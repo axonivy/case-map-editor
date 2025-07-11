@@ -1,0 +1,12 @@
+node_modules
+out
+dist
+lib
+*tsconfig*.tsbuildinfo
+eslint.xml
+test-results
+playwright-report
+**/standalone/build
+target
+
+.ivy-engine

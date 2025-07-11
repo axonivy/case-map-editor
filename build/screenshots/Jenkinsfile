@@ -1,0 +1,46 @@
+pipeline {
+  agent any
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '5'))
+    disableConcurrentBuilds()
+  }
+
+  triggers {
+    cron '@midnight'
+  }
+
+
+  stages {
+    stage('Screenshots') {
+      steps {
+        script {
+          catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+            docker.build('node-webtest', '-f build/Dockerfile.playwright .').inside {
+              sh 'npm install && npm run package'
+              sh 'npm run webtest:screenshot'
+            }
+          }
+          archiveArtifacts artifacts: 'playwright/test-results/**', allowEmptyArchive: true
+          archiveArtifacts artifacts: 'playwright/**/target/screenshots/*.png', allowEmptyArchive: true
+          withChecks('Screenshots') {
+            junit testDataPublishers: [[$class: 'StabilityTestDataPublisher']], testResults: 'playwright/**/report.xml'
+          }
+        }
+      }
+    }
+    stage('Deploy') {
+      when {
+        expression { isReleasingBranch() && currentBuild.currentResult == 'SUCCESS' }
+      }
+      steps {
+        script {
+          docker.build('maven-build', '-f build/Dockerfile.maven .').inside {
+            maven cmd: '-ntp -f playwright/tests/screenshots deploy -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+          }
+          archiveArtifacts 'playwright/**/target/casemap-editor-screenshots-*.zip'
+        }
+      }
+    }
+  }
+}

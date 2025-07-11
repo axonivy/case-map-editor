@@ -1,0 +1,32 @@
+{
+  "name": "@axonivy/case-map-editor-protocol",
+  "version": "13.2.0-next",
+  "private": false,
+  "license": "Apache-2.0",
+  "author": "Axon Ivy AG",
+  "homepage": "https://developer.axonivy.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axonivy/case-map-editor"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "type": "module",
+  "types": "./lib/index.d.ts",
+  "module": "./lib/protocol.js",
+  "source": "./src/index",
+  "scripts": {
+    "clean": "rimraf lib tsconfig.tsbuildinfo",
+    "build": "tsc --build",
+    "package": "vite build",
+    "build:clean": "npm run clean && npm run generate && npm run build",
+    "generate": "node ./schemaCodegen.cjs",
+    "type": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "json-schema-to-typescript": "^15.0.4"
+  }
+}

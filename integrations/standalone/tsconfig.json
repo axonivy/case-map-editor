@@ -1,0 +1,15 @@
+{
+  "extends": "../../config/tsconfig.integration.json",
+  "compilerOptions": {
+    "types": ["vite/client", "node"],
+    "jsx": "preserve",
+    "rootDir": ".",
+    "rootDirs": ["src"],
+    "outDir": "lib"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../../packages/case-map-editor/tsconfig.json" },
+    { "path": "../../packages/protocol/tsconfig.json" }
+  ]
+}

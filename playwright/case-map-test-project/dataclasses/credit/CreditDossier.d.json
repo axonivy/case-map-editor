@@ -1,0 +1,19 @@
+{
+  "$schema" : "https://json-schema.axonivy.com/data-class/13.2.0/data-class.json",
+  "simpleName" : "CreditDossier",
+  "namespace" : "credit",
+  "isBusinessCaseData" : true,
+  "fields" : [ {
+    "name" : "customer",
+    "type" : "credit.Person",
+    "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "request",
+    "type" : "credit.CreditRequest",
+    "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "decision",
+    "type" : "credit.Decision",
+    "modifiers" : [ "PERSISTENT" ]
+  } ]
+}

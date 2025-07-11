@@ -1,0 +1,56 @@
+{
+  "name": "@axonivy/case-map-editor",
+  "version": "13.2.0-next",
+  "license": "Apache-2.0",
+  "author": "Axon Ivy AG",
+  "homepage": "https://developer.axonivy.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axonivy/case-map-editor"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "type": "module",
+  "module": "lib/editor.js",
+  "types": "lib/index.d.ts",
+  "main": "lib/editor.js",
+  "dependencies": {
+    "@axonivy/case-map-editor-protocol": "~13.2.0-next"
+  },
+  "peerDependencies": {
+    "@axonivy/jsonrpc": "~13.2.0-next",
+    "@axonivy/ui-components": "~13.2.0-next",
+    "@axonivy/ui-icons": "~13.2.0-next",
+    "@tanstack/react-query": "^5.64",
+    "@tanstack/react-query-devtools": "^5.64",
+    "i18next": "^24.2.3 || ^25.0.0",
+    "react": "^18.2 || ^19.0",
+    "react-i18next": "^15.4.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
+    "@types/react": "^19.0.7",
+    "@vanilla-extract/recipes": "^0.5.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "i18next-parser": "^9.3.0",
+    "jsdom": "^26.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite-plugin-dts": "^4.5.0",
+    "vitest": "^3.2.4"
+  },
+  "scripts": {
+    "clean": "rimraf lib *.tsbuildinfo",
+    "build": "tsc --build && tscp",
+    "package": "vite build",
+    "build:clean": "npm run clean && npm run build",
+    "type": "tsc --noEmit",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "i18n:extract": "i18next",
+    "i18n:ci": "i18next --fail-on-update"
+  }
+}
