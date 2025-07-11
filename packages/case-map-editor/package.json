@@ -20,7 +20,6 @@
     "@axonivy/case-map-editor-protocol": "~13.2.0-next"
   },
   "peerDependencies": {
-    "@axonivy/jsonrpc": "~13.2.0-next",
     "@axonivy/ui-components": "~13.2.0-next",
     "@axonivy/ui-icons": "~13.2.0-next",
     "@tanstack/react-query": "^5.64",
