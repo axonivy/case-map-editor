@@ -1,10 +1,10 @@
-import { ClientContextProvider, CaseMapEditor, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
+import { CaseMapEditor, ClientContextProvider, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
 import { Flex, HotkeysProvider, ReadonlyProvider, Spinner, ThemeProvider, Toaster } from '@axonivy/ui-components';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { initTranslation } from './i18n';
 import './index.css';
 import { readonlyParam, themeParam } from './url-helper';
-import { initTranslation } from './i18n';
 
 export async function start(): Promise<void> {
   const theme = themeParam();
@@ -30,6 +30,8 @@ export async function start(): Promise<void> {
   );
 
   const dummyClient = {} as const;
+  const pmv = 'case-map-test-project';
+  const caseMapUuid = '25099c02-721a-42ac-a3de-ff78e93a52b4';
   // Initialize the editor without websocket // Adjusted: assumes no connection param needed
   root.render(
     <React.StrictMode>
@@ -38,7 +40,7 @@ export async function start(): Promise<void> {
           <QueryProvider client={queryClient}>
             <ReadonlyProvider readonly={readonly}>
               <HotkeysProvider initiallyActiveScopes={['global']}>
-                <CaseMapEditor />
+                <CaseMapEditor context={{ pmv, uuid: caseMapUuid }} />
               </HotkeysProvider>
             </ReadonlyProvider>
           </QueryProvider>

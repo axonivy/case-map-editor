@@ -1,5 +1,7 @@
 {
   "editor": {
-    "title": "Case Map Editor"
+    "toolbar": {
+      "detailToggle": "Details"
+    }
   }
 }
