@@ -22,7 +22,6 @@
     "build": "tsc --build",
     "package": "vite build",
     "build:clean": "npm run clean && npm run generate && npm run build",
-    "generate": "node ./schemaCodegen.cjs",
     "type": "tsc --noEmit"
   },
   "devDependencies": {
