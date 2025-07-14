@@ -6,7 +6,7 @@ import {
   setCaseMapModel,
   type CaseMapModelRestServiceModel,
   type GetProcessesParams
-} from './data/ivy-client';
+} from './ivy-client';
 
 export const useGetCaseMapModel = (pmv: string, caseMapUuid: string) => {
   return useQuery({

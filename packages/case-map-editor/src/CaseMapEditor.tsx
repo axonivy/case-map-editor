@@ -1,31 +1,16 @@
-import { useGetCaseMapModel, type CaseMap, type EditorProps } from '@axonivy/case-map-editor-protocol';
-import type { CaseMapModelRestServiceModel } from '@axonivy/case-map-editor-protocol/src/data/ivy-client';
+import { type EditorProps } from '@axonivy/case-map-editor-protocol';
+
 import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, SidebarHeader, Spinner } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AppProvider } from './context/AppContext';
+import { useGetCaseMapModel } from './data/case-map';
+import type { CaseMapModelRestServiceModel } from './data/ivy-client';
 import { MainToolbar } from './main/MainToolbar';
 
 function CaseMapEditor(props: EditorProps) {
-  const [context, setContext] = useState(props.context);
-  useEffect(() => {
-    setContext(props.context);
-  }, [props]);
-
   const [detail, setDetail] = useState(true);
-  const [caseMapModel, setCaseMapModel] = useState<CaseMap>({} as CaseMap);
-  const { data, isPending, isError, error } = useGetCaseMapModel(context.pmv, context.uuid);
-
-  useEffect(() => {
-    if (data) {
-      const model = (data.data as CaseMapModelRestServiceModel).model;
-      if (model !== undefined) {
-        const caseMapModel = JSON.parse(model);
-        setCaseMapModel(caseMapModel);
-        console.log(caseMapModel);
-      }
-    }
-  }, [data]);
+  const { data, isPending, isError, error } = useGetCaseMapModel(props.context.pmv, props.context.uuid);
 
   if (isPending) {
     return (
@@ -38,6 +23,8 @@ function CaseMapEditor(props: EditorProps) {
   if (isError) {
     return <PanelMessage icon={IvyIcons.ErrorXMark} message={`An error has occurred: ${error.message}`} />;
   }
+
+  const caseMapModel = JSON.parse((data.data as CaseMapModelRestServiceModel).model ?? '{}');
 
   return (
     <AppProvider value={{ caseMap: caseMapModel, detail, setDetail }}>
