@@ -1,14 +1,17 @@
 import { type EditorProps } from '@axonivy/case-map-editor-protocol';
-
-import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, SidebarHeader, Spinner } from '@axonivy/ui-components';
+import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, Spinner } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useState } from 'react';
+import './CaseMapEditor.css';
 import { AppProvider } from './context/AppContext';
 import { useGetCaseMapModel } from './data/case-map';
+import { Sidebar } from './detail/Sidebar';
+import { CaseMapFlow } from './main/CaseMapFlow';
 import { MainToolbar } from './main/MainToolbar';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(true);
+  const [selectedElement, setSelectedElement] = useState<string>();
   const { data, isPending, isError, error } = useGetCaseMapModel(props.context.pmv, props.context.uuid);
 
   if (isPending) {
@@ -24,22 +27,21 @@ function CaseMapEditor(props: EditorProps) {
   }
 
   return (
-    <AppProvider value={{ caseMap: data.caseMapModel, detail, setDetail }}>
+    <AppProvider value={{ caseMap: data.caseMapModel, detail, setDetail, selectedElement, setSelectedElement }}>
       <ResizablePanelGroup direction='horizontal'>
-        <ResizablePanel defaultSize={75} minSize={50}>
-          <Flex direction='column'>
+        <ResizablePanel defaultSize={75} minSize={50} className='case-map-editor-main-panel'>
+          <Flex direction='column' style={{ height: '100%' }}>
             <MainToolbar title={data.caseMapModel.name} />
-            <div className='cms-editor-content'>{data.caseMapModel.name}</div>
+            <div className='case-map-editor-panel-content' onClick={() => setDetail(false)}>
+              <CaseMapFlow />
+            </div>
           </Flex>
         </ResizablePanel>
         {detail && (
           <>
             <ResizableHandle />
             <ResizablePanel defaultSize={25} minSize={10}>
-              <Flex direction='column' className='cms-editor-detail-panel'>
-                <SidebarHeader icon={IvyIcons.PenEdit} title={data.caseMapModel.name} />
-                <div>{data.caseMapModel.name}</div>
-              </Flex>
+              <Sidebar />
             </ResizablePanel>
           </>
         )}

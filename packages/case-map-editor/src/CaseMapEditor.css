@@ -4,4 +4,13 @@
 
 .case-map-editor-panel-content {
   height: 100%;
+  overflow-x: auto;
+  padding: var(--size-4);
+}
+.case-map-editor-detail-panel {
+  height: 100%;
+
+  .properties {
+    padding: var(--size-2);
+  }
 }

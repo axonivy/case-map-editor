@@ -1,0 +1,99 @@
+.stage-header {
+  flex-direction: row;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+
+.stage-line {
+  flex-grow: 1;
+  height: 2px;
+  background-color: var(--N300);
+}
+
+.stage-line-hidden {
+  flex-grow: 1;
+  height: 2px;
+  background-color: 'none';
+}
+
+.stage-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--background);
+  border: var(--basic-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 1;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--editor-shadow);
+    cursor: pointer;
+  }
+}
+.stage-tile-triangle {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 20px solid var(--P300); /* change color to match your tile */
+  z-index: 1;
+}
+.stage-tile {
+  margin: 0 var(--size-3) 0 var(--size-3);
+  background: var(--background);
+
+  border-radius: var(--border-r2);
+  min-width: 200px;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--editor-shadow);
+    cursor: pointer;
+  }
+  .stage-tile-header {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    background-color: var(--P300);
+    color: var(--background);
+    border-radius: var(--border-r2) var(--border-r2) 0 0;
+  }
+
+  .stage-tile-content {
+    border-radius: 0 0 var(--border-r2) var(--border-r2);
+    padding: var(--size-2);
+  }
+}
+
+.stage-process-tile {
+  background: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: var(--basic-border);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--focus-shadow);
+    cursor: pointer;
+  }
+  .process-tile-condition-badge {
+    background-color: var(--P300);
+    border-radius: 50%;
+    padding: var(--size-1);
+    color: var(--background);
+  }
+}

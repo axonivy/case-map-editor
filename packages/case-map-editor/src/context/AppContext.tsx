@@ -3,12 +3,15 @@ import { createContext, useContext } from 'react';
 
 type AppContext = {
   caseMap: CaseMap;
+  selectedElement?: string;
+  setSelectedElement: (element?: string) => void;
   detail: boolean;
   setDetail: (visible: boolean) => void;
 };
 
 const appContext = createContext<AppContext>({
   caseMap: {} as CaseMap,
+  setSelectedElement: () => {},
   detail: true,
   setDetail: () => {}
 });

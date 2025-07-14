@@ -2,6 +2,14 @@
   "editor": {
     "toolbar": {
       "detailToggle": "Details"
+    },
+    "flow": {
+      "addProcess": "Add Process",
+      "addSidestep": "Add Sidestep"
+    },
+    "sidebar": {
+      "general": "General",
+      "noElement": "No element selected"
     }
   }
 }

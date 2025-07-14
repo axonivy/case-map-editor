@@ -2,6 +2,14 @@
   "editor": {
     "toolbar": {
       "detailToggle": "Details"
+    },
+    "flow": {
+      "addProcess": "Prozess hinzufügen",
+      "addSidestep": "Nebenschritt hinzufügen"
+    },
+    "sidebar": {
+      "general": "Allgemein",
+      "noElement": "Kein Element ausgewählt"
     }
   }
 }
