@@ -10,8 +10,13 @@ import {
 
 export const useGetCaseMapModel = (pmv: string, caseMapUuid: string) => {
   return useQuery({
-    queryKey: ['caseMapModel', pmv, caseMapUuid],
-    queryFn: () => getCaseMapModel1(pmv, caseMapUuid),
+    queryKey: ['model', pmv, caseMapUuid],
+    queryFn: async () => {
+      const rawData = await getCaseMapModel1(pmv, caseMapUuid);
+      const modelJson = (rawData.data as CaseMapModelRestServiceModel).model ?? '{}';
+      const caseMapModel = JSON.parse(modelJson);
+      return { ...rawData, caseMapModel };
+    },
     enabled: !!pmv && !!caseMapUuid
   });
 };

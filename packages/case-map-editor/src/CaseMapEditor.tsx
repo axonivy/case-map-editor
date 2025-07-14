@@ -5,7 +5,6 @@ import { IvyIcons } from '@axonivy/ui-icons';
 import { useState } from 'react';
 import { AppProvider } from './context/AppContext';
 import { useGetCaseMapModel } from './data/case-map';
-import type { CaseMapModelRestServiceModel } from './data/ivy-client';
 import { MainToolbar } from './main/MainToolbar';
 
 function CaseMapEditor(props: EditorProps) {
@@ -24,15 +23,13 @@ function CaseMapEditor(props: EditorProps) {
     return <PanelMessage icon={IvyIcons.ErrorXMark} message={`An error has occurred: ${error.message}`} />;
   }
 
-  const caseMapModel = JSON.parse((data.data as CaseMapModelRestServiceModel).model ?? '{}');
-
   return (
-    <AppProvider value={{ caseMap: caseMapModel, detail, setDetail }}>
+    <AppProvider value={{ caseMap: data.caseMapModel, detail, setDetail }}>
       <ResizablePanelGroup direction='horizontal'>
         <ResizablePanel defaultSize={75} minSize={50}>
           <Flex direction='column'>
-            <MainToolbar title={caseMapModel.name} />
-            <div className='cms-editor-content'>{caseMapModel.name}</div>
+            <MainToolbar title={data.caseMapModel.name} />
+            <div className='cms-editor-content'>{data.caseMapModel.name}</div>
           </Flex>
         </ResizablePanel>
         {detail && (
@@ -40,8 +37,8 @@ function CaseMapEditor(props: EditorProps) {
             <ResizableHandle />
             <ResizablePanel defaultSize={25} minSize={10}>
               <Flex direction='column' className='cms-editor-detail-panel'>
-                <SidebarHeader icon={IvyIcons.PenEdit} title={caseMapModel.name} />
-                <div>{caseMapModel.name}</div>
+                <SidebarHeader icon={IvyIcons.PenEdit} title={data.caseMapModel.name} />
+                <div>{data.caseMapModel.name}</div>
               </Flex>
             </ResizablePanel>
           </>
