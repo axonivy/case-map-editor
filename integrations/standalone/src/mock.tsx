@@ -1,11 +1,11 @@
-import { ClientContextProvider, CaseMapEditor, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
+import { CaseMapEditor, ClientContextProvider, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
 import { HotkeysProvider, ReadonlyProvider, ThemeProvider } from '@axonivy/ui-components';
 import React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { initTranslation } from './i18n';
 import './index.css';
 import { CaseMapClientMock } from './mock/case-map-client-mock';
 import { readonlyParam } from './url-helper';
-import { initTranslation } from './i18n';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -27,7 +27,7 @@ root.render(
         <QueryProvider client={queryClient}>
           <ReadonlyProvider readonly={readonly}>
             <HotkeysProvider initiallyActiveScopes={['global']}>
-              <CaseMapEditor />
+              <CaseMapEditor context={{ uuid: '', pmv: '' }} />
             </HotkeysProvider>
           </ReadonlyProvider>
         </QueryProvider>

@@ -1,8 +1,7 @@
 // prettier-ignore
 
 export interface CaseMapEditorDataContext {
-  app: string;
-  file: string;
+  uuid: string;
   pmv: string;
 }
 
@@ -21,7 +20,6 @@ export interface CaseMap {
 }
 
 export interface Stage {
-  _key: string;
   id: string;
   name?: string;
   icon?: string;
@@ -32,7 +30,6 @@ export interface Stage {
 }
 
 export interface StageProcess {
-  _key: string;
   id: string;
   name?: string;
   description?: string;
