@@ -1,12 +1,13 @@
-import { CaseMapEditor, ClientContextProvider, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
+import { CaseMapClientRest, CaseMapEditor, ClientContextProvider, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
 import { Flex, HotkeysProvider, ReadonlyProvider, Spinner, ThemeProvider, Toaster } from '@axonivy/ui-components';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { initTranslation } from './i18n';
 import './index.css';
-import { readonlyParam, themeParam } from './url-helper';
+import { appParam, readonlyParam, themeParam } from './url-helper';
 
 export async function start(): Promise<void> {
+  const app = appParam();
   const theme = themeParam();
   const readonly = readonlyParam();
   const queryClient = initQueryClient();
@@ -29,18 +30,19 @@ export async function start(): Promise<void> {
     </React.StrictMode>
   );
 
-  const dummyClient = {} as const;
+  const client = new CaseMapClientRest();
+
   const pmv = 'case-map-test-project';
-  const caseMapUuid = '25099c02-721a-42ac-a3de-ff78e93a52b4';
+  const uuid = '25099c02-721a-42ac-a3de-ff78e93a52b4';
   // Initialize the editor without websocket // Adjusted: assumes no connection param needed
   root.render(
     <React.StrictMode>
       <ThemeProvider defaultTheme={theme}>
-        <ClientContextProvider client={dummyClient}>
+        <ClientContextProvider client={client}>
           <QueryProvider client={queryClient}>
             <ReadonlyProvider readonly={readonly}>
               <HotkeysProvider initiallyActiveScopes={['global']}>
-                <CaseMapEditor context={{ pmv, uuid: caseMapUuid }} />
+                <CaseMapEditor context={{ app, pmv, uuid }} />
               </HotkeysProvider>
             </ReadonlyProvider>
           </QueryProvider>

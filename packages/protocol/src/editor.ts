@@ -1,6 +1,7 @@
 // prettier-ignore
 
 export interface CaseMapEditorDataContext {
+  app: string,
   uuid: string;
   pmv: string;
 }
