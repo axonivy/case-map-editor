@@ -1,9 +1,10 @@
-import type { CaseMapEditorDataContext } from './editor';
+import type { CaseMap, CaseMapEditorDataContext } from './editor';
 
 export type EditorProps = { context: CaseMapEditorDataContext };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Client {}
+export interface Client {
+  data(context: CaseMapEditorDataContext): Promise<CaseMap>;
+}
 
 export interface ClientContext {
   client: Client;

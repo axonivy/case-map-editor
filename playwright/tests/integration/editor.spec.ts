@@ -4,9 +4,9 @@ import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
 let editor: CaseMapEditor;
 
 test.beforeEach(async ({ page }) => {
-  editor = await CaseMapEditor.openCaseMap(page);
+  editor = await CaseMapEditor.openMock(page);
 });
 
-test('load data', async () => {
-  await expect(editor.page.locator('.case-map-editor-content')).toHaveText('Lending (Case Map)');
+test('open mock', async () => {
+  await expect(editor.page.locator('.case-map-editor-content')).toHaveText('Mock Case Map');
 });

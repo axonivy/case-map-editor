@@ -3,7 +3,6 @@ import i18next from 'i18next';
 
 const getUrl = (contextUrl: string, headers?: Record<string, string>): string => {
   const base = headers && headers['base'] ? headers['base'] : '';
-  console.log(base);
   const apiPrefix = '/api';
   if (contextUrl.startsWith(apiPrefix)) {
     return `${base}${contextUrl} `;

@@ -1,4 +1,9 @@
-import type { Client } from '@axonivy/case-map-editor-protocol';
+import type { CaseMap, CaseMapEditorDataContext, Client } from '@axonivy/case-map-editor-protocol';
+import { data } from './data.mock';
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class CaseMapClientMock implements Client {}
+export class CaseMapClientMock implements Client {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  data(context: CaseMapEditorDataContext): Promise<CaseMap> {
+    return Promise.resolve(data);
+  }
+}

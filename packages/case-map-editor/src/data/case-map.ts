@@ -1,23 +1,15 @@
+import type { CaseMapEditorDataContext } from '@axonivy/case-map-editor-protocol';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-  getCaseMapModel1,
-  getMetrics1,
-  getProcesses,
-  setCaseMapModel,
-  type CaseMapModelRestServiceModel,
-  type GetProcessesParams
-} from './ivy-client';
+import { useClient } from '../protocol/ClientContextProvider';
+import { getMetrics1, getProcesses, setCaseMapModel, type CaseMapModelRestServiceModel, type GetProcessesParams } from './ivy-client';
 
-export const useGetCaseMapModel = (pmv: string, caseMapUuid: string) => {
+export const useGetCaseMapModel = (context: CaseMapEditorDataContext) => {
+  const client = useClient();
   return useQuery({
-    queryKey: ['model', pmv, caseMapUuid],
+    queryKey: ['model', context],
     queryFn: async () => {
-      const rawData = await getCaseMapModel1(pmv, caseMapUuid);
-      const modelJson = (rawData.data as CaseMapModelRestServiceModel).model ?? '{}';
-      const caseMapModel = JSON.parse(modelJson);
-      return { ...rawData, caseMapModel };
-    },
-    enabled: !!pmv && !!caseMapUuid
+      return client.data(context);
+    }
   });
 };
 
