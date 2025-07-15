@@ -1,7 +1,15 @@
 {
+  "common": {
+    "label": {
+      "reload": "Reload page"
+    }
+  },
   "editor": {
     "toolbar": {
       "detailToggle": "Details"
     }
+  },
+  "toast": {
+    "unauthorized": "Unauthorized, click reload to log in."
   }
 }

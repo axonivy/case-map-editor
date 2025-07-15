@@ -1,7 +1,15 @@
 {
+  "common": {
+    "label": {
+      "reload": "Seite neu laden"
+    }
+  },
   "editor": {
     "toolbar": {
       "detailToggle": "Details"
     }
+  },
+  "toast": {
+    "unauthorized": "Nicht autorisiert, klicken Sie auf 'Neu laden', um sich anzumelden."
   }
 }

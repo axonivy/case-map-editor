@@ -29,14 +29,14 @@ function CaseMapEditor(props: EditorProps) {
         <ResizablePanel defaultSize={75} minSize={50}>
           <Flex direction='column'>
             <MainToolbar title={data.caseMapModel.name} />
-            <div className='cms-editor-content'>{data.caseMapModel.name}</div>
+            <div className='case-map-editor-content'>{data.caseMapModel.name}</div>
           </Flex>
         </ResizablePanel>
         {detail && (
           <>
             <ResizableHandle />
             <ResizablePanel defaultSize={25} minSize={10}>
-              <Flex direction='column' className='cms-editor-detail-panel'>
+              <Flex direction='column' className='case-map-editor-detail-panel'>
                 <SidebarHeader icon={IvyIcons.PenEdit} title={data.caseMapModel.name} />
                 <div>{data.caseMapModel.name}</div>
               </Flex>

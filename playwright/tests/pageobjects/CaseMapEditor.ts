@@ -2,12 +2,27 @@ import { expect, type Page } from '@playwright/test';
 
 export const server = process.env.BASE_URL ?? 'http://localhost:8081';
 export const user = 'Developer';
+const ws = process.env.TEST_WS ?? '';
+const app = process.env.TEST_APP ?? 'designer';
+const pmv = 'case-map-test-project';
 
 export class CaseMapEditor {
   readonly page: Page;
 
   constructor(page: Page) {
     this.page = page;
+  }
+
+  static async openCaseMap(page: Page, options?: { readonly?: boolean }) {
+    const serverUrl = server.replace(/^https?:\/\//, '');
+
+    let url = `?server=${serverUrl}${ws}&app=${app}&pmv=${pmv}`;
+
+    if (options) {
+      url += `${this.params(options)}`;
+    }
+
+    return this.openUrl(page, url);
   }
 
   static async openMock(page: Page, options?: { readonly?: boolean; app?: string }) {
