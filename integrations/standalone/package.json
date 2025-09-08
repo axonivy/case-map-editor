@@ -5,8 +5,8 @@
   "dependencies": {
     "@axonivy/case-map-editor": "~13.2.0-next",
     "@axonivy/case-map-editor-protocol": "~13.2.0-next",
-    "@axonivy/ui-components": "~13.2.0-next.780",
-    "@axonivy/ui-icons": "~13.2.0-next.780",
+    "@axonivy/ui-components": "~13.2.0-next.847.a8ce22a",
+    "@axonivy/ui-icons": "~13.2.0-next.847.a8ce22a",
     "@tanstack/react-query": "^5.64",
     "@tanstack/react-query-devtools": "^5.64",
     "i18next": "^25.0.0",
