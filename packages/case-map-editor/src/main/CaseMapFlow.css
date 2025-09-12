@@ -1,0 +1,43 @@
+.case-map-flow {
+  padding: var(--size-4);
+}
+
+.stage-header {
+  width: 100%;
+}
+
+.stage-line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: var(--P300);
+}
+
+.stage-line-hidden {
+  flex-grow: 1;
+  height: 2px;
+  background-color: 'none';
+}
+
+.stage-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--P50);
+  border: 1px solid var(--P300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 1;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--focus-shadow);
+    cursor: pointer;
+  }
+  &.selected {
+    background-color: var(--P300);
+  }
+}

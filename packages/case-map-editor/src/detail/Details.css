@@ -1,0 +1,7 @@
+.case-map-editor-detail-panel {
+  height: 100%;
+  .case-map-editor-detail-content {
+    flex: 1;
+    padding: var(--size-2);
+  }
+}

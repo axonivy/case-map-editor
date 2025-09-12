@@ -55,7 +55,7 @@ export const setCaseMapModel = async (
   return customFetch<setCaseMapModelResponse>(getSetCaseMapModelUrl(pmv, caseMapUuid), {
     ...options,
     method: 'PUT',
-    headers: { 'Content-Type': '*/*', ...options?.headers },
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(caseMapModelRestServiceModel)
   });
 };

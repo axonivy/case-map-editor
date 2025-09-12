@@ -1,12 +1,11 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
 import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
 
-let editor: CaseMapEditor;
-
-test.beforeEach(async ({ page }) => {
-  editor = await CaseMapEditor.openMock(page);
-});
-
-test('open mock', async () => {
-  await expect(editor.page.locator('.case-map-editor-content')).toHaveText('Mock Case Map');
+test('open mock', async ({ page }) => {
+  const { flow } = await CaseMapEditor.openMock(page);
+  await flow.expectStages(3);
+  await flow.stageByNth(0).expectProcesses(1);
+  await flow.stageByNth(0).expectSidesteps(0);
+  await flow.stageByNth(1).expectProcesses(1);
+  await flow.stageByNth(1).expectSidesteps(1);
 });

@@ -1,0 +1,42 @@
+.stage-tile {
+  margin: 0 var(--size-3) 0 var(--size-3);
+  background: var(--background);
+  padding: var(--size-3);
+  border-radius: var(--border-r3);
+  min-width: 200px;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  .stage-tile-header {
+    font-weight: bold;
+    justify-content: flex-start;
+    height: 20px;
+    max-width: 350px;
+    overflow: hidden;
+    color: var(--body);
+    .stage-tile-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .add-process-button {
+    background-color: var(--P50);
+    border: 1px dashed var(--P75);
+    color: var(--P300);
+    justify-content: space-between;
+    font-size: 12px;
+    padding: var(--size-2);
+  }
+
+  &:hover {
+    box-shadow: var(--focus-shadow);
+    cursor: pointer;
+  }
+
+  &.selected {
+    box-shadow: var(--focus-shadow);
+  }
+}

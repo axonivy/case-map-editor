@@ -4,12 +4,39 @@
       "reload": "Reload page"
     }
   },
+  "dialog": {
+    "addStage": {
+      "title": "Add stage"
+    }
+  },
   "editor": {
+    "flow": {
+      "addFirstItem": "Add first {{item}}",
+      "processes": "Processes",
+      "sidesteps": "Sidesteps"
+    },
+    "sidebar": {
+      "condition": "Condition",
+      "description": "Description",
+      "general": "General",
+      "icon": "Icon",
+      "id": "Id",
+      "isTerminating": "Is terminating",
+      "label": "Label",
+      "name": "Name",
+      "preCondition": "Precondition",
+      "process": "Process"
+    },
     "toolbar": {
       "detailToggle": "Details"
     }
   },
+  "message": {
+    "addFirstItem": "Add your first stage to your case map.",
+    "help": "Help",
+    "nothingSelected": "Nothing selected"
+  },
   "toast": {
-    "unauthorized": "Unauthorized, click reload to log in."
+    "unauthorized": "Unauthorized, click “Reload” to log in."
   }
 }

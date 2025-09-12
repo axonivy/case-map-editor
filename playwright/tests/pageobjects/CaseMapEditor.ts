@@ -1,4 +1,6 @@
 import { expect, type Page } from '@playwright/test';
+import { Flow } from './flow';
+import { Inscription } from './inscription';
 
 export const server = process.env.BASE_URL ?? 'http://localhost:8081';
 export const user = 'Developer';
@@ -58,5 +60,13 @@ export class CaseMapEditor {
 
   async hideQuery() {
     await this.page.addStyleTag({ content: `.tsqd-parent-container { display: none; }` });
+  }
+
+  get flow() {
+    return new Flow(this.page);
+  }
+
+  get inscription() {
+    return new Inscription(this.page);
   }
 }

@@ -1,7 +1,8 @@
 .case-map-editor-main-panel {
-  background-color: var(--N75);
+  background-color: var(--N100);
 }
 
 .case-map-editor-panel-content {
   height: 100%;
+  overflow-x: auto;
 }
