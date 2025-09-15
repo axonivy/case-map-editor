@@ -1,0 +1,33 @@
+.process-tile,
+.sidestep-tile {
+  flex: 1;
+  background: white;
+  padding: var(--size-2);
+  border-radius: var(--border-r2);
+  border: var(--basic-border);
+  max-width: 330px;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+  .process-tile-condition-badge {
+    background-color: var(--P300);
+    border-radius: 50%;
+    padding: var(--size-1);
+    color: var(--background);
+  }
+  .process-tile-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    box-shadow: var(--focus-shadow);
+    cursor: pointer;
+  }
+
+  &.selected {
+    box-shadow: var(--focus-shadow);
+  }
+}

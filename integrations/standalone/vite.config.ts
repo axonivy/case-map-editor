@@ -15,9 +15,15 @@ export default defineConfig({
     port: 3002,
     proxy: {
       '/api': {
-        target: ENGINE_URL + '/' + APP,
+        target: ENGINE_URL + APP,
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api\/dev/, '/api')
+        rewrite: path => path.replace(/^\/api/, '/api')
+      },
+      '/dev-workflow-ui': {
+        target: ENGINE_URL,
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/dev-workflow-ui/, '/dev-workflow-ui'),
+        secure: false
       }
     }
   },

@@ -24,16 +24,67 @@ export const data: CaseMap = {
           processToExecute: 'my.start.Process'
         }
       ],
+      sidesteps: []
+    },
+    {
+      id: 'stage-2',
+      name: 'Review Stage',
+      icon: 'review-icon',
+      isTerminating: false,
+      description: 'Stage for reviewing the case details.',
+      processes: [
+        {
+          id: 'process-2',
+          name: 'Review Process',
+          description: 'Handles case review logic.',
+          preCondition: {
+            script: 'return true;',
+            label: 'Proceed to review'
+          },
+          processToExecute: 'my.review.Process'
+        }
+      ],
       sidesteps: [
         {
-          id: 'sidestep-1',
-          name: 'Alternative Path',
-          description: 'This sidestep is optional.',
+          id: 'sidestep-2',
+          name: 'Request Changes',
+          description: 'Optional sidestep for requesting changes.',
           preCondition: {
-            script: 'return false;',
-            label: 'Never'
+            script: 'return true;',
+            label: 'If changes are needed'
           },
-          processToExecute: 'my.alt.Process'
+          processToExecute: 'my.requestChanges.Process'
+        }
+      ]
+    },
+    {
+      id: 'stage-3',
+      name: 'Approval Stage',
+      icon: 'approval-icon',
+      isTerminating: true,
+      description: 'Final stage for approving the case.',
+      processes: [
+        {
+          id: 'process-3',
+          name: 'Approval Process',
+          description: 'Executes final approval steps.',
+          preCondition: {
+            script: 'return true;',
+            label: 'Ready for approval'
+          },
+          processToExecute: 'my.approval.Process'
+        }
+      ],
+      sidesteps: [
+        {
+          id: 'sidestep-3',
+          name: 'Reject Case',
+          description: 'Optional sidestep to reject the case.',
+          preCondition: {
+            script: 'return true;',
+            label: 'Reject if criteria not met'
+          },
+          processToExecute: 'my.reject.Process'
         }
       ]
     }

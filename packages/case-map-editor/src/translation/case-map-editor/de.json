@@ -4,12 +4,39 @@
       "reload": "Seite neu laden"
     }
   },
+  "dialog": {
+    "addStage": {
+      "title": "Stufe hinzufügen"
+    }
+  },
   "editor": {
+    "flow": {
+      "addFirstItem": "Füge deinen ersten {{item}} hinzu",
+      "processes": "Prozesse",
+      "sidesteps": "Sidesteps"
+    },
+    "sidebar": {
+      "condition": "Bedingung",
+      "description": "Beschreibung",
+      "general": "Allgemein",
+      "icon": "Icon",
+      "id": "Id",
+      "isTerminating": "Ist terminierend",
+      "label": "Bezeichnung",
+      "name": "Name",
+      "preCondition": "Vorbedingung",
+      "process": "Prozess"
+    },
     "toolbar": {
       "detailToggle": "Details"
     }
   },
+  "message": {
+    "addFirstItem": "Füge deinem Case Map deinen ersten Eintrag hinzu.",
+    "help": "Hilfe",
+    "nothingSelected": "Nichts ausgewählt"
+  },
   "toast": {
-    "unauthorized": "Nicht autorisiert, klicken Sie auf 'Neu laden', um sich anzumelden."
+    "unauthorized": "Nicht autorisiert, klicke auf „Neu laden“, um dich anzumelden."
   }
 }
