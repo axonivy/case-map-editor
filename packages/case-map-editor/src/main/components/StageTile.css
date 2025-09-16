@@ -1,5 +1,4 @@
 .stage-tile {
-  margin: 0 var(--size-3) 0 var(--size-3);
   background: var(--background);
   padding: var(--size-3);
   border-radius: var(--border-r3);
@@ -10,7 +9,6 @@
 
   .stage-tile-header {
     font-weight: bold;
-    justify-content: flex-start;
     height: 20px;
     max-width: 350px;
     overflow: hidden;

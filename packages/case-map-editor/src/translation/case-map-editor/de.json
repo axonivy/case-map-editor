@@ -1,11 +1,19 @@
 {
   "common": {
     "label": {
+      "cancel": "Abbrechen",
       "reload": "Seite neu laden"
     }
   },
   "dialog": {
+    "addProcess": {
+      "create": "Prozess erstellen",
+      "desc": "Einen neuen Prozess erstellen",
+      "title": "Prozess hinzufügen"
+    },
     "addStage": {
+      "create": "Stufe erstellen",
+      "desc": "Eine neue Stufe erstellen",
       "title": "Stufe hinzufügen"
     }
   },

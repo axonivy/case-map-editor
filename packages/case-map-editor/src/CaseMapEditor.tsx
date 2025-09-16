@@ -12,7 +12,7 @@ import { MainToolbar } from './main/MainToolbar';
 import { useClient } from './protocol/ClientContextProvider';
 
 function CaseMapEditor(props: EditorProps) {
-  const [detail, setDetail] = useState(true);
+  const [detail, setDetail] = useState(false);
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
   const { data, isPending, isError, error } = useGetCaseMapModel(props.context);
   const client = useClient();
@@ -34,7 +34,6 @@ function CaseMapEditor(props: EditorProps) {
   if (isError) {
     return <PanelMessage icon={IvyIcons.ErrorXMark} message={`An error has occurred: ${error.message}`} />;
   }
-
   return (
     <AppProvider
       value={{
@@ -63,8 +62,8 @@ function CaseMapEditor(props: EditorProps) {
             <div
               className='case-map-editor-panel-content'
               onClick={() => {
-                setDetail(!detail);
                 setSelectedElement(undefined);
+                setDetail(false);
               }}
             >
               <CaseMapFlow />
