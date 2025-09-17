@@ -35,8 +35,7 @@ function CaseMapEditor(props: EditorProps) {
   const { data, isPending, isError, error } = useQuery({
     queryKey: queryKeys.data(context),
     queryFn: async () => {
-      const data = await client.data(context);
-      return data;
+      return await client.data(context);
     },
     structuralSharing: false
   });

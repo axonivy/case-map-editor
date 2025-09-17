@@ -10,8 +10,8 @@ import { StageTile } from './components/StageTile';
 
 export const CaseMapFlow = () => {
   const { caseMap } = useAppContext();
-  const [hoverIndex, setHoverIndex] = useState<number | undefined>(undefined);
-  const [showPlaceholder, setShowPlaceholder] = useState<number | undefined>(undefined);
+  const [hoverIndex, setHoverIndex] = useState<number | undefined>();
+  const [showPlaceholder, setShowPlaceholder] = useState<number | undefined>();
 
   if (!caseMap || !caseMap.stages || caseMap.stages.length === 0) {
     return <EmptyState />;

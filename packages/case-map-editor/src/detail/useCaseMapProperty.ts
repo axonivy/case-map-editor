@@ -103,7 +103,6 @@ const updateProcessOrSidestep = (caseMap: CaseMapModel, elementId: string, updat
       updater(stage.sideSteps[sideIdx]);
       return newCaseMap;
     }
-    console.log(stage.name);
   }
 
   return newCaseMap;
