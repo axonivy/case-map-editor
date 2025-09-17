@@ -10,7 +10,6 @@ import { StageDetail } from './StageDetail';
 export const Detail = () => {
   const { selectedElement } = useAppContext();
   const { t } = useTranslation();
-
   return (
     <Flex direction='column' className='case-map-editor-detail-panel'>
       <SidebarHeader icon={IvyIcons.PenEdit} title={selectedElement?.id ?? ''} className='case-map-editor-detail-header'>

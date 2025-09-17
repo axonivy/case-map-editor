@@ -1,4 +1,4 @@
-export * from './case-map-client-rest';
+export * from './case-map-client-json-rpc';
 export { default as CaseMapEditor } from './CaseMapEditor';
 export * from './protocol/ClientContextProvider';
 export * from './query/query-client';

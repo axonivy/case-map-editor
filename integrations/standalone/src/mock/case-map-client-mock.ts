@@ -1,15 +1,15 @@
-import type { CaseMap, CaseMapEditorDataContext, Client } from '@axonivy/case-map-editor-protocol';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { CaseMapEditorDataContext, CaseMapModel, Client, SaveArgs } from '@axonivy/case-map-editor-protocol';
 import { data } from './data.mock';
 
 export class CaseMapClientMock implements Client {
-  private caseMap: CaseMap = data;
+  private caseMap: CaseMapModel = data;
 
-  saveData(saveArgs: { pmv: string; caseMapUuid: string; model: CaseMap }): Promise<unknown> {
-    this.caseMap = saveArgs.model;
-    return Promise.resolve({ content: '' });
+  data(context: CaseMapEditorDataContext): Promise<CaseMapModel> {
+    return Promise.resolve(this.caseMap);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  data(context: CaseMapEditorDataContext): Promise<CaseMap> {
+  saveData(saveData: SaveArgs): Promise<CaseMapModel> {
+    this.caseMap = saveData.model;
     return Promise.resolve(this.caseMap);
   }
 }

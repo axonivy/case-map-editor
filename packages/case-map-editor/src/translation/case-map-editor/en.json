@@ -1,8 +1,7 @@
 {
   "common": {
     "label": {
-      "cancel": "Cancel",
-      "reload": "Reload page"
+      "cancel": "Cancel"
     }
   },
   "dialog": {
@@ -43,8 +42,5 @@
     "addFirstItem": "Add your first stage to your case map.",
     "help": "Help",
     "nothingSelected": "Nothing selected"
-  },
-  "toast": {
-    "unauthorized": "Unauthorized, click “Reload” to log in."
   }
 }
