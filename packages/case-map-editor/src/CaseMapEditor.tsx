@@ -13,7 +13,6 @@ import { genQueryKey } from './query/query-client';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
-
   const [context, setContext] = useState(props.context);
   const [directSave, setDirectSave] = useState(props.directSave);
   useEffect(() => {
@@ -23,8 +22,15 @@ function CaseMapEditor(props: EditorProps) {
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
 
   const client = useClient();
-  const queryClient = useQueryClient();
 
+  useEffect(() => {
+    const animateDispose = client.onAnimate(data => console.log('animate', data));
+    return () => {
+      animateDispose.dispose();
+    };
+  }, [client]);
+
+  const queryClient = useQueryClient();
   const queryKeys = useMemo(() => {
     return {
       data: (context: CaseMapEditorDataContext) => genQueryKey('data', context),
