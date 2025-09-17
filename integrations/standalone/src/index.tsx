@@ -34,6 +34,7 @@ export async function start(): Promise<void> {
   );
   const initialize = async (connection: Connection) => {
     const client = await CaseMapClientJsonRpc.startClient(connection);
+    await client.initialize({ app, pmv, file });
     root.render(
       <React.StrictMode>
         <ThemeProvider defaultTheme={theme}>

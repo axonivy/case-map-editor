@@ -46,10 +46,10 @@ export interface StageModel {
   isTerminating: boolean;
   name: string;
   processes: StageProcessModel[];
-  sideSteps: StageProcessModel[];
+  sidesteps: StageProcessModel[];
 }
 export interface StageId {
-  value: string;
+  id: string;
 }
 export interface StageProcessModel {
   description: string;
