@@ -7,7 +7,7 @@ export const data: CaseMapModel = {
   description: 'A mock case map for testing purposes',
   stages: [
     {
-      id: { value: 'stage-1' },
+      id: { id: 'stage-1' },
       name: 'Start Stage',
       icon: 'start-icon',
       isTerminating: false,
@@ -27,7 +27,7 @@ export const data: CaseMapModel = {
       sideSteps: []
     },
     {
-      id: { value: 'stage-2' },
+      id: { id: 'stage-2' },
       name: 'Review Stage',
       icon: 'review-icon',
       isTerminating: false,
@@ -58,7 +58,7 @@ export const data: CaseMapModel = {
       ]
     },
     {
-      id: { value: 'stage-3' },
+      id: { id: 'stage-3' },
       name: 'Approval Stage',
       icon: 'approval-icon',
       isTerminating: true,

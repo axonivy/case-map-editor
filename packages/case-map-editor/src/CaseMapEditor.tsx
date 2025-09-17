@@ -23,12 +23,15 @@ function CaseMapEditor(props: EditorProps) {
 
   const client = useClient();
 
-  useEffect(() => {
-    const animateDispose = client.onAnimate(data => console.log('animate', data));
-    return () => {
-      animateDispose.dispose();
-    };
-  }, [client]);
+  /**
+   * TODO: Implement animation handling
+   * useEffect(() => {
+   *   const animateDispose = client.onAnimate(data => animate(data));
+   *   return () => {
+   *     animateDispose.dispose();
+   *   };
+   * }, [client]);
+   */
 
   const queryClient = useQueryClient();
   const queryKeys = useMemo(() => {
@@ -82,7 +85,8 @@ function CaseMapEditor(props: EditorProps) {
         detail,
         setDetail,
         setSelectedElement,
-        selectedElement
+        selectedElement,
+        context
       }}
     >
       <link rel='stylesheet' href='/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css' />

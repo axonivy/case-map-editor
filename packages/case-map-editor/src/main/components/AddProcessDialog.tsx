@@ -50,7 +50,7 @@ const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'si
 
     setCaseMap(old => {
       const newDataClass = structuredClone(old);
-      const targetStage = newDataClass.stages.find(stage => stage.id.value === stageId);
+      const targetStage = newDataClass.stages.find(stage => stage.id.id === stageId);
 
       if (targetStage) {
         if (type === 'process') {
@@ -107,7 +107,7 @@ export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id.value === id) ||
+    caseMap.stages.some(stage => stage.id.id === id) ||
     caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
     caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
   ) {

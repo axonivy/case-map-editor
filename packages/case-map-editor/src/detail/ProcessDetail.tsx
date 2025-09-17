@@ -1,12 +1,24 @@
-import { BasicField, BasicInput, Collapsible, CollapsibleContent, CollapsibleTrigger, Flex, PanelMessage } from '@axonivy/ui-components';
+import {
+  BasicField,
+  BasicInput,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  Combobox,
+  Flex,
+  PanelMessage
+} from '@axonivy/ui-components';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
+import { useMeta } from '../context/useMeta';
 import { useStageProcessProperty } from './useCaseMapProperty';
 
 export const ProcessDetail = () => {
   const { t } = useTranslation();
   const { setSelectedElement } = useAppContext();
   const { process, setProperty, setPropertyId, setPropertyProcessToExecute } = useStageProcessProperty();
+  const processes = useMeta('meta/processes', { projectFilter: '' }, []).data.map(p => ({ value: p.name }));
+
   if (!process) {
     return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
   }
@@ -32,7 +44,11 @@ export const ProcessDetail = () => {
               <BasicInput value={process.description} onChange={event => setProperty('description', event.target.value)} />
             </BasicField>
             <BasicField label={t('editor.sidebar.process')} tabIndex={0}>
-              <BasicInput value={process.processToExecute.value} onChange={event => setPropertyProcessToExecute(event.target.value)} />
+              <Combobox
+                options={processes}
+                value={process.processToExecute?.value ?? ''}
+                onChange={value => setPropertyProcessToExecute(value)}
+              />
             </BasicField>
           </Flex>
         </CollapsibleContent>

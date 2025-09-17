@@ -14,7 +14,7 @@ export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOv
   const deleteStage = (id: string) => {
     setCaseMap(old => {
       const newDataClass = structuredClone(old);
-      newDataClass.stages = newDataClass.stages.filter(s => s.id.value !== id);
+      newDataClass.stages = newDataClass.stages.filter(s => s.id.id !== id);
       return newDataClass;
     });
 
@@ -26,11 +26,11 @@ export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOv
   return (
     <>
       <Flex
-        className={`stage-tile ${selectedElement?.id === stage.id.value && selectedElement?.type === 'stage' ? 'selected' : ''}`}
+        className={`stage-tile ${selectedElement?.id === stage.id.id && selectedElement?.type === 'stage' ? 'selected' : ''}`}
         direction='column'
         onClick={e => {
           e.stopPropagation();
-          setSelectedElement({ id: stage.id.value, type: 'stage' });
+          setSelectedElement({ id: stage.id.id, type: 'stage' });
           setDetail(true);
         }}
         style={{ flexWrap: 'wrap' }}
@@ -46,14 +46,14 @@ export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOv
             icon={IvyIcons.Trash}
             onClick={e => {
               e.stopPropagation();
-              deleteStage(stage.id.value);
+              deleteStage(stage.id.id);
             }}
           />
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
-          <ProcessPart stageId={stage.id.value} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
-          <ProcessPart stageId={stage.id.value} title={t('editor.flow.sidesteps')} stageProcesses={stage.sideSteps} type='sidestep' />
+          <ProcessPart stageId={stage.id.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
+          <ProcessPart stageId={stage.id.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sideSteps} type='sidestep' />
         </Flex>
       </Flex>
     </>

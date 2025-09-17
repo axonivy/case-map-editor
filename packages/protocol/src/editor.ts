@@ -49,7 +49,7 @@ export interface StageModel {
   sideSteps: StageProcessModel[];
 }
 export interface StageId {
-  value: string;
+  id: string;
 }
 export interface StageProcessModel {
   description: string;
