@@ -1,12 +1,20 @@
 {
   "common": {
     "label": {
+      "cancel": "Cancel",
       "reload": "Reload page"
     }
   },
   "dialog": {
+    "addProcess": {
+      "create": "Create Process",
+      "desc": "Create a new process",
+      "title": "Add Process"
+    },
     "addStage": {
-      "title": "Add stage"
+      "create": "Create Stage",
+      "desc": "Create a new stage",
+      "title": "Add Stage"
     }
   },
   "editor": {
