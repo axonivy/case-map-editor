@@ -5,6 +5,7 @@
   "dependencies": {
     "@axonivy/case-map-editor": "~13.2.0-next",
     "@axonivy/case-map-editor-protocol": "~13.2.0-next",
+    "@axonivy/jsonrpc": "~13.2.0-next.847.a8ce22a",
     "@axonivy/ui-components": "~13.2.0-next.864.44ab3b6",
     "@axonivy/ui-icons": "~13.2.0-next.864.44ab3b6",
     "@tanstack/react-query": "^5.64",

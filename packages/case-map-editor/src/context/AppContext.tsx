@@ -1,12 +1,12 @@
-import type { CaseMap } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapModel } from '@axonivy/case-map-editor-protocol';
 import type { UpdateConsumer } from '@axonivy/ui-components';
 import { createContext, useContext } from 'react';
 
 export type SelectedElement = { id: string; type: 'stage' | 'process' };
 
 type AppContext = {
-  caseMap: CaseMap;
-  setCaseMap: UpdateConsumer<CaseMap>;
+  caseMap: CaseMapModel;
+  setCaseMap: UpdateConsumer<CaseMapModel>;
   selectedElement?: SelectedElement;
   setSelectedElement: (element?: SelectedElement) => void;
   detail: boolean;
@@ -14,7 +14,7 @@ type AppContext = {
 };
 
 const appContext = createContext<AppContext>({
-  caseMap: {} as CaseMap,
+  caseMap: {} as CaseMapModel,
   setCaseMap: () => {},
   detail: true,
   setSelectedElement: () => {},

@@ -1,12 +1,12 @@
 import { BasicField, BasicInput, Collapsible, CollapsibleContent, CollapsibleTrigger, Flex, PanelMessage } from '@axonivy/ui-components';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
-import { usePreConditionProperty, useStageProcessProperty } from './useCaseMapProperty';
+import { useStageProcessProperty } from './useCaseMapProperty';
 
 export const ProcessDetail = () => {
   const { t } = useTranslation();
   const { setSelectedElement } = useAppContext();
-  const { process, setProperty } = useStageProcessProperty();
+  const { process, setProperty, setPropertyId, setPropertyProcessToExecute } = useStageProcessProperty();
   if (!process) {
     return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
   }
@@ -18,9 +18,9 @@ export const ProcessDetail = () => {
           <Flex direction='column' gap={2}>
             <BasicField label={t('editor.sidebar.id')} tabIndex={0}>
               <BasicInput
-                value={process.id}
+                value={process.id.id}
                 onBlur={event => {
-                  setProperty('id', event.target.value);
+                  setPropertyId(event.target.value);
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />
@@ -32,7 +32,7 @@ export const ProcessDetail = () => {
               <BasicInput value={process.description} onChange={event => setProperty('description', event.target.value)} />
             </BasicField>
             <BasicField label={t('editor.sidebar.process')} tabIndex={0}>
-              <BasicInput value={process.processToExecute} onChange={event => setProperty('processToExecute', event.target.value)} />
+              <BasicInput value={process.processToExecute.value} onChange={event => setPropertyProcessToExecute(event.target.value)} />
             </BasicField>
           </Flex>
         </CollapsibleContent>
@@ -44,8 +44,8 @@ export const ProcessDetail = () => {
 
 const PreConditionFields = () => {
   const { t } = useTranslation();
-  const { preCondition, setProperty } = usePreConditionProperty();
-  if (!preCondition) {
+  const { process, setPropertyPreCondition } = useStageProcessProperty();
+  if (!process) {
     return <>{t('message.nothingSelected')}</>;
   }
   return (
@@ -54,10 +54,13 @@ const PreConditionFields = () => {
       <CollapsibleContent>
         <Flex direction='column' gap={2}>
           <BasicField label={t('editor.sidebar.label')} tabIndex={0}>
-            <BasicInput value={preCondition?.label} onChange={event => setProperty('label', event.target.value)} />
+            <BasicInput value={process.preCondition.label} onChange={event => setPropertyPreCondition('label', event.target.value)} />
           </BasicField>
           <BasicField label={t('editor.sidebar.condition')} tabIndex={0}>
-            <BasicInput value={preCondition?.script} onChange={event => setProperty('script', event.target.value)} />
+            <BasicInput
+              value={process.preCondition.script.script}
+              onChange={event => setPropertyPreCondition('script', { script: event.target.value })}
+            />
           </BasicField>
         </Flex>
       </CollapsibleContent>

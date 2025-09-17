@@ -1,26 +1,60 @@
-import { type CaseMap, type EditorProps } from '@axonivy/case-map-editor-protocol';
-import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, Spinner } from '@axonivy/ui-components';
+import { type CaseMapEditorDataContext, type CaseMapModel, type EditorProps } from '@axonivy/case-map-editor-protocol';
+import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, Spinner, type Unary } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo, useState } from 'react';
 import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
-import { useGetCaseMapModel } from './data/case-map';
 import { Detail } from './detail/Details';
 import { CaseMapFlow } from './main/CaseMapFlow';
 import { MainToolbar } from './main/MainToolbar';
 import { useClient } from './protocol/ClientContextProvider';
+import { genQueryKey } from './query/query-client';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
+
+  const [context, setContext] = useState(props.context);
+  const [directSave, setDirectSave] = useState(props.directSave);
+  useEffect(() => {
+    setContext(props.context);
+    setDirectSave(props.directSave);
+  }, [props]);
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
-  const { data, isPending, isError, error } = useGetCaseMapModel(props.context);
+
   const client = useClient();
   const queryClient = useQueryClient();
 
+  const queryKeys = useMemo(() => {
+    return {
+      data: (context: CaseMapEditorDataContext) => genQueryKey('data', context),
+      saveData: (context: CaseMapEditorDataContext) => genQueryKey('saveData', context)
+    };
+  }, []);
+
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: queryKeys.data(context),
+    queryFn: async () => {
+      return await client.data(context);
+    },
+    structuralSharing: false
+  });
+
   const mutation = useMutation({
-    mutationFn: (updateData: CaseMap) => client.saveData({ pmv: props.context.pmv, caseMapUuid: props.context.uuid, model: updateData }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['model', props.context] })
+    mutationKey: queryKeys.saveData(context),
+    mutationFn: async (updateData: Unary<CaseMapModel>) => {
+      const saveData = queryClient.setQueryData<CaseMapModel>(queryKeys.data(context), prevData => {
+        if (prevData) {
+          return updateData(prevData);
+        }
+        return undefined;
+      });
+      if (saveData) {
+        return client.saveData({ context, model: saveData, directSave });
+      }
+      return Promise.resolve();
+    },
+    onSuccess: () => queryClient.invalidateQueries()
   });
 
   if (isPending) {
@@ -38,13 +72,7 @@ function CaseMapEditor(props: EditorProps) {
     <AppProvider
       value={{
         caseMap: data,
-        setCaseMap: accept => {
-          if (typeof accept === 'function') {
-            mutation.mutate(accept(data));
-          } else {
-            mutation.mutate(accept);
-          }
-        },
+        setCaseMap: mutation.mutate,
         detail,
         setDetail,
         setSelectedElement,
@@ -57,7 +85,7 @@ function CaseMapEditor(props: EditorProps) {
       <ResizablePanelGroup direction='horizontal'>
         <ResizablePanel defaultSize={75} minSize={50} className='case-map-editor-main-panel'>
           <Flex direction='column' style={{ height: '100%' }}>
-            <MainToolbar title={data.name} />
+            <MainToolbar title={data ? data.name : ''} />
 
             <div
               className='case-map-editor-panel-content'

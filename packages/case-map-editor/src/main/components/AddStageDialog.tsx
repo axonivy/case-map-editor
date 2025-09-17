@@ -1,4 +1,4 @@
-import type { CaseMap, Stage } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapModel, StageModel } from '@axonivy/case-map-editor-protocol';
 import {
   BasicDialogContent,
   BasicField,
@@ -16,19 +16,16 @@ import { useAppContext } from '../../context/AppContext';
 
 type AddStageDialogProps = { children: React.ReactNode; index?: number };
 
-export const AddStageDialog = ({ children, index }: AddStageDialogProps) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <AddStageDialogContent index={index} closeDialog={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
-  );
-};
+export const AddStageDialog = ({ children, index }: AddStageDialogProps) => (
+  <Dialog>
+    <DialogTrigger asChild>{children}</DialogTrigger>
+    <DialogContent>
+      <AddStageDialogContent index={index} />
+    </DialogContent>
+  </Dialog>
+);
 
-const AddStageDialogContent = ({ index, closeDialog }: { closeDialog: () => void; index?: number }) => {
+const AddStageDialogContent = ({ index }: { index?: number }) => {
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
 
@@ -39,23 +36,24 @@ const AddStageDialogContent = ({ index, closeDialog }: { closeDialog: () => void
   const idValidationMessage = useMemo(() => validateFieldId(id, caseMap), [id, caseMap]);
 
   const addStage = () => {
-    const newField: Stage = {
-      id: id,
+    const newStage: StageModel = {
+      id: {
+        value: id
+      },
       name: name,
       icon: icon,
+      isTerminating: false,
       description: '',
       processes: [],
-      sidesteps: []
+      sideSteps: []
     };
 
     setCaseMap(old => {
       const newDataClass = structuredClone(old);
       const insertIndex = Math.max(0, Math.min(index ?? caseMap.stages.length - 1, newDataClass.stages.length));
-      newDataClass.stages.splice(insertIndex, 0, newField);
+      newDataClass.stages.splice(insertIndex, 0, newStage);
       return newDataClass;
     });
-
-    closeDialog();
   };
   const allInputsValid = () => !idValidationMessage;
   return (
@@ -94,14 +92,14 @@ const AddStageDialogContent = ({ index, closeDialog }: { closeDialog: () => void
   );
 };
 
-export const validateFieldId = (id: string, caseMap: CaseMap) => {
+export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
   if (id.trim() === '') {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
-    caseMap.stages.some(stage => stage.sidesteps?.some(sidesteps => sidesteps.id === id))
+    caseMap.stages.some(stage => stage.id.value === id) ||
+    caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
+    caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
   ) {
     return toErrorMessage('Id is already taken.');
   }

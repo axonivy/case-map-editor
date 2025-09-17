@@ -1,8 +1,7 @@
 {
   "common": {
     "label": {
-      "cancel": "Abbrechen",
-      "reload": "Seite neu laden"
+      "cancel": "Abbrechen"
     }
   },
   "dialog": {
@@ -43,8 +42,5 @@
     "addFirstItem": "Füge deinem Case Map deinen ersten Eintrag hinzu.",
     "help": "Hilfe",
     "nothingSelected": "Nichts ausgewählt"
-  },
-  "toast": {
-    "unauthorized": "Nicht autorisiert, klicke auf „Neu laden“, um dich anzumelden."
   }
 }

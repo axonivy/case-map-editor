@@ -1,4 +1,4 @@
-import type { CaseMap, ProcessPreCondition, Stage, StageProcess } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapModel, ProcessPreCondition, StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import { useAppContext } from '../context/AppContext';
 
 export const useStageProperty = () => {
@@ -8,20 +8,25 @@ export const useStageProperty = () => {
     return { stage: undefined, setProperty: () => {} };
   }
 
-  const stage = caseMap.stages.find(s => s.id === selectedElement.id);
+  const stage = caseMap.stages.find(s => s.id.value === selectedElement.id);
 
-  const setProperty = <K extends keyof Stage>(key: K, value: Stage[K]) => {
-    setCaseMap(old => {
-      const newCaseMap: CaseMap = structuredClone(old);
-      const idx = newCaseMap.stages.findIndex(s => s.id === selectedElement.id);
-      if (idx !== -1 && newCaseMap.stages[idx]) {
-        newCaseMap.stages[idx][key] = value;
-      }
-      return newCaseMap;
-    });
+  const setProperty = <K extends keyof StageModel>(key: K, value: StageModel[K]) => {
+    setCaseMap(old =>
+      updateStage(old, selectedElement.id, stage => {
+        stage[key] = value;
+      })
+    );
   };
 
-  return { stage, setProperty };
+  const setPropertyId = (value: string) => {
+    setCaseMap(old =>
+      updateStage(old, selectedElement.id, stage => {
+        stage.id = { value };
+      })
+    );
+  };
+
+  return { stage, setProperty, setPropertyId };
 };
 
 export const useStageProcessProperty = () => {
@@ -31,81 +36,74 @@ export const useStageProcessProperty = () => {
     return { process: undefined, setProperty: () => {} };
   }
 
-  let process: StageProcess | undefined;
+  let process: StageProcessModel | undefined;
 
   for (const stage of caseMap.stages) {
-    process = stage.processes?.find(p => p.id === selectedElement.id) ?? stage.sidesteps?.find(s => s.id === selectedElement.id);
+    process = stage.processes?.find(p => p.id.id === selectedElement.id) ?? stage.sideSteps?.find(s => s.id.id === selectedElement.id);
     if (process) break;
   }
 
-  const setProperty = <K extends keyof StageProcess>(key: K, value: StageProcess[K]) => {
+  const setProperty = <K extends keyof StageProcessModel>(key: K, value: StageProcessModel[K]) => {
+    setCaseMap(old =>
+      updateProcessOrSidestep(old, selectedElement.id, process => {
+        process[key] = value;
+      })
+    );
+  };
+
+  const setPropertyProcessToExecute = (value: string) => {
     setCaseMap(old => {
-      const newCaseMap: CaseMap = structuredClone(old);
-      for (const stage of newCaseMap.stages) {
-        const procIdx = stage.processes?.findIndex(p => p.id === selectedElement.id) ?? -1;
-        if (procIdx !== -1 && stage.processes && stage.processes[procIdx]) {
-          stage.processes[procIdx][key] = value;
-          return newCaseMap;
-        }
-        const sideIdx = stage.sidesteps?.findIndex(s => s.id === selectedElement.id) ?? -1;
-        if (sideIdx !== -1 && stage.sidesteps && stage.sidesteps[sideIdx]) {
-          stage.sidesteps[sideIdx][key] = value;
-          return newCaseMap;
-        }
-      }
+      const newCaseMap: CaseMapModel = structuredClone(old);
+      updateProcessOrSidestep(old, selectedElement.id, proc => (proc.processToExecute = { value }));
       return newCaseMap;
     });
   };
 
-  return { process, setProperty };
+  const setPropertyId = (value: string) => {
+    setCaseMap(old => updateProcessOrSidestep(old, selectedElement.id, proc => (proc.id = { id: value })));
+  };
+
+  const setPropertyPreCondition = <K extends keyof ProcessPreCondition>(key: K, value: ProcessPreCondition[K]) => {
+    setCaseMap(old =>
+      updateProcessOrSidestep(old, selectedElement.id, proc => {
+        proc.preCondition = {
+          ...proc.preCondition,
+          [key]: value
+        };
+      })
+    );
+  };
+
+  return { process, setProperty, setPropertyPreCondition, setPropertyProcessToExecute, setPropertyId };
 };
 
-export const usePreConditionProperty = () => {
-  const { caseMap, setCaseMap, selectedElement } = useAppContext();
+const updateStage = (caseMap: CaseMapModel, elementId: string, updater: (stage: StageModel) => void): CaseMapModel => {
+  const newCaseMap: CaseMapModel = structuredClone(caseMap);
+  const stageIdx = newCaseMap.stages.findIndex(s => s.id.value === elementId);
 
-  if (!selectedElement || selectedElement.type !== 'process') {
-    return { preCondition: undefined, setProperty: () => {} };
+  if (stageIdx !== -1 && newCaseMap.stages[stageIdx]) {
+    updater(newCaseMap.stages[stageIdx]);
   }
 
-  let preCondition: ProcessPreCondition | undefined;
+  return newCaseMap;
+};
 
-  for (const stage of caseMap.stages) {
-    const proc = stage.processes?.find(p => p.id === selectedElement.id);
-    if (proc) {
-      preCondition = proc.preCondition;
-      break;
-    }
-    const side = stage.sidesteps?.find(s => s.id === selectedElement.id);
-    if (side) {
-      preCondition = side.preCondition;
-      break;
-    }
-  }
+const updateProcessOrSidestep = (caseMap: CaseMapModel, elementId: string, updater: (proc: StageProcessModel) => void): CaseMapModel => {
+  const newCaseMap: CaseMapModel = structuredClone(caseMap);
 
-  const setProperty = <K extends keyof ProcessPreCondition>(key: K, value: ProcessPreCondition[K]) => {
-    setCaseMap(old => {
-      const newCaseMap: CaseMap = structuredClone(old);
-      for (const stage of newCaseMap.stages) {
-        const procIdx = stage.processes?.findIndex(p => p.id === selectedElement.id) ?? -1;
-        if (procIdx !== -1 && stage.processes && stage.processes[procIdx]) {
-          stage.processes[procIdx].preCondition = {
-            ...(stage.processes[procIdx].preCondition ?? { script: '', label: '' }),
-            [key]: value
-          };
-          return newCaseMap;
-        }
-        const sideIdx = stage.sidesteps?.findIndex(s => s.id === selectedElement.id) ?? -1;
-        if (sideIdx !== -1 && stage.sidesteps && stage.sidesteps[sideIdx]) {
-          stage.sidesteps[sideIdx].preCondition = {
-            ...(stage.sidesteps[sideIdx].preCondition ?? { script: '', label: '' }),
-            [key]: value
-          };
-          return newCaseMap;
-        }
-      }
+  for (const stage of newCaseMap.stages) {
+    const procIdx = stage.processes.length > 0 ? stage.processes.findIndex(p => p.id.id === elementId) : -1;
+    if (procIdx !== -1 && stage.processes[procIdx]) {
+      updater(stage.processes[procIdx]);
       return newCaseMap;
-    });
-  };
+    }
 
-  return { preCondition, setProperty };
+    const sideIdx = stage.sideSteps?.findIndex(s => s.id.id === elementId);
+    if (sideIdx !== -1 && stage.sideSteps[sideIdx]) {
+      updater(stage.sideSteps[sideIdx]);
+      return newCaseMap;
+    }
+  }
+
+  return newCaseMap;
 };
