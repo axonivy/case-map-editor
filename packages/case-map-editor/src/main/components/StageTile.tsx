@@ -1,4 +1,4 @@
-import type { Stage, StageProcess } from '@axonivy/case-map-editor-protocol';
+import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import { Button, Flex, IvyIcon, Separator } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useTranslation } from 'react-i18next';
@@ -7,14 +7,14 @@ import { AddProcessDialog } from './AddProcessDialog';
 import { ProcessTile } from './ProcessTile';
 import './StageTile.css';
 
-export const StageTile = ({ stage, onMouseOver }: { stage: Stage; onMouseOver?: () => void }) => {
+export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOver?: () => void }) => {
   const { t } = useTranslation();
   const { setSelectedElement, setDetail, selectedElement, setCaseMap } = useAppContext();
 
   const deleteStage = (id: string) => {
     setCaseMap(old => {
       const newDataClass = structuredClone(old);
-      newDataClass.stages = newDataClass.stages.filter(s => s.id !== id);
+      newDataClass.stages = newDataClass.stages.filter(s => s.id.value !== id);
       return newDataClass;
     });
 
@@ -23,15 +23,14 @@ export const StageTile = ({ stage, onMouseOver }: { stage: Stage; onMouseOver?: 
       setDetail(false);
     }
   };
-
   return (
     <>
       <Flex
-        className={`stage-tile ${selectedElement?.id === stage.id && selectedElement?.type === 'stage' ? 'selected' : ''}`}
+        className={`stage-tile ${selectedElement?.id === stage.id.value && selectedElement?.type === 'stage' ? 'selected' : ''}`}
         direction='column'
         onClick={e => {
           e.stopPropagation();
-          setSelectedElement({ id: stage.id, type: 'stage' });
+          setSelectedElement({ id: stage.id.value, type: 'stage' });
           setDetail(true);
         }}
         style={{ flexWrap: 'wrap' }}
@@ -47,14 +46,14 @@ export const StageTile = ({ stage, onMouseOver }: { stage: Stage; onMouseOver?: 
             icon={IvyIcons.Trash}
             onClick={e => {
               e.stopPropagation();
-              deleteStage(stage.id);
+              deleteStage(stage.id.value);
             }}
           />
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
-          <ProcessPart stageId={stage.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
-          <ProcessPart stageId={stage.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sidesteps} type='sidestep' />
+          <ProcessPart stageId={stage.id.value} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
+          <ProcessPart stageId={stage.id.value} title={t('editor.flow.sidesteps')} stageProcesses={stage.sideSteps} type='sidestep' />
         </Flex>
       </Flex>
     </>
@@ -69,10 +68,11 @@ const ProcessPart = ({
 }: {
   stageId: string;
   title: string;
-  stageProcesses?: StageProcess[];
+  stageProcesses?: StageProcessModel[];
   type: 'process' | 'sidestep';
 }) => {
   const { t } = useTranslation();
+
   const processesAvailable = stageProcesses !== undefined && stageProcesses.length > 0;
   return (
     <Flex direction='column' gap={2}>
@@ -93,7 +93,7 @@ const ProcessPart = ({
         </AddProcessDialog>
       )}
       {stageProcesses?.map(proc => (
-        <ProcessTile key={proc.id} process={proc} type={type} />
+        <ProcessTile key={proc.id.id} process={proc} type={type} />
       ))}
     </Flex>
   );

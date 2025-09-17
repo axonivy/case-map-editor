@@ -1,4 +1,4 @@
-import type { CaseMap, StageProcess } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import {
   BasicDialogContent,
   BasicField,
@@ -20,27 +20,16 @@ type AddProcessDialogProps = {
   children: React.ReactNode;
 };
 
-export const AddProcessDialog = ({ stageId, type, children }: AddProcessDialogProps) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
-        <AddProcessDialogContent stageId={stageId} type={type} closeDialog={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
-  );
-};
+export const AddProcessDialog = ({ stageId, type, children }: AddProcessDialogProps) => (
+  <Dialog>
+    <DialogTrigger asChild>{children}</DialogTrigger>
+    <DialogContent>
+      <AddProcessDialogContent stageId={stageId} type={type} />
+    </DialogContent>
+  </Dialog>
+);
 
-const AddProcessDialogContent = ({
-  closeDialog,
-  stageId,
-  type
-}: {
-  closeDialog: () => void;
-  stageId: string;
-  type: 'sidestep' | 'process';
-}) => {
+const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'sidestep' | 'process' }) => {
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
   const [id, setId] = useState('newId');
@@ -51,32 +40,30 @@ const AddProcessDialogContent = ({
   const processValidationMessage = useMemo(() => validateFieldProcess(process), [process]);
 
   const addProcess = () => {
-    const newProcess: StageProcess = {
-      id: id,
+    const newProcess: StageProcessModel = {
+      id: { id: id },
       name: name,
-      processToExecute: process,
+      processToExecute: { value: process },
       description: '',
-      preCondition: { label: '', script: '' }
+      preCondition: { label: '', script: { script: '' } }
     };
 
     setCaseMap(old => {
       const newDataClass = structuredClone(old);
-      const targetStage = newDataClass.stages.find(stage => stage.id === stageId);
+      const targetStage = newDataClass.stages.find(stage => stage.id.value === stageId);
 
       if (targetStage) {
         if (type === 'process') {
           targetStage.processes = targetStage.processes ?? [];
           targetStage.processes.push(newProcess);
         } else {
-          targetStage.sidesteps = targetStage.sidesteps ?? [];
-          targetStage.sidesteps.push(newProcess);
+          targetStage.sideSteps = targetStage.sideSteps ?? [];
+          targetStage.sideSteps.push(newProcess);
         }
       }
 
       return newDataClass;
     });
-
-    closeDialog();
   };
   const allInputsValid = () => !idValidationMessage && !processValidationMessage;
   return (
@@ -115,14 +102,14 @@ const AddProcessDialogContent = ({
   );
 };
 
-export const validateFieldId = (id: string, caseMap: CaseMap) => {
+export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
   if (id.trim() === '') {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
-    caseMap.stages.some(stage => stage.sidesteps?.some(sidesteps => sidesteps.id === id))
+    caseMap.stages.some(stage => stage.id.value === id) ||
+    caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
+    caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
   ) {
     return toErrorMessage('Id is already taken.');
   }

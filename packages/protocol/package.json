@@ -21,11 +21,11 @@
     "clean": "rimraf lib tsconfig.tsbuildinfo",
     "build": "tsc --build",
     "package": "tsc",
+    "generate": "node ./schemaCodegen.cjs",
     "build:clean": "npm run clean && npm run generate && npm run build",
     "type": "tsc --noEmit"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.0",
     "json-schema-to-typescript": "^15.0.4"
   }
 }

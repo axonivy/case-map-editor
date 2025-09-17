@@ -1,4 +1,4 @@
-import type { Stage } from '@axonivy/case-map-editor-protocol';
+import type { StageModel } from '@axonivy/case-map-editor-protocol';
 import { Button, Flex, PanelMessage } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useState } from 'react';
@@ -10,33 +10,31 @@ import { StageTile } from './components/StageTile';
 
 export const CaseMapFlow = () => {
   const { caseMap } = useAppContext();
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [showPlaceholder, setShowPlaceholder] = useState<number | null>(null);
+  const [hoverIndex, setHoverIndex] = useState<number | undefined>();
+  const [showPlaceholder, setShowPlaceholder] = useState<number | undefined>();
 
-  if (!caseMap.stages || caseMap.stages.length === 0) {
+  if (!caseMap || !caseMap.stages || caseMap.stages.length === 0) {
     return <EmptyState />;
   }
 
   return (
     <Flex direction='row' className='case-map-flow'>
-      {caseMap.stages.map((stage, index) => {
-        return (
-          <Flex key={stage.id} direction='row'>
-            <Flex gap={4} direction='column' alignItems='center'>
-              <StageConnector stage={stage} showLeftLine={index !== 0} />
-              <StageTile stage={stage} />
-            </Flex>
-            <AddStageSlot
-              index={index}
-              isLast={index === caseMap.stages.length - 1}
-              hoverIndex={hoverIndex}
-              setHoverIndex={setHoverIndex}
-              showPlaceholder={showPlaceholder}
-              setShowPlaceholder={setShowPlaceholder}
-            />
+      {caseMap.stages.map((stage, index) => (
+        <Flex key={stage.id.value} direction='row'>
+          <Flex gap={4} direction='column' alignItems='center'>
+            <StageConnector stage={stage} showLeftLine={index !== 0} />
+            <StageTile stage={stage} />
           </Flex>
-        );
-      })}
+          <AddStageSlot
+            index={index}
+            isLast={index === caseMap.stages.length - 1}
+            hoverIndex={hoverIndex}
+            setHoverIndex={setHoverIndex}
+            showPlaceholder={showPlaceholder}
+            setShowPlaceholder={setShowPlaceholder}
+          />
+        </Flex>
+      ))}
       <Flex style={{ width: '50vw', flexShrink: 0 }} />
     </Flex>
   );
@@ -58,19 +56,19 @@ const EmptyState = () => {
   );
 };
 
-const StageConnector = ({ stage, showLeftLine }: { stage: Stage; showLeftLine: boolean }) => {
+const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLine: boolean }) => {
   const { selectedElement, setSelectedElement, setDetail } = useAppContext();
   const isStageSelected =
-    (selectedElement?.id === stage.id && selectedElement?.type === 'stage') ||
-    stage.processes?.some(proc => proc.id === selectedElement?.id) ||
-    stage.sidesteps?.some(proc => proc.id === selectedElement?.id);
+    (selectedElement?.id === stage.id.value && selectedElement?.type === 'stage') ||
+    stage.processes?.some(proc => proc.id.id === selectedElement?.id) ||
+    stage.sideSteps?.some(proc => proc.id.id === selectedElement?.id);
   return (
     <Flex className='stage-header' alignItems='center' justifyContent='center'>
       <div className={showLeftLine ? 'stage-line' : 'stage-line-hidden'} />
       <div
         className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
         onClick={() => {
-          setSelectedElement({ id: stage.id, type: 'stage' });
+          setSelectedElement({ id: stage.id.value, type: 'stage' });
           setDetail(true);
         }}
       />
@@ -89,10 +87,10 @@ const AddStageSlot = ({
 }: {
   index: number;
   isLast: boolean;
-  hoverIndex: number | null;
-  setHoverIndex: (i: number | null) => void;
-  showPlaceholder: number | null;
-  setShowPlaceholder: (i: number | null) => void;
+  hoverIndex?: number;
+  setHoverIndex: (i: number | undefined) => void;
+  showPlaceholder?: number;
+  setShowPlaceholder: (i: number | undefined) => void;
 }) => {
   return (
     <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>
@@ -101,7 +99,7 @@ const AddStageSlot = ({
         alignItems='center'
         justifyContent='center'
         onMouseOver={() => setHoverIndex(index)}
-        onMouseOut={() => setShowPlaceholder(null)}
+        onMouseOut={() => setShowPlaceholder(undefined)}
       >
         {(hoverIndex === index || isLast) && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>

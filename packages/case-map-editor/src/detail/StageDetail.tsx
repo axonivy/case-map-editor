@@ -15,7 +15,7 @@ import { useStageProperty } from './useCaseMapProperty';
 export const StageDetail = () => {
   const { t } = useTranslation();
   const { setSelectedElement } = useAppContext();
-  const { stage, setProperty } = useStageProperty();
+  const { stage, setProperty, setPropertyId } = useStageProperty();
   if (!stage) {
     return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
   }
@@ -27,9 +27,9 @@ export const StageDetail = () => {
           <Flex direction='column' gap={2}>
             <BasicField label={t('editor.sidebar.id')} tabIndex={0}>
               <BasicInput
-                value={stage.id}
+                value={stage.id.value}
                 onBlur={event => {
-                  setProperty('id', event.target.value);
+                  setPropertyId(event.target.value);
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />
