@@ -15,9 +15,13 @@ import { useStageProcessProperty } from './useCaseMapProperty';
 
 export const ProcessDetail = () => {
   const { t } = useTranslation();
-  const { setSelectedElement } = useAppContext();
-  const { process, setProperty, setPropertyId, setPropertyProcessToExecute } = useStageProcessProperty();
-  const processes = useMeta('meta/processes', { projectFilter: '' }, []).data.map(p => ({ value: p.name }));
+  const { context, setSelectedElement } = useAppContext();
+  const { process, setProperty } = useStageProcessProperty();
+  const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data.map(p => ({
+    value: p.name + ':' + p.processReference,
+    name: p.name,
+    detail: p.userFriendlyRequestPath
+  }));
 
   if (!process) {
     return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
@@ -32,7 +36,7 @@ export const ProcessDetail = () => {
               <BasicInput
                 value={process.id.id}
                 onBlur={event => {
-                  setPropertyId(event.target.value);
+                  setProperty('id', { id: event.target.value });
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />
@@ -47,13 +51,23 @@ export const ProcessDetail = () => {
               <Combobox
                 options={processes}
                 value={process.processToExecute?.value ?? ''}
-                onChange={value => setPropertyProcessToExecute(value)}
+                onChange={value => setProperty('processToExecute', { value: value })}
+                itemRender={option => <ExtendedComboboxProcess {...option} />}
               />
             </BasicField>
           </Flex>
         </CollapsibleContent>
       </Collapsible>
       <PreConditionFields />
+    </Flex>
+  );
+};
+
+const ExtendedComboboxProcess = ({ name, detail }: { name: string; detail: string }) => {
+  return (
+    <Flex direction='row' gap={1} style={{ flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <span>{name}</span>
+      <span style={{ color: 'var(--N700)' }}>- {detail}</span>
     </Flex>
   );
 };

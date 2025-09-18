@@ -1,6 +1,7 @@
 import type { StageModel } from '@axonivy/case-map-editor-protocol';
-import { Button, Flex, PanelMessage } from '@axonivy/ui-components';
+import { Button, cn, Flex, PanelMessage } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
+import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
@@ -27,11 +28,13 @@ export const CaseMapFlow = () => {
           </Flex>
           <AddStageSlot
             index={index}
+            stageId={stage.id.id}
             isLast={index === caseMap.stages.length - 1}
             hoverIndex={hoverIndex}
             setHoverIndex={setHoverIndex}
             showPlaceholder={showPlaceholder}
             setShowPlaceholder={setShowPlaceholder}
+            postStageId={caseMap.stages?.[index + 1]?.id.id ?? undefined}
           />
         </Flex>
       ))}
@@ -67,7 +70,8 @@ const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLi
       <div className={showLeftLine ? 'stage-line' : 'stage-line-hidden'} />
       <div
         className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
-        onClick={() => {
+        onClick={e => {
+          e.stopPropagation();
           setSelectedElement({ id: stage.id.id, type: 'stage' });
           setDetail(true);
         }}
@@ -83,7 +87,9 @@ const AddStageSlot = ({
   hoverIndex,
   setHoverIndex,
   showPlaceholder,
-  setShowPlaceholder
+  setShowPlaceholder,
+  stageId,
+  postStageId
 }: {
   index: number;
   isLast: boolean;
@@ -91,7 +97,15 @@ const AddStageSlot = ({
   setHoverIndex: (i?: number) => void;
   showPlaceholder?: number;
   setShowPlaceholder: (i?: number) => void;
+  stageId: string;
+  postStageId?: string;
 }) => {
+  const dnd = useDndContext();
+  const { isOver, setNodeRef } = useDroppable({
+    id: stageId,
+    disabled: dnd.active?.id === stageId || dnd.active?.id === postStageId || dnd.active?.data?.current?.type !== 'stage'
+  });
+
   return (
     <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>
       <Flex
@@ -108,9 +122,14 @@ const AddStageSlot = ({
         )}
         <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
       </Flex>
-      <Flex style={{ flex: 1 }}>
+
+      <Flex style={{ flex: 1 }} ref={setNodeRef}>
         <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
-        <Flex direction='column' className={`placeholder-stage ${showPlaceholder === index ? 'visible' : ''}`} alignItems='center' />
+        <Flex
+          direction='column'
+          className={cn('placeholder-stage', showPlaceholder === index && 'visible', isOver && 'is-drop-target')}
+          alignItems='center'
+        />
         <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
       </Flex>
     </Flex>

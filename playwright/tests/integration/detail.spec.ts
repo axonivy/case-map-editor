@@ -54,7 +54,7 @@ test('process', async ({ page }) => {
   await condition.fill('New Condition');
 
   await description.expectValue('New Description');
-  await process.expectValue('my.start.Process');
+  await process.expectValue('new-process');
   await label.expectValue('New Label');
   await condition.expectValue('New Condition');
 });
