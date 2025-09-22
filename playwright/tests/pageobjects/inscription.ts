@@ -47,6 +47,10 @@ export class Collapsible {
     return new Checkbox(this.page, this.content, label);
   }
 
+  combobox(label: string) {
+    return new Combobox(this.page, this.content, label);
+  }
+
   async toggleControl(nth?: number) {
     await this.control.nth(nth ? nth : 0).click();
   }
@@ -131,5 +135,35 @@ export class Checkbox {
     } else {
       await expect(this.locator).not.toBeChecked();
     }
+  }
+}
+
+export class Combobox {
+  readonly locator: Locator;
+
+  constructor(
+    readonly page: Page,
+    parentLocator: Locator,
+    label?: string
+  ) {
+    if (label) {
+      this.locator = parentLocator.getByRole('combobox', { name: label }).first();
+    } else {
+      this.locator = parentLocator.getByRole('combobox').nth(0);
+    }
+  }
+
+  async fill(value: string) {
+    await this.locator.fill(value);
+    await this.locator.blur();
+  }
+
+  async choose(value: string) {
+    await this.locator.fill(value);
+    await this.page.getByRole('option', { name: value }).first().click();
+  }
+
+  async expectValue(value: string | RegExp) {
+    await expect(this.locator).toHaveValue(value);
   }
 }

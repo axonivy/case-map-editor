@@ -38,7 +38,7 @@ const AddStageDialogContent = ({ index }: { index?: number }) => {
   const addStage = () => {
     const newStage: StageModel = {
       id: {
-        value: id
+        id: id
       },
       name: name,
       icon: icon,
@@ -97,7 +97,7 @@ export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id.value === id) ||
+    caseMap.stages.some(stage => stage.id.id === id) ||
     caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
     caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
   ) {

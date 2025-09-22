@@ -20,7 +20,7 @@ export const CaseMapFlow = () => {
   return (
     <Flex direction='row' className='case-map-flow'>
       {caseMap.stages.map((stage, index) => (
-        <Flex key={stage.id.value} direction='row'>
+        <Flex key={stage.id.id} direction='row'>
           <Flex gap={4} direction='column' alignItems='center'>
             <StageConnector stage={stage} showLeftLine={index !== 0} />
             <StageTile stage={stage} />
@@ -59,7 +59,7 @@ const EmptyState = () => {
 const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLine: boolean }) => {
   const { selectedElement, setSelectedElement, setDetail } = useAppContext();
   const isStageSelected =
-    (selectedElement?.id === stage.id.value && selectedElement?.type === 'stage') ||
+    (selectedElement?.id === stage.id.id && selectedElement?.type === 'stage') ||
     stage.processes?.some(proc => proc.id.id === selectedElement?.id) ||
     stage.sideSteps?.some(proc => proc.id.id === selectedElement?.id);
   return (
@@ -68,7 +68,7 @@ const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLi
       <div
         className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
         onClick={() => {
-          setSelectedElement({ id: stage.id.value, type: 'stage' });
+          setSelectedElement({ id: stage.id.id, type: 'stage' });
           setDetail(true);
         }}
       />
@@ -88,9 +88,9 @@ const AddStageSlot = ({
   index: number;
   isLast: boolean;
   hoverIndex?: number;
-  setHoverIndex: (i: number | undefined) => void;
+  setHoverIndex: (i?: number) => void;
   showPlaceholder?: number;
-  setShowPlaceholder: (i: number | undefined) => void;
+  setShowPlaceholder: (i?: number) => void;
 }) => {
   return (
     <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>

@@ -9,7 +9,7 @@ test('stage', async ({ page }) => {
   const id = general.input('Id');
   const name = general.input('Name');
   const description = general.input('Description');
-  const icon = general.input('Icon');
+  const icon = general.combobox('Icon');
   const isTerminating = general.checkbox('Is Terminating');
   await id.expectValue('stage-1');
   await name.expectValue('Start Stage');
@@ -35,7 +35,7 @@ test('process', async ({ page }) => {
   const id = general.input('Id');
   const name = general.input('Name');
   const description = general.input('Description');
-  const process = general.input('Process');
+  const process = general.combobox('Process');
   const precondition = editor.inscription.collapsible('Precondition');
   const label = precondition.input('Label');
   const condition = precondition.input('Condition');
@@ -54,7 +54,7 @@ test('process', async ({ page }) => {
   await condition.fill('New Condition');
 
   await description.expectValue('New Description');
-  await process.expectValue('new-process');
+  await process.expectValue('my.start.Process');
   await label.expectValue('New Label');
   await condition.expectValue('New Condition');
 });

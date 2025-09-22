@@ -13,7 +13,6 @@ import { genQueryKey } from './query/query-client';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
-
   const [context, setContext] = useState(props.context);
   const [directSave, setDirectSave] = useState(props.directSave);
   useEffect(() => {
@@ -23,8 +22,18 @@ function CaseMapEditor(props: EditorProps) {
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
 
   const client = useClient();
-  const queryClient = useQueryClient();
 
+  /**
+   * TODO: Implement animation handling
+   * useEffect(() => {
+   *   const animateDispose = client.onAnimate(data => animate(data));
+   *   return () => {
+   *     animateDispose.dispose();
+   *   };
+   * }, [client]);
+   */
+
+  const queryClient = useQueryClient();
   const queryKeys = useMemo(() => {
     return {
       data: (context: CaseMapEditorDataContext) => genQueryKey('data', context),
@@ -76,7 +85,8 @@ function CaseMapEditor(props: EditorProps) {
         detail,
         setDetail,
         setSelectedElement,
-        selectedElement
+        selectedElement,
+        context
       }}
     >
       <link rel='stylesheet' href='/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css' />

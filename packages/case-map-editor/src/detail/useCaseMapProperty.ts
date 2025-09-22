@@ -8,7 +8,7 @@ export const useStageProperty = () => {
     return { stage: undefined, setProperty: () => {} };
   }
 
-  const stage = caseMap.stages.find(s => s.id.value === selectedElement.id);
+  const stage = caseMap.stages.find(s => s.id.id === selectedElement.id);
 
   const setProperty = <K extends keyof StageModel>(key: K, value: StageModel[K]) => {
     setCaseMap(old =>
@@ -21,7 +21,7 @@ export const useStageProperty = () => {
   const setPropertyId = (value: string) => {
     setCaseMap(old =>
       updateStage(old, selectedElement.id, stage => {
-        stage.id = { value };
+        stage.id = { id: value };
       })
     );
   };
@@ -79,7 +79,7 @@ export const useStageProcessProperty = () => {
 
 const updateStage = (caseMap: CaseMapModel, elementId: string, updater: (stage: StageModel) => void): CaseMapModel => {
   const newCaseMap: CaseMapModel = structuredClone(caseMap);
-  const stageIdx = newCaseMap.stages.findIndex(s => s.id.value === elementId);
+  const stageIdx = newCaseMap.stages.findIndex(s => s.id.id === elementId);
 
   if (stageIdx !== -1 && newCaseMap.stages[stageIdx]) {
     updater(newCaseMap.stages[stageIdx]);
