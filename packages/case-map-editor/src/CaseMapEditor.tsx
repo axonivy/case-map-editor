@@ -2,7 +2,7 @@ import { type CaseMapEditorDataContext, type CaseMapModel, type EditorProps } fr
 import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, Spinner, type Unary } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
 import { Detail } from './detail/Details';
@@ -13,12 +13,7 @@ import { genQueryKey } from './query/query-client';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
-  const [context, setContext] = useState(props.context);
-  const [directSave, setDirectSave] = useState(props.directSave);
-  useEffect(() => {
-    setContext(props.context);
-    setDirectSave(props.directSave);
-  }, [props]);
+  const context = props.context;
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
 
   const client = useClient();
@@ -59,7 +54,7 @@ function CaseMapEditor(props: EditorProps) {
         return undefined;
       });
       if (saveData) {
-        return client.saveData({ context, model: saveData, directSave });
+        return client.saveData({ context, model: saveData, directSave: props.directSave });
       }
       return Promise.resolve();
     },
