@@ -1,7 +1,7 @@
 .process-tile,
 .sidestep-tile {
   flex: 1;
-  background: white;
+  background: var(--background);
   padding: var(--size-2);
   border-radius: var(--border-r2);
   border: var(--basic-border);

@@ -18,7 +18,7 @@ import { useStageProperty } from './useCaseMapProperty';
 export const StageDetail = () => {
   const { t } = useTranslation();
   const { setSelectedElement } = useAppContext();
-  const { stage, setProperty, setPropertyId } = useStageProperty();
+  const { stage, setProperty } = useStageProperty();
   if (!stage) {
     return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
   }
@@ -32,7 +32,7 @@ export const StageDetail = () => {
               <BasicInput
                 value={stage.id.id}
                 onBlur={event => {
-                  setPropertyId(event.target.value);
+                  setProperty('id', { id: event.target.value });
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />

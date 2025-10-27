@@ -1,41 +1,41 @@
 import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import { Button, Flex, IvyIcon, Separator } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
+import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { useCaseMapData } from '../useCaseMapData';
 import { AddProcessDialog } from './AddProcessDialog';
+import { DropZone, FirstStageDropZone } from './DropZone';
 import { ProcessTile } from './ProcessTile';
 import './StageTile.css';
+import { useSelectableTile } from './useSelectableTile';
 
-export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOver?: () => void }) => {
+export const StageTile = ({ stage }: { stage: StageModel }) => {
   const { t } = useTranslation();
-  const { setSelectedElement, setDetail, selectedElement, setCaseMap } = useAppContext();
+  const { caseMap } = useAppContext();
+  const { attributes, listeners, setNodeRef } = useDraggable({
+    id: stage.id.id,
+    data: { type: 'stage' },
+    attributes: { tabIndex: 0 }
+  });
+  const isFirst = caseMap.stages[0]?.id.id === stage.id.id;
+  const { deleteElementById } = useCaseMapData();
+  const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id.id, 'stage');
 
-  const deleteStage = (id: string) => {
-    setCaseMap(old => {
-      const newDataClass = structuredClone(old);
-      newDataClass.stages = newDataClass.stages.filter(s => s.id.id !== id);
-      return newDataClass;
-    });
-
-    if (selectedElement?.id === id && selectedElement?.type === 'stage') {
-      setSelectedElement(undefined);
-      setDetail(false);
-    }
-  };
   return (
-    <>
+    <FirstStageDropZone isFirst={isFirst} id={stage.id.id}>
       <Flex
-        className={`stage-tile ${selectedElement?.id === stage.id.id && selectedElement?.type === 'stage' ? 'selected' : ''}`}
+        className={`stage-tile ${isSelected ? 'selected' : ''}`}
         direction='column'
-        onClick={e => {
-          e.stopPropagation();
-          setSelectedElement({ id: stage.id.id, type: 'stage' });
-          setDetail(true);
-        }}
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}
+        onKeyDown={onKeyDown}
         style={{ flexWrap: 'wrap' }}
         gap={3}
-        onMouseOver={onMouseOver}
+        ref={setNodeRef}
+        {...listeners}
+        {...attributes}
       >
         <Flex className='stage-tile-header' alignItems='center' justifyContent='space-between' gap={2}>
           <Flex gap={2} alignItems='center'>
@@ -46,7 +46,7 @@ export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOv
             icon={IvyIcons.Trash}
             onClick={e => {
               e.stopPropagation();
-              deleteStage(stage.id.id);
+              deleteElementById(stage.id.id, 'stage');
             }}
           />
         </Flex>
@@ -56,7 +56,7 @@ export const StageTile = ({ stage, onMouseOver }: { stage: StageModel; onMouseOv
           <ProcessPart stageId={stage.id.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sideSteps} type='sidestep' />
         </Flex>
       </Flex>
-    </>
+    </FirstStageDropZone>
   );
 };
 
@@ -72,29 +72,40 @@ const ProcessPart = ({
   type: 'process' | 'sidestep';
 }) => {
   const { t } = useTranslation();
+  const dnd = useDndContext();
+  const { isOver, setNodeRef } = useDroppable({
+    id: `empty-${type}-${stageId}`,
+    disabled: dnd.active?.data?.current?.type !== 'process'
+  });
 
   const processesAvailable = stageProcesses !== undefined && stageProcesses.length > 0;
   return (
     <Flex direction='column' gap={2}>
-      <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
-        {title}
-        {processesAvailable && (
+      {processesAvailable ? (
+        <>
+          <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id.id ?? undefined}>
+            <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
+              {title}
+              <AddProcessDialog type={type} stageId={stageId}>
+                <Button size='small' icon={IvyIcons.Plus} />
+              </AddProcessDialog>
+            </Flex>
+          </DropZone>
+          {stageProcesses?.map((proc, index) => (
+            <ProcessTile key={proc.id.id} process={proc} type={type} postId={stageProcesses?.[index + 1]?.id.id ?? undefined} />
+          ))}
+        </>
+      ) : (
+        <>
+          <div style={{ fontWeight: 'bold' }}>{title}</div>
           <AddProcessDialog type={type} stageId={stageId}>
-            <Button size='small' icon={IvyIcons.Plus} />
+            <Button className={`add-process-button ${isOver && 'is-drop-target'}`} ref={setNodeRef}>
+              {t(`editor.flow.addFirstItem`, { item: title })}
+              <IvyIcon icon={IvyIcons.Plus} />
+            </Button>
           </AddProcessDialog>
-        )}
-      </Flex>
-      {!processesAvailable && (
-        <AddProcessDialog type={type} stageId={stageId}>
-          <Button className='add-process-button'>
-            {t(`editor.flow.addFirstItem`, { item: title })}
-            <IvyIcon icon={IvyIcons.Plus} />
-          </Button>
-        </AddProcessDialog>
+        </>
       )}
-      {stageProcesses?.map(proc => (
-        <ProcessTile key={proc.id.id} process={proc} type={type} />
-      ))}
     </Flex>
   );
 };

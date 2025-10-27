@@ -13,6 +13,7 @@ import { IvyIcons } from '@axonivy/ui-icons';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { modifyData } from '../../data/data';
 
 type AddStageDialogProps = { children: React.ReactNode; index?: number };
 
@@ -49,10 +50,8 @@ const AddStageDialogContent = ({ index }: { index?: number }) => {
     };
 
     setCaseMap(old => {
-      const newDataClass = structuredClone(old);
-      const insertIndex = Math.max(0, Math.min(index ?? caseMap.stages.length - 1, newDataClass.stages.length));
-      newDataClass.stages.splice(insertIndex, 0, newStage);
-      return newDataClass;
+      const afterId = caseMap.stages[index ? index - 1 : caseMap.stages.length - 1]?.id.id;
+      return modifyData(old, { type: 'add', data: { newElement: newStage, type: 'stage', targetId: afterId } }).newData;
     });
   };
   const allInputsValid = () => !idValidationMessage;

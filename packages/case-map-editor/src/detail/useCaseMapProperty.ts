@@ -18,15 +18,7 @@ export const useStageProperty = () => {
     );
   };
 
-  const setPropertyId = (value: string) => {
-    setCaseMap(old =>
-      updateStage(old, selectedElement.id, stage => {
-        stage.id = { id: value };
-      })
-    );
-  };
-
-  return { stage, setProperty, setPropertyId };
+  return { stage, setProperty };
 };
 
 export const useStageProcessProperty = () => {
@@ -50,19 +42,6 @@ export const useStageProcessProperty = () => {
       })
     );
   };
-
-  const setPropertyProcessToExecute = (value: string) => {
-    setCaseMap(old => {
-      const newCaseMap: CaseMapModel = structuredClone(old);
-      updateProcessOrSidestep(old, selectedElement.id, proc => (proc.processToExecute = { value }));
-      return newCaseMap;
-    });
-  };
-
-  const setPropertyId = (value: string) => {
-    setCaseMap(old => updateProcessOrSidestep(old, selectedElement.id, proc => (proc.id = { id: value })));
-  };
-
   const setPropertyPreCondition = <K extends keyof ProcessPreCondition>(key: K, value: ProcessPreCondition[K]) => {
     setCaseMap(old =>
       updateProcessOrSidestep(old, selectedElement.id, proc => {
@@ -74,7 +53,7 @@ export const useStageProcessProperty = () => {
     );
   };
 
-  return { process, setProperty, setPropertyPreCondition, setPropertyProcessToExecute, setPropertyId };
+  return { process, setProperty, setPropertyPreCondition };
 };
 
 const updateStage = (caseMap: CaseMapModel, elementId: string, updater: (stage: StageModel) => void): CaseMapModel => {

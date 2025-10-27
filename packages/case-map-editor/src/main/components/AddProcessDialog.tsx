@@ -13,6 +13,7 @@ import { IvyIcons } from '@axonivy/ui-icons';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { modifyData } from '../../data/data';
 
 type AddProcessDialogProps = {
   stageId: string;
@@ -48,23 +49,15 @@ const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'si
       preCondition: { label: '', script: { script: '' } }
     };
 
-    setCaseMap(old => {
-      const newDataClass = structuredClone(old);
-      const targetStage = newDataClass.stages.find(stage => stage.id.id === stageId);
-
-      if (targetStage) {
-        if (type === 'process') {
-          targetStage.processes = targetStage.processes ?? [];
-          targetStage.processes.push(newProcess);
-        } else {
-          targetStage.sideSteps = targetStage.sideSteps ?? [];
-          targetStage.sideSteps.push(newProcess);
-        }
-      }
-
-      return newDataClass;
-    });
+    setCaseMap(
+      old =>
+        modifyData(old, {
+          type: 'add',
+          data: { parentId: stageId, type: type, newElement: newProcess }
+        }).newData
+    );
   };
+
   const allInputsValid = () => !idValidationMessage && !processValidationMessage;
   return (
     <BasicDialogContent

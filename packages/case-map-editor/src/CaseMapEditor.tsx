@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
+import { DndContext } from './context/DndContext';
 import { Detail } from './detail/Details';
 import { CaseMapFlow } from './main/CaseMapFlow';
 import { MainToolbar } from './main/MainToolbar';
@@ -88,21 +89,23 @@ function CaseMapEditor(props: EditorProps) {
       <link rel='stylesheet' href='/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css' />
       <link rel='stylesheet' href='/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces' />
       <ResizablePanelGroup direction='horizontal'>
-        <ResizablePanel defaultSize={75} minSize={50} className='case-map-editor-main-panel'>
-          <Flex direction='column' style={{ height: '100%' }}>
-            <MainToolbar title={data ? data.name : ''} />
+        <DndContext>
+          <ResizablePanel defaultSize={75} minSize={50} className='case-map-editor-main-panel'>
+            <Flex direction='column' style={{ height: '100%' }}>
+              <MainToolbar title={data ? data.name : ''} />
 
-            <div
-              className='case-map-editor-panel-content'
-              onClick={() => {
-                setSelectedElement(undefined);
-                setDetail(false);
-              }}
-            >
-              <CaseMapFlow />
-            </div>
-          </Flex>
-        </ResizablePanel>
+              <div
+                className='case-map-editor-panel-content'
+                onClick={() => {
+                  setSelectedElement(undefined);
+                  setDetail(false);
+                }}
+              >
+                <CaseMapFlow />
+              </div>
+            </Flex>
+          </ResizablePanel>
+        </DndContext>
         {detail && (
           <>
             <ResizableHandle />
