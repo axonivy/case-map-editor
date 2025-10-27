@@ -37,9 +37,9 @@ export const DndContext = ({ children }: { children: ReactNode }) => {
       {children}
       <DragOverlay dropAnimation={null}>
         {activeElement?.type === 'stage' ? (
-          <StageTile stage={activeElement.data} />
+          <StageTile stage={activeElement.data} dragging={true} />
         ) : activeElement?.type === 'process' || activeElement?.type === 'sidestep' ? (
-          <ProcessTile type={activeElement.type} process={activeElement.data} />
+          <ProcessTile type={activeElement.type} process={activeElement.data} dragging={true} />
         ) : null}
       </DragOverlay>
     </DndKitContext>

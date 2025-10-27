@@ -1,12 +1,22 @@
 import type { StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import { Flex, IvyIcon } from '@axonivy/ui-components';
+import { cn, Flex, IvyIcon } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDraggable } from '@dnd-kit/core';
 import { DropZone } from './DropZone';
 import './ProcessTile.css';
 import { useSelectableTile } from './useSelectableTile';
 
-export const ProcessTile = ({ process, type, postId }: { process: StageProcessModel; type: 'process' | 'sidestep'; postId?: string }) => {
+export const ProcessTile = ({
+  process,
+  type,
+  postId,
+  dragging
+}: {
+  process: StageProcessModel;
+  type: 'process' | 'sidestep';
+  postId?: string;
+  dragging?: boolean;
+}) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: process.id.id,
     data: { type: 'process' },
@@ -18,7 +28,7 @@ export const ProcessTile = ({ process, type, postId }: { process: StageProcessMo
     <DropZone id={process.id.id} postId={postId}>
       <Flex
         key={process.id.id}
-        className={`${type}-tile ${isSelected ? 'selected' : ''}`}
+        className={cn(`${type}-tile`, { selected: isSelected, dragging })}
         alignItems='center'
         justifyContent='space-between'
         onClick={onClick}

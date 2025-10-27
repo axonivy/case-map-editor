@@ -30,4 +30,11 @@
   &.selected {
     box-shadow: var(--focus-shadow);
   }
+
+  &.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    border: var(--select-active-border);
+    background-color: var(--P50);
+  }
 }
