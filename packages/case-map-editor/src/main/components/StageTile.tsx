@@ -1,5 +1,5 @@
 import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import { Button, Flex, IvyIcon, Separator } from '@axonivy/ui-components';
+import { Button, cn, Flex, IvyIcon, Separator } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import { ProcessTile } from './ProcessTile';
 import './StageTile.css';
 import { useSelectableTile } from './useSelectableTile';
 
-export const StageTile = ({ stage }: { stage: StageModel }) => {
+export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: boolean }) => {
   const { t } = useTranslation();
   const { caseMap } = useAppContext();
   const { attributes, listeners, setNodeRef } = useDraggable({
@@ -26,7 +26,7 @@ export const StageTile = ({ stage }: { stage: StageModel }) => {
   return (
     <FirstStageDropZone isFirst={isFirst} id={stage.id.id}>
       <Flex
-        className={`stage-tile ${isSelected ? 'selected' : ''}`}
+        className={cn('stage-tile', { selected: isSelected, dragging })}
         direction='column'
         onClick={onClick}
         onDoubleClick={onDoubleClick}
@@ -99,7 +99,7 @@ const ProcessPart = ({
         <>
           <div style={{ fontWeight: 'bold' }}>{title}</div>
           <AddProcessDialog type={type} stageId={stageId}>
-            <Button className={`add-process-button ${isOver && 'is-drop-target'}`} ref={setNodeRef}>
+            <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef}>
               {t(`editor.flow.addFirstItem`, { item: title })}
               <IvyIcon icon={IvyIcons.Plus} />
             </Button>
