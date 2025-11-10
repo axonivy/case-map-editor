@@ -2,6 +2,7 @@ import type {
   CaseMapEditorDataContext,
   CaseMapModel,
   CaseMapNotificationTypes,
+  Event,
   MetaRequestTypes,
   RequestTypes,
   SaveArgs
@@ -19,7 +20,7 @@ import {
 
 export class CaseMapClientJsonRpc extends BaseRpcClient implements CaseMapClient {
   protected onAnimateEmitter = new Emitter<void>();
-  onAnimate = this.onAnimateEmitter.event;
+  onAnimate: Event<void> = this.onAnimateEmitter.event;
 
   protected override setupConnection(): void {
     super.setupConnection();
