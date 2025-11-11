@@ -22,7 +22,7 @@
     "build": "tsc --build",
     "package": "tsc",
     "generate": "node ./schemaCodegen.cjs",
-    "build:clean": "npm run clean && npm run generate && npm run build",
+    "build:clean": "pnpm run clean && pnpm run generate && pnpm run build",
     "type": "tsc --noEmit"
   },
   "devDependencies": {
