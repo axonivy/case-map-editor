@@ -45,10 +45,10 @@ importers:
   integrations/standalone:
     dependencies:
       '@axonivy/case-map-editor':
-        specifier: workspace:~13.2.0-next
+        specifier: workspace:~14.0.0-next
         version: link:../../packages/case-map-editor
       '@axonivy/case-map-editor-protocol':
-        specifier: workspace:~13.2.0-next
+        specifier: workspace:~14.0.0-next
         version: link:../../packages/protocol
       '@axonivy/jsonrpc':
         specifier: ~13.2.0-next.940.7631360
@@ -97,7 +97,7 @@ importers:
   packages/case-map-editor:
     dependencies:
       '@axonivy/case-map-editor-protocol':
-        specifier: workspace:~13.2.0-next
+        specifier: workspace:~14.0.0-next
         version: link:../protocol
       '@dnd-kit/core':
         specifier: ^6.3.1
