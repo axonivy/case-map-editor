@@ -5,10 +5,9 @@
   padding: var(--size-2);
   border-radius: var(--border-r2);
   border: var(--basic-border);
+  user-select: none;
   max-width: 330px;
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 
   .process-tile-condition-badge {
     background-color: var(--P300);
