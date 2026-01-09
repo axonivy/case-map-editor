@@ -42,11 +42,11 @@ const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'si
 
   const addProcess = () => {
     const newProcess: StageProcessModel = {
-      id: { id: id },
+      id: id,
       name: name,
-      processToExecute: { value: process },
+      processToExecute: process,
       description: '',
-      preCondition: { label: '', script: { script: '' } }
+      preCondition: { label: '', script: '' }
     };
 
     setCaseMap(
@@ -100,9 +100,9 @@ export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
-    caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
+    caseMap.stages.some(stage => stage.id === id) ||
+    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
+    caseMap.stages.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
   ) {
     return toErrorMessage('Id is already taken.');
   }

@@ -15,16 +15,16 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
   const { t } = useTranslation();
   const { caseMap } = useAppContext();
   const { attributes, listeners, setNodeRef } = useDraggable({
-    id: stage.id.id,
+    id: stage.id,
     data: { type: 'stage' },
     attributes: { tabIndex: 0 }
   });
-  const isFirst = caseMap.stages[0]?.id.id === stage.id.id;
+  const isFirst = caseMap.stages[0]?.id === stage.id;
   const { deleteElementById } = useCaseMapData();
-  const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id.id, 'stage');
+  const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id, 'stage');
 
   return (
-    <FirstStageDropZone isFirst={isFirst} id={stage.id.id}>
+    <FirstStageDropZone isFirst={isFirst} id={stage.id}>
       <Flex
         className={cn('stage-tile', { selected: isSelected, dragging })}
         direction='column'
@@ -46,14 +46,14 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
             icon={IvyIcons.Trash}
             onClick={e => {
               e.stopPropagation();
-              deleteElementById(stage.id.id, 'stage');
+              deleteElementById(stage.id, 'stage');
             }}
           />
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
-          <ProcessPart stageId={stage.id.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
-          <ProcessPart stageId={stage.id.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sideSteps} type='sidestep' />
+          <ProcessPart stageId={stage.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
+          <ProcessPart stageId={stage.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sidesteps} type='sidestep' />
         </Flex>
       </Flex>
     </FirstStageDropZone>
@@ -83,7 +83,7 @@ const ProcessPart = ({
     <Flex direction='column' gap={2}>
       {processesAvailable ? (
         <>
-          <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id.id ?? undefined}>
+          <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id ?? undefined}>
             <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
               {title}
               <AddProcessDialog type={type} stageId={stageId}>
@@ -92,7 +92,7 @@ const ProcessPart = ({
             </Flex>
           </DropZone>
           {stageProcesses?.map((proc, index) => (
-            <ProcessTile key={proc.id.id} process={proc} type={type} postId={stageProcesses?.[index + 1]?.id.id ?? undefined} />
+            <ProcessTile key={proc.id} process={proc} type={type} postId={stageProcesses?.[index + 1]?.id ?? undefined} />
           ))}
         </>
       ) : (

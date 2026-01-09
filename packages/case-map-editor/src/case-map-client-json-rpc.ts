@@ -1,7 +1,8 @@
 import type {
-  CaseMapEditorDataContext,
-  CaseMapModel,
+  CaseMapContext,
+  CaseMapEditorData,
   CaseMapNotificationTypes,
+  EditorFileContent,
   Event,
   MetaRequestTypes,
   RequestTypes,
@@ -29,7 +30,7 @@ export class CaseMapClientJsonRpc extends BaseRpcClient implements CaseMapClient
     });
   }
 
-  initialize(context: CaseMapEditorDataContext): Promise<boolean> {
+  initialize(context: CaseMapContext): Promise<boolean> {
     this.sendRequest('initialize', context);
     return Promise.resolve(true);
   }
@@ -38,10 +39,10 @@ export class CaseMapClientJsonRpc extends BaseRpcClient implements CaseMapClient
     return this.sendRequest(path, args);
   }
 
-  data(context: CaseMapEditorDataContext): Promise<CaseMapModel> {
+  data(context: CaseMapContext): Promise<CaseMapEditorData> {
     return this.sendRequest('data', context);
   }
-  saveData(saveData: SaveArgs): Promise<CaseMapModel> {
+  saveData(saveData: SaveArgs): Promise<EditorFileContent> {
     return this.sendRequest('saveData', saveData);
   }
 

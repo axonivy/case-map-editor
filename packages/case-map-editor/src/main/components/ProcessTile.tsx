@@ -18,16 +18,16 @@ export const ProcessTile = ({
   dragging?: boolean;
 }) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
-    id: process.id.id,
+    id: process.id,
     data: { type: 'process' },
     attributes: { tabIndex: 0 }
   });
-  const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(process.id.id, 'process');
+  const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(process.id, 'process');
 
   return (
-    <DropZone id={process.id.id} postId={postId}>
+    <DropZone id={process.id} postId={postId}>
       <Flex
-        key={process.id.id}
+        key={process.id}
         className={cn(`${type}-tile`, { selected: isSelected, dragging })}
         alignItems='center'
         justifyContent='space-between'
@@ -42,7 +42,7 @@ export const ProcessTile = ({
           <IvyIcon icon={IvyIcons.EditDots} />
           <div className='process-tile-name'> {process.name}</div>
         </Flex>
-        {process.preCondition !== undefined && process.preCondition.label.length > 0 && process.preCondition.script.script.length > 0 && (
+        {process.preCondition !== undefined && process.preCondition.label.length > 0 && process.preCondition.script.length > 0 && (
           <IvyIcon className='process-tile-condition-badge' icon={IvyIcons.Condition} />
         )}
       </Flex>

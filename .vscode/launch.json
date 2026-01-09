@@ -8,7 +8,7 @@
       "name": "Launch Standalone (Chrome)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3002/?server=localhost:8081&app=designer&pmv=case-map-test-project&file=/processes/Lending/Lending.icm",
+      "url": "http://localhost:3002/?server=localhost:8080/~Developer-case-map-test-project&app=Developer-case-map-test-project&pmv=case-map-test-project&file=processes/Lending/Lending.icm",
       "preLaunchTask": "Start Standalone",
       "postDebugTask": "Terminate All Tasks"
     },

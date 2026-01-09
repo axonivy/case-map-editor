@@ -99,16 +99,15 @@ export const findElementById = (caseMap: CaseMapModel, id: string): FindElement 
   if (!caseMap) {
     return undefined;
   }
-  const stage = caseMap.stages.find(s => s.id.id === id);
+  const stage = caseMap.stages?.find(s => s.id === id);
   if (stage) return { data: stage, parentArray: caseMap.stages, index: caseMap.stages.indexOf(stage), type: 'stage' };
   for (const s of caseMap.stages) {
-    const process = s.processes.find(p => p.id.id === id);
-    if (process)
-      return { data: process, parentArray: s.processes, index: s.processes.indexOf(process), type: 'process', parentId: s.id.id };
+    const process = s.processes?.find(p => p.id === id);
+    if (process) return { data: process, parentArray: s.processes, index: s.processes.indexOf(process), type: 'process', parentId: s.id };
 
-    const sidestep = s.sideSteps.find(ss => ss.id.id === id);
+    const sidestep = s.sidesteps?.find(ss => ss.id === id);
     if (sidestep)
-      return { data: sidestep, parentArray: s.sideSteps, index: s.sideSteps.indexOf(sidestep), type: 'sidestep', parentId: s.id.id };
+      return { data: sidestep, parentArray: s.sidesteps, index: s.sidesteps.indexOf(sidestep), type: 'sidestep', parentId: s.id };
   }
 
   return undefined;
@@ -132,16 +131,16 @@ const addElement = (
   if (type === 'stage') {
     if (!insertAfterId || insertAfterId.startsWith('first-stage')) {
       data.stages.unshift(element as StageModel);
-      return (element as StageModel).id.id;
+      return (element as StageModel).id;
     }
-    const index = data.stages.findIndex(p => p.id.id === insertAfterId);
+    const index = data.stages.findIndex(p => p.id === insertAfterId);
     if (index !== -1) {
       add(data.stages, element as StageModel, index + 1);
-      return (element as StageModel).id.id;
+      return (element as StageModel).id;
     }
   }
   if (!insertAfterId) {
-    const parentStage = data.stages.find(s => s.id.id === parentId);
+    const parentStage = data.stages.find(s => s.id === parentId);
     if (parentStage) {
       return pushElementToStage(parentStage, type, element as StageProcessModel);
     }
@@ -149,33 +148,39 @@ const addElement = (
   if (type === 'process') {
     if (insertAfterId?.startsWith('empty-') || insertAfterId?.startsWith('first-')) {
       const [, emptyType, stageId] = insertAfterId.split('-');
-      const stage = data.stages.find(s => s.id.id === stageId);
+      const stage = data.stages.find(s => s.id === stageId);
       if (stage) {
         return pushElementToStage(stage, emptyType as 'process' | 'sidestep', element as StageProcessModel);
       }
     }
     const foundElement = findElementById(data, insertAfterId ?? '');
-    const parentStage = data.stages.find(
-      s => s.id.id === (foundElement && foundElement.type !== 'stage' ? foundElement.parentId : undefined)
-    );
+    const parentStage = data.stages.find(s => s.id === (foundElement && foundElement.type !== 'stage' ? foundElement.parentId : undefined));
 
     if (parentStage) {
-      let index = parentStage.processes.findIndex(p => p.id.id === insertAfterId);
+      ensureStageArrays(parentStage);
+      let index = parentStage.processes.findIndex(p => p.id === insertAfterId);
       if (index === -1) {
-        index = parentStage.sideSteps.findIndex(p => p.id.id === insertAfterId);
+        index = parentStage.sidesteps.findIndex(p => p.id === insertAfterId);
         if (index !== -1) {
-          add(parentStage.sideSteps, element as StageProcessModel, index + 1);
-          return (element as StageProcessModel).id.id;
+          add(parentStage.sidesteps, element as StageProcessModel, index + 1);
+          return (element as StageProcessModel).id;
         }
       }
       add(parentStage.processes, element as StageProcessModel, index + 1);
-      return (element as StageProcessModel).id.id;
+      return (element as StageProcessModel).id;
     }
   }
 };
 
+const ensureStageArrays = (stage: StageModel) => {
+  stage.processes ??= [];
+  stage.sidesteps ??= [];
+};
+
 const pushElementToStage = (stage: StageModel, type: ElementType, element: StageProcessModel): string => {
-  const target = type === 'process' ? stage.processes : type === 'sidestep' ? stage.sideSteps : [];
+  ensureStageArrays(stage);
+  const target = type === 'process' ? stage.processes : type === 'sidestep' ? stage.sidesteps : [];
+
   target.unshift(element);
-  return element.id.id;
+  return element.id;
 };

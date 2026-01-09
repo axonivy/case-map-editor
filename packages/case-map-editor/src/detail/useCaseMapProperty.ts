@@ -8,7 +8,7 @@ export const useStageProperty = () => {
     return { stage: undefined, setProperty: () => {} };
   }
 
-  const stage = caseMap.stages.find(s => s.id.id === selectedElement.id);
+  const stage = caseMap.stages.find(s => s.id === selectedElement.id);
 
   const setProperty = <K extends keyof StageModel>(key: K, value: StageModel[K]) => {
     setCaseMap(old =>
@@ -31,7 +31,7 @@ export const useStageProcessProperty = () => {
   let process: StageProcessModel | undefined;
 
   for (const stage of caseMap.stages) {
-    process = stage.processes?.find(p => p.id.id === selectedElement.id) ?? stage.sideSteps?.find(s => s.id.id === selectedElement.id);
+    process = stage.processes?.find(p => p.id === selectedElement.id) ?? stage.sidesteps?.find(s => s.id === selectedElement.id);
     if (process) break;
   }
 
@@ -58,7 +58,7 @@ export const useStageProcessProperty = () => {
 
 const updateStage = (caseMap: CaseMapModel, elementId: string, updater: (stage: StageModel) => void): CaseMapModel => {
   const newCaseMap: CaseMapModel = structuredClone(caseMap);
-  const stageIdx = newCaseMap.stages.findIndex(s => s.id.id === elementId);
+  const stageIdx = newCaseMap.stages.findIndex(s => s.id === elementId);
 
   if (stageIdx !== -1 && newCaseMap.stages[stageIdx]) {
     updater(newCaseMap.stages[stageIdx]);
@@ -71,15 +71,15 @@ const updateProcessOrSidestep = (caseMap: CaseMapModel, elementId: string, updat
   const newCaseMap: CaseMapModel = structuredClone(caseMap);
 
   for (const stage of newCaseMap.stages) {
-    const procIdx = stage.processes.length > 0 ? stage.processes.findIndex(p => p.id.id === elementId) : -1;
-    if (procIdx !== -1 && stage.processes[procIdx]) {
+    const procIdx = stage.processes.length > 0 ? stage.processes.findIndex(p => p.id === elementId) : -1;
+    if (procIdx !== undefined && procIdx !== -1 && stage.processes[procIdx]) {
       updater(stage.processes[procIdx]);
       return newCaseMap;
     }
 
-    const sideIdx = stage.sideSteps?.findIndex(s => s.id.id === elementId);
-    if (sideIdx !== -1 && stage.sideSteps[sideIdx]) {
-      updater(stage.sideSteps[sideIdx]);
+    const sideIdx = stage.sidesteps?.findIndex(s => s.id === elementId);
+    if (sideIdx !== undefined && sideIdx !== -1 && stage.sidesteps[sideIdx]) {
+      updater(stage.sidesteps[sideIdx]);
       return newCaseMap;
     }
   }

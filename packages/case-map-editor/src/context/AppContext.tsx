@@ -1,4 +1,4 @@
-import type { CaseMapEditorDataContext, CaseMapModel } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapContext, CaseMapModel } from '@axonivy/case-map-editor-protocol';
 import type { UpdateConsumer } from '@axonivy/ui-components';
 import { createContext, useContext } from 'react';
 
@@ -11,7 +11,7 @@ type AppContext = {
   setSelectedElement: (element?: SelectedElement) => void;
   detail: boolean;
   setDetail: (visible: boolean) => void;
-  context: CaseMapEditorDataContext;
+  context: CaseMapContext;
 };
 
 const appContext = createContext<AppContext>({

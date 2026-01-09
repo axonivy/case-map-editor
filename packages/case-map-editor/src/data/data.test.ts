@@ -3,25 +3,25 @@ import { describe, expect } from 'vitest';
 import { findElementById, modifyData } from './data';
 
 const createProcess = (id: string): StageProcessModel => ({
-  id: { id },
+  id: id,
   name: `Process ${id}`,
   description: '',
-  preCondition: { label: '', script: { script: '' } },
-  processToExecute: { value: '' }
+  preCondition: { label: '', script: '' },
+  processToExecute: ''
 });
 
 const createStage = (id: string, processes: string[], sidesteps: string[]): StageModel => ({
-  id: { id },
+  id: id,
   name: `Stage ${id}`,
   description: '',
   icon: '',
   isTerminating: false,
   processes: processes.map(createProcess),
-  sideSteps: sidesteps.map(createProcess)
+  sidesteps: sidesteps.map(createProcess)
 });
 
 const baseModel = (): CaseMapModel => ({
-  id: { id: 'root' },
+  id: 'root',
   uuid: 'uuid',
   name: 'test model',
   description: '',
@@ -33,7 +33,7 @@ describe('findElementById', () => {
     const model = baseModel();
     const result = findElementById(model, 's1');
     expect(result?.type).toBe('stage');
-    expect(result?.data.id.id).toBe('s1');
+    expect(result?.data.id).toBe('s1');
   });
 
   test('should find a process by id', () => {
@@ -41,7 +41,7 @@ describe('findElementById', () => {
     const result = findElementById(model, 'p1');
     expect(result?.type).toBe('process');
     expect(result?.type === 'process' ? result.parentId : undefined).toBe('s1');
-    expect(result?.data.id.id).toBe('p1');
+    expect(result?.data.id).toBe('p1');
   });
 
   test('should find a sidestep by id', () => {
@@ -49,7 +49,7 @@ describe('findElementById', () => {
     const result = findElementById(model, 'ss1');
     expect(result?.type).toBe('sidestep');
     expect(result?.type === 'sidestep' ? result.parentId : undefined).toBe('s2');
-    expect(result?.data.id.id).toBe('ss1');
+    expect(result?.data.id).toBe('ss1');
   });
 
   test('should return undefined if not found', () => {
@@ -81,7 +81,7 @@ describe('modifyData - stages', () => {
       type: 'add',
       data: { newElement: newStage, type: 'stage', targetId: 's2' }
     });
-    expect(newData.stages[2]?.id.id).toBe('s4');
+    expect(newData.stages[2]?.id).toBe('s4');
   });
 
   test('should remove a stage', () => {
@@ -95,18 +95,18 @@ describe('modifyData - stages', () => {
 
   test('should move a stage up and down', () => {
     const model = baseModel();
-    expect(model.stages[1]?.id.id).toBe('s2');
+    expect(model.stages[1]?.id).toBe('s2');
     let { newData } = modifyData(model, {
       type: 'moveUp',
       data: { id: 's2' }
     });
-    expect(newData.stages[0]?.id.id).toBe('s2');
+    expect(newData.stages[0]?.id).toBe('s2');
 
     ({ newData } = modifyData(newData, {
       type: 'moveDown',
       data: { id: 's2' }
     }));
-    expect(newData.stages[1]?.id.id).toBe('s2');
+    expect(newData.stages[1]?.id).toBe('s2');
   });
 });
 
@@ -128,7 +128,7 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'add',
       data: { newElement: sidestep, type: 'sidestep', parentId: 's2' }
     });
-    expect(newData.stages[1]?.sideSteps).toHaveLength(3);
+    expect(newData.stages[1]?.sidesteps).toHaveLength(3);
   });
 
   test('should add process after empty-process slot', () => {
@@ -148,7 +148,7 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'add',
       data: { newElement: ss1, type: 'process', targetId: 'empty-sidestep-s1' }
     });
-    expect(newData.stages[0]?.sideSteps).toHaveLength(1);
+    expect(newData.stages[0]?.sidesteps).toHaveLength(1);
   });
 
   test('should insert process after another process', () => {
@@ -158,7 +158,7 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'add',
       data: { newElement: p2, type: 'process', targetId: 'p1' }
     });
-    expect(newData.stages[0]?.processes[1]?.id.id).toBe('p5');
+    expect(newData.stages[0]?.processes[1]?.id).toBe('p5');
   });
 
   test('should insert sidestep after another sidestep', () => {
@@ -168,7 +168,7 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'add',
       data: { newElement: ss2, type: 'process', targetId: 'ss1', parentId: 's2' }
     });
-    expect(newData.stages[1]?.sideSteps[1]?.id.id).toBe('ss5');
+    expect(newData.stages[1]?.sidesteps[1]?.id).toBe('ss5');
   });
 
   test('should remove a sidestep', () => {
@@ -177,7 +177,7 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'remove',
       data: { id: 'ss1' }
     });
-    expect(newData.stages[1]?.sideSteps).toHaveLength(1);
+    expect(newData.stages[1]?.sidesteps).toHaveLength(1);
   });
 
   test('should move a sidestep up and down', () => {
@@ -186,13 +186,13 @@ describe('modifyData - processes and sidesteps', () => {
       type: 'moveUp',
       data: { id: 'ss2' }
     });
-    expect(newData.stages[1]?.sideSteps[0]?.id.id).toBe('ss2');
+    expect(newData.stages[1]?.sidesteps[0]?.id).toBe('ss2');
 
     ({ newData } = modifyData(newData, {
       type: 'moveDown',
       data: { id: 'ss2' }
     }));
-    expect(newData.stages[1]?.sideSteps[1]?.id.id).toBe('ss2');
+    expect(newData.stages[1]?.sidesteps[1]?.id).toBe('ss2');
   });
 });
 
@@ -206,8 +206,8 @@ describe('modifyData - dnd', () => {
     expect(newComponentId).toBe('p3');
     expect(newData.stages[0]?.processes).toHaveLength(3);
     expect(newData.stages[2]?.processes).toHaveLength(0);
-    expect(newData.stages[0]?.processes[0]?.id.id).toBe('p1');
-    expect(newData.stages[0]?.processes[1]?.id.id).toBe('p3');
+    expect(newData.stages[0]?.processes[0]?.id).toBe('p1');
+    expect(newData.stages[0]?.processes[1]?.id).toBe('p3');
   });
 
   test('should handle dnd for sidesteps', () => {
@@ -217,10 +217,10 @@ describe('modifyData - dnd', () => {
       data: { activeId: 'ss3', targetId: 'ss1', type: 'process' }
     });
     expect(newComponentId).toBe('ss3');
-    expect(newData.stages[2]?.sideSteps).toHaveLength(0);
-    expect(newData.stages[1]?.sideSteps).toHaveLength(3);
-    expect(newData.stages[1]?.sideSteps[0]?.id.id).toBe('ss1');
-    expect(newData.stages[1]?.sideSteps[1]?.id.id).toBe('ss3');
+    expect(newData.stages[2]?.sidesteps).toHaveLength(0);
+    expect(newData.stages[1]?.sidesteps).toHaveLength(3);
+    expect(newData.stages[1]?.sidesteps[0]?.id).toBe('ss1');
+    expect(newData.stages[1]?.sidesteps[1]?.id).toBe('ss3');
   });
 
   test('should return undefined if dnd activeId not found', () => {
@@ -256,6 +256,6 @@ describe('edge cases', () => {
       type: 'moveDown',
       data: { id: 'not-found' }
     });
-    expect(newData.stages[0]?.id.id).toBe('s1');
+    expect(newData.stages[0]?.id).toBe('s1');
   });
 });

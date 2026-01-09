@@ -1,4 +1,4 @@
-import { type CaseMapEditorDataContext, type CaseMapModel, type EditorProps } from '@axonivy/case-map-editor-protocol';
+import { type CaseMapContext, type CaseMapEditorData, type CaseMapModel, type EditorProps } from '@axonivy/case-map-editor-protocol';
 import { Flex, PanelMessage, ResizableHandle, ResizablePanel, ResizablePanelGroup, Spinner, type Unary } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -32,8 +32,8 @@ function CaseMapEditor(props: EditorProps) {
   const queryClient = useQueryClient();
   const queryKeys = useMemo(() => {
     return {
-      data: (context: CaseMapEditorDataContext) => genQueryKey('data', context),
-      saveData: (context: CaseMapEditorDataContext) => genQueryKey('saveData', context)
+      data: (context: CaseMapContext) => genQueryKey('data', context),
+      saveData: (context: CaseMapContext) => genQueryKey('saveData', context)
     };
   }, []);
 
@@ -48,14 +48,14 @@ function CaseMapEditor(props: EditorProps) {
   const mutation = useMutation({
     mutationKey: queryKeys.saveData(context),
     mutationFn: async (updateData: Unary<CaseMapModel>) => {
-      const saveData = queryClient.setQueryData<CaseMapModel>(queryKeys.data(context), prevData => {
+      const saveData = queryClient.setQueryData<CaseMapEditorData>(queryKeys.data(context), prevData => {
         if (prevData) {
-          return updateData(prevData);
+          return { ...prevData, data: updateData(prevData.data) };
         }
         return undefined;
       });
       if (saveData) {
-        return client.saveData({ context, model: saveData, directSave: props.directSave });
+        return client.saveData({ context, data: saveData.data, directSave: props.directSave });
       }
       return Promise.resolve();
     },
@@ -76,7 +76,7 @@ function CaseMapEditor(props: EditorProps) {
   return (
     <AppProvider
       value={{
-        caseMap: data,
+        caseMap: data.data,
         setCaseMap: mutation.mutate,
         detail,
         setDetail,
@@ -85,14 +85,14 @@ function CaseMapEditor(props: EditorProps) {
         context
       }}
     >
-      <link rel='stylesheet' href='/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css' />
+      {/* <link rel='stylesheet' href='/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css' />
       <link rel='stylesheet' href='/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css' />
-      <link rel='stylesheet' href='/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces' />
+      <link rel='stylesheet' href='/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces' /> */}
       <ResizablePanelGroup direction='horizontal'>
         <DndContext>
           <ResizablePanel defaultSize={75} minSize={50} className='case-map-editor-main-panel'>
             <Flex direction='column' style={{ height: '100%' }}>
-              <MainToolbar title={data ? data.name : ''} />
+              <MainToolbar title={data ? data.data.name : ''} />
 
               <div
                 className='case-map-editor-panel-content'
