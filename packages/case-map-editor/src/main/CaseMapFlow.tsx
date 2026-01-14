@@ -21,20 +21,20 @@ export const CaseMapFlow = () => {
   return (
     <Flex direction='row' className='case-map-flow'>
       {caseMap.stages.map((stage, index) => (
-        <Flex key={stage.id.id} direction='row'>
+        <Flex key={stage.id} direction='row'>
           <Flex gap={4} direction='column' alignItems='center'>
             <StageConnector stage={stage} showLeftLine={index !== 0} />
             <StageTile stage={stage} />
           </Flex>
           <AddStageSlot
             index={index}
-            stageId={stage.id.id}
+            stageId={stage.id}
             isLast={index === caseMap.stages.length - 1}
             hoverIndex={hoverIndex}
             setHoverIndex={setHoverIndex}
             showPlaceholder={showPlaceholder}
             setShowPlaceholder={setShowPlaceholder}
-            postStageId={caseMap.stages?.[index + 1]?.id.id ?? undefined}
+            postStageId={caseMap.stages?.[index + 1]?.id ?? undefined}
           />
         </Flex>
       ))}
@@ -62,9 +62,9 @@ const EmptyState = () => {
 const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLine: boolean }) => {
   const { selectedElement, setSelectedElement, setDetail } = useAppContext();
   const isStageSelected =
-    (selectedElement?.id === stage.id.id && selectedElement?.type === 'stage') ||
-    stage.processes?.some(proc => proc.id.id === selectedElement?.id) ||
-    stage.sideSteps?.some(proc => proc.id.id === selectedElement?.id);
+    (selectedElement?.id === stage.id && selectedElement?.type === 'stage') ||
+    stage.processes?.some(proc => proc.id === selectedElement?.id) ||
+    stage.sidesteps?.some(proc => proc.id === selectedElement?.id);
   return (
     <Flex className='stage-header' alignItems='center' justifyContent='center'>
       <div className={showLeftLine ? 'stage-line' : 'stage-line-hidden'} />
@@ -72,10 +72,12 @@ const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLi
         className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
         onClick={e => {
           e.stopPropagation();
-          setSelectedElement({ id: stage.id.id, type: 'stage' });
+          setSelectedElement({ id: stage.id, type: 'stage' });
           setDetail(true);
         }}
-      />
+      >
+        <i className={stage.icon} />
+      </div>
       <div className='stage-line' />
     </Flex>
   );

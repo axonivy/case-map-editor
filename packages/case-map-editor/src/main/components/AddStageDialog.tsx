@@ -38,19 +38,17 @@ const AddStageDialogContent = ({ index }: { index?: number }) => {
 
   const addStage = () => {
     const newStage: StageModel = {
-      id: {
-        id: id
-      },
+      id: id,
       name: name,
       icon: icon,
       isTerminating: false,
       description: '',
       processes: [],
-      sideSteps: []
+      sidesteps: []
     };
 
     setCaseMap(old => {
-      const afterId = caseMap.stages[index ? index - 1 : caseMap.stages.length - 1]?.id.id;
+      const afterId = caseMap.stages[index ? index - 1 : caseMap.stages.length - 1]?.id;
       return modifyData(old, { type: 'add', data: { newElement: newStage, type: 'stage', targetId: afterId } }).newData;
     });
   };
@@ -96,9 +94,9 @@ export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id.id === id)) ||
-    caseMap.stages.some(stage => stage.sideSteps?.some(sideSteps => sideSteps.id.id === id))
+    caseMap.stages.some(stage => stage.id === id) ||
+    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
+    caseMap.stages.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
   ) {
     return toErrorMessage('Id is already taken.');
   }

@@ -30,9 +30,9 @@ export const StageDetail = () => {
           <Flex direction='column' gap={2}>
             <BasicField label={t('editor.sidebar.id')} tabIndex={0}>
               <BasicInput
-                value={stage.id.id}
+                value={stage.id}
                 onBlur={event => {
-                  setProperty('id', { id: event.target.value });
+                  setProperty('id', event.target.value);
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />

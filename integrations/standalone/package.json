@@ -5,9 +5,9 @@
   "dependencies": {
     "@axonivy/case-map-editor": "workspace:~14.0.0-next",
     "@axonivy/case-map-editor-protocol": "workspace:~14.0.0-next",
-    "@axonivy/jsonrpc": "~14.0.0-next.971.89c0a99",
-    "@axonivy/ui-components": "~14.0.0-next.971.89c0a99",
-    "@axonivy/ui-icons": "~14.0.0-next.971.89c0a99",
+    "@axonivy/jsonrpc": "~14.0.0-next.975.2016b35",
+    "@axonivy/ui-components": "~14.0.0-next.975.2016b35",
+    "@axonivy/ui-icons": "~14.0.0-next.975.2016b35",
     "@tanstack/react-query": "^5.64",
     "@tanstack/react-query-devtools": "^5.64",
     "i18next": "^25.0.0",

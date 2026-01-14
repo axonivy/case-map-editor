@@ -18,8 +18,8 @@ export const ProcessDetail = () => {
   const { context, setSelectedElement } = useAppContext();
   const { process, setProperty } = useStageProcessProperty();
   const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data.map(p => ({
-    value: p.name + ':' + p.processReference,
-    name: p.name,
+    value: p.processReference,
+    name: p.startName.length > 0 ? p.startName : p.processName,
     detail: p.userFriendlyRequestPath
   }));
 
@@ -34,9 +34,9 @@ export const ProcessDetail = () => {
           <Flex direction='column' gap={2}>
             <BasicField label={t('editor.sidebar.id')} tabIndex={0}>
               <BasicInput
-                value={process.id.id}
+                value={process.id}
                 onBlur={event => {
-                  setProperty('id', { id: event.target.value });
+                  setProperty('id', event.target.value);
                   setSelectedElement({ id: event.target.value, type: 'stage' });
                 }}
               />
@@ -50,8 +50,8 @@ export const ProcessDetail = () => {
             <BasicField label={t('editor.sidebar.process')} tabIndex={0}>
               <Combobox
                 options={processes}
-                value={process.processToExecute?.value ?? ''}
-                onChange={value => setProperty('processToExecute', { value: value })}
+                value={process.processToExecute ?? ''}
+                onChange={value => setProperty('processToExecute', value)}
                 itemRender={option => <ExtendedComboboxProcess {...option} />}
               />
             </BasicField>
@@ -84,13 +84,10 @@ const PreConditionFields = () => {
       <CollapsibleContent>
         <Flex direction='column' gap={2}>
           <BasicField label={t('editor.sidebar.label')} tabIndex={0}>
-            <BasicInput value={process.preCondition.label} onChange={event => setPropertyPreCondition('label', event.target.value)} />
+            <BasicInput value={process.preCondition?.label} onChange={event => setPropertyPreCondition('label', event.target.value)} />
           </BasicField>
           <BasicField label={t('editor.sidebar.condition')} tabIndex={0}>
-            <BasicInput
-              value={process.preCondition.script.script}
-              onChange={event => setPropertyPreCondition('script', { script: event.target.value })}
-            />
+            <BasicInput value={process.preCondition?.script} onChange={event => setPropertyPreCondition('script', event.target.value)} />
           </BasicField>
         </Flex>
       </CollapsibleContent>
