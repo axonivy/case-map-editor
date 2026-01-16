@@ -48,7 +48,8 @@ const AddStageDialogContent = ({ index }: { index?: number }) => {
     };
 
     setCaseMap(old => {
-      const afterId = caseMap.stages[index ? index - 1 : caseMap.stages.length - 1]?.id;
+      const stages = old.stages ?? [];
+      const afterId = stages[index ? index - 1 : stages.length - 1]?.id;
       return modifyData(old, { type: 'add', data: { newElement: newStage, type: 'stage', targetId: afterId } }).newData;
     });
   };
@@ -94,9 +95,9 @@ export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
     return toErrorMessage('Id cannot be empty.');
   }
   if (
-    caseMap.stages.some(stage => stage.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
-    caseMap.stages.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
+    caseMap.stages?.some(stage => stage.id === id) ||
+    caseMap.stages?.some(stage => stage.processes?.some(process => process.id === id)) ||
+    caseMap.stages?.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
   ) {
     return toErrorMessage('Id is already taken.');
   }
