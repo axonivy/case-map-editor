@@ -23,6 +23,7 @@ type ModifyAction =
 
 export const modifyData = (data: CaseMapModel, action: ModifyAction) => {
   const newData = structuredClone(data);
+  ensureStagesArray(newData);
   let newComponentId;
   switch (action.type) {
     case 'dnd':
@@ -99,9 +100,10 @@ export const findElementById = (caseMap: CaseMapModel, id: string): FindElement 
   if (!caseMap) {
     return undefined;
   }
-  const stage = caseMap.stages?.find(s => s.id === id);
-  if (stage) return { data: stage, parentArray: caseMap.stages, index: caseMap.stages.indexOf(stage), type: 'stage' };
-  for (const s of caseMap.stages) {
+  const stages = caseMap.stages ?? [];
+  const stage = stages?.find(s => s.id === id);
+  if (stage) return { data: stage, parentArray: stages, index: stages.indexOf(stage), type: 'stage' };
+  for (const s of stages) {
     const process = s.processes?.find(p => p.id === id);
     if (process) return { data: process, parentArray: s.processes, index: s.processes.indexOf(process), type: 'process', parentId: s.id };
 
@@ -157,7 +159,7 @@ const addElement = (
     const parentStage = data.stages.find(s => s.id === (foundElement && foundElement.type !== 'stage' ? foundElement.parentId : undefined));
 
     if (parentStage) {
-      ensureStageArrays(parentStage);
+      ensureProcessArrays(parentStage);
       let index = parentStage.processes.findIndex(p => p.id === insertAfterId);
       if (index === -1) {
         index = parentStage.sidesteps.findIndex(p => p.id === insertAfterId);
@@ -172,13 +174,17 @@ const addElement = (
   }
 };
 
-const ensureStageArrays = (stage: StageModel) => {
+const ensureStagesArray = (data: CaseMapModel) => {
+  data.stages ??= [];
+};
+
+const ensureProcessArrays = (stage: StageModel) => {
   stage.processes ??= [];
   stage.sidesteps ??= [];
 };
 
 const pushElementToStage = (stage: StageModel, type: ElementType, element: StageProcessModel): string => {
-  ensureStageArrays(stage);
+  ensureProcessArrays(stage);
   const target = type === 'process' ? stage.processes : type === 'sidestep' ? stage.sidesteps : [];
 
   target.unshift(element);

@@ -108,6 +108,26 @@ describe('modifyData - stages', () => {
     }));
     expect(newData.stages[1]?.id).toBe('s2');
   });
+
+  test('should initialize stages array and add first stage when stages is undefined', () => {
+    const model: Partial<CaseMapModel> = {
+      id: 'root',
+      uuid: 'uuid',
+      name: 'test model',
+      description: ''
+    };
+
+    const newStage = createStage('s1', [], []);
+
+    const { newData, newComponentId } = modifyData(model as CaseMapModel, {
+      type: 'add',
+      data: { newElement: newStage, type: 'stage' }
+    });
+
+    expect(newComponentId).toBe('s1');
+    expect(newData.stages).toHaveLength(1);
+    expect(newData.stages[0]?.id).toBe('s1');
+  });
 });
 
 describe('modifyData - processes and sidesteps', () => {
