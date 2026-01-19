@@ -19,6 +19,7 @@ export class CaseMapClientMock implements CaseMapClient {
     context: { app: 'mock', pmv: 'mock', file: 'mock.f.json' },
     readonly: false,
     data: data,
+    baseUrl: '',
     helpUrl: 'https://dev.axonivy.com'
   };
 

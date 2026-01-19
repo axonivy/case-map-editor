@@ -6,7 +6,7 @@
   "stages" : [ {
     "id" : "identification",
     "name" : "Identification",
-    "icon" : "css:fa fa-info-circle",
+    "icon" : "si si-single-neutral-actions",
     "processes" : [ {
       "id" : "collect_personal_data",
       "name" : "Collect personal data",
@@ -19,15 +19,11 @@
   }, {
     "id" : "credit_rating",
     "name" : "Credit rating",
-    "icon" : "css:fa fa-file",
+    "icon" : "si si-monetization-approve",
     "processes" : [ {
       "id" : "check_company_register",
       "name" : "Check company register",
       "processToExecute" : "casemap.test.project:casemap-test-project:15A8492F526C14B3/start.ivp"
-    }, {
-      "id" : "internal_solvency_check",
-      "name" : "Internal solvency check",
-      "processToExecute" : "casemap.test.project:casemap-test-project:15A89953E2D3784F/start.ivp"
     } ],
     "sidesteps" : [ {
       "id" : "external_solvency_service",
@@ -37,7 +33,7 @@
   }, {
     "id" : "approval",
     "name" : "Approval",
-    "icon" : "css:fa fa-check",
+    "icon" : "si si-check-circle-1",
     "isTerminating" : true,
     "processes" : [ {
       "id" : "approve_level_1",
