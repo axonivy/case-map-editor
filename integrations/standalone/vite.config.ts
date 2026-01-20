@@ -1,8 +1,7 @@
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
-const ENGINE_URL = process.env.BASE_URL ?? 'http://localhost:8081/';
-const APP = process.env.TEST_APP ?? 'designer';
+const ENGINE_URL = process.env.BASE_URL ?? 'http://localhost:8080/~Developer-case-map-test-project';
 
 export default defineConfig({
   plugins: [react()],

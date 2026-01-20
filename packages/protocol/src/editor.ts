@@ -21,6 +21,7 @@ export interface CaseMapContext {
   pmv: string;
 }
 export interface CaseMapEditorData {
+  baseUrl: string;
   context: CaseMapContext;
   data: CaseMapModel;
   helpUrl: string;
