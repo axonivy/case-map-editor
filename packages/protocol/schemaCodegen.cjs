@@ -17,8 +17,7 @@ tsGen.DEFAULT_OPTIONS.bannerComment = `
 `;
 
 const tsOut = path.resolve('./src/editor.ts');
-var schemaUri =
-  'https://jenkins.ivyteam.io/job/core_json-schema/job/casempa_lsp_endpoint/lastSuccessfulBuild/artifact/workspace/ch.ivyteam.ivy.casemap.editor.lsp.schema/target/schema/casemap/14.0.0/casemap-tsgen.json';
+var schemaUri = 'https://jenkins.ivyteam.io/job/core_json-schema/job/master/lastSuccessfulBuild/artifact/workspace/ch.ivyteam.ivy.casemap.editor.lsp.schema/target/editor-ts/14.0/casemap-tsgen.json';
 
 const args = process.argv.slice(2);
 if (args.length > 0) {
