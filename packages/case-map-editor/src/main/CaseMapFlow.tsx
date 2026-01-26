@@ -1,10 +1,11 @@
 import type { StageModel } from '@axonivy/case-map-editor-protocol';
-import { Button, cn, Flex, PanelMessage } from '@axonivy/ui-components';
+import { Button, cn, Flex, PanelMessage, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
+import { useKnownHotkeys } from '../utils/useKnownHotkeys';
 import './CaseMapFlow.css';
 import { AddStageDialog } from './components/AddStageDialog';
 import { StageTile } from './components/StageTile';
@@ -45,13 +46,14 @@ export const CaseMapFlow = () => {
 
 const EmptyState = () => {
   const { t } = useTranslation();
+  const hotkeys = useKnownHotkeys();
 
   return (
     <Flex direction='column' alignItems='center' justifyContent='center' style={{ height: '100%' }}>
       <PanelMessage icon={IvyIcons.Database} message={t('message.addFirstItem')} mode='column' style={{ height: 'unset' }} />
 
       <AddStageDialog index={0}>
-        <Button size='large' variant='primary' icon={IvyIcons.Plus} onClick={() => {}}>
+        <Button size='large' variant='primary' icon={IvyIcons.Plus} aria-label={hotkeys.addStage.label}>
           {t('dialog.addStage.title')}
         </Button>
       </AddStageDialog>
@@ -103,6 +105,8 @@ const AddStageSlot = ({
   postStageId?: string;
 }) => {
   const dnd = useDndContext();
+  const readonly = useReadonly();
+  const hotkeys = useKnownHotkeys();
   const { isOver, setNodeRef } = useDroppable({
     id: stageId,
     disabled: dnd.active?.id === stageId || dnd.active?.id === postStageId || dnd.active?.data?.current?.type !== 'stage'
@@ -117,9 +121,14 @@ const AddStageSlot = ({
         onMouseOver={() => setHoverIndex(index)}
         onMouseOut={() => setShowPlaceholder(undefined)}
       >
-        {(hoverIndex === index || isLast) && (
+        {!readonly && (hoverIndex === index || isLast) && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>
-            <Button className='add-stage-button' icon={IvyIcons.Plus} onMouseOver={() => setShowPlaceholder(index)} />
+            <Button
+              className='add-stage-button'
+              icon={IvyIcons.Plus}
+              onMouseOver={() => setShowPlaceholder(index)}
+              aria-label={hotkeys.addStage.label}
+            />
           </AddStageDialog>
         )}
         <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />

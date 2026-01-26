@@ -1,9 +1,21 @@
 import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import { Button, cn, Flex, IvyIcon, Separator } from '@axonivy/ui-components';
+import {
+  Button,
+  cn,
+  Flex,
+  IvyIcon,
+  Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  useReadonly
+} from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { useKnownHotkeys } from '../../utils/useKnownHotkeys';
 import { useCaseMapData } from '../useCaseMapData';
 import { AddProcessDialog } from './AddProcessDialog';
 import { DropZone, FirstStageDropZone } from './DropZone';
@@ -14,14 +26,17 @@ import { useSelectableTile } from './useSelectableTile';
 export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: boolean }) => {
   const { t } = useTranslation();
   const { caseMap } = useAppContext();
+  const readonly = useReadonly();
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: stage.id,
     data: { type: 'stage' },
+    disabled: readonly,
     attributes: { tabIndex: 0 }
   });
   const isFirst = caseMap.stages[0]?.id === stage.id;
   const { deleteElementById } = useCaseMapData();
   const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id, 'stage');
+  const hotkeys = useKnownHotkeys();
 
   return (
     <FirstStageDropZone isFirst={isFirst} id={stage.id}>
@@ -38,17 +53,25 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
         {...attributes}
       >
         <Flex className='stage-tile-header' alignItems='center' justifyContent='space-between' gap={2}>
-          <Flex gap={2} alignItems='center'>
-            <i className={stage.icon} />
-            <div className='stage-tile-name'>{stage.name}</div>
+          <Flex gap={2} alignItems='center' className='stage-tile-name'>
+            {stage.name}
           </Flex>
-          <Button
-            icon={IvyIcons.Trash}
-            onClick={e => {
-              e.stopPropagation();
-              deleteElementById(stage.id, 'stage');
-            }}
-          />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  icon={IvyIcons.Trash}
+                  disabled={readonly}
+                  onClick={e => {
+                    e.stopPropagation();
+                    deleteElementById(stage.id, 'stage');
+                  }}
+                  aria-label={hotkeys.deleteStage.label}
+                />
+              </TooltipTrigger>
+              <TooltipContent>{hotkeys.deleteStage.label}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
@@ -77,7 +100,7 @@ const ProcessPart = ({
     id: `empty-${type}-${stageId}`,
     disabled: dnd.active?.data?.current?.type !== 'process'
   });
-
+  const readonly = useReadonly();
   const processesAvailable = stageProcesses !== undefined && stageProcesses.length > 0;
   return (
     <Flex direction='column' gap={2}>
@@ -87,7 +110,7 @@ const ProcessPart = ({
             <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
               {title}
               <AddProcessDialog type={type} stageId={stageId}>
-                <Button size='small' icon={IvyIcons.Plus} />
+                <Button size='small' icon={IvyIcons.Plus} disabled={readonly} />
               </AddProcessDialog>
             </Flex>
           </DropZone>
@@ -99,7 +122,7 @@ const ProcessPart = ({
         <>
           <div style={{ fontWeight: 'bold' }}>{title}</div>
           <AddProcessDialog type={type} stageId={stageId}>
-            <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef}>
+            <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef} disabled={readonly}>
               {t(`editor.flow.addFirstItem`, { item: title })}
               <IvyIcon icon={IvyIcons.Plus} />
             </Button>

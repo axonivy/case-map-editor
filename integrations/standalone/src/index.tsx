@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { initTranslation } from './i18n';
 import './index.css';
-import { appParam, fileParam, pmvParam, readonlyParam, themeParam, webSocketBaseParam } from './url-helper';
+import { appParam, directSaveParam, fileParam, pmvParam, readonlyParam, themeParam, webSocketBaseParam } from './url-helper';
 
 export async function start(): Promise<void> {
   const server = webSocketBaseParam();
@@ -13,6 +13,7 @@ export async function start(): Promise<void> {
   const file = fileParam();
   const app = appParam();
   const theme = themeParam();
+  const directSave = directSaveParam();
   const readonly = readonlyParam();
   const queryClient = initQueryClient();
   const rootElement = document.getElementById('root');
@@ -42,7 +43,7 @@ export async function start(): Promise<void> {
             <QueryProvider client={queryClient}>
               <ReadonlyProvider readonly={readonly}>
                 <HotkeysProvider initiallyActiveScopes={['global']}>
-                  <CaseMapEditor context={{ app, pmv, file }} />
+                  <CaseMapEditor context={{ app, pmv, file }} directSave={directSave} />
                 </HotkeysProvider>
               </ReadonlyProvider>
             </QueryProvider>

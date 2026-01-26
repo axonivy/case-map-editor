@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import type { CaseMapClient } from './case-map-client';
 import type {
   CaseMapContext,
@@ -16,6 +15,12 @@ export type CaseMapEditor = Omit<CaseMapEditorData, 'data'> & {
   data: CaseMapModel;
 };
 
+export interface CaseMapActionArgs {
+  actionId: 'openUrl';
+  context: CaseMapContext;
+  payload: string;
+}
+
 export interface ClientContext {
   client: CaseMapClient;
 }
@@ -31,5 +36,5 @@ export interface MetaRequestTypes {
 }
 
 export interface CaseMapNotificationTypes {
-  animate: void;
+  action: CaseMapActionArgs;
 }

@@ -1,14 +1,22 @@
 {
   "common": {
+    "hotkey": {
+      "focusInscription": "Fokus Detailansicht ({{hotkey}})",
+      "focusMain": "Fokus Hauptansicht ({{hotkey}})",
+      "focusToolbar": "Fokus Toolbar ({{hotkey}})",
+      "help": "Hilfe öffnen ({{hotkey}})",
+      "redo": "Wiederholen ({{hotkey}})",
+      "undo": "Rückgängig ({{hotkey}})"
+    },
     "label": {
       "cancel": "Abbrechen"
     }
   },
   "dialog": {
     "addProcess": {
-      "create": "Prozess erstellen",
-      "desc": "Einen neuen Prozess erstellen",
-      "title": "Prozess hinzufügen"
+      "create": "{{type}} erstellen",
+      "desc": "Einen neuen {{type}} erstellen",
+      "title": "{{type}} hinzufügen"
     },
     "addStage": {
       "create": "Stufe erstellen",
@@ -37,6 +45,10 @@
     "toolbar": {
       "detailToggle": "Details"
     }
+  },
+  "hotkey": {
+    "addStage": "Stufe hinzufügen ({{hotkey}})",
+    "deleteStage": "Stufe löschen ({{hotkey}})"
   },
   "message": {
     "addFirstItem": "Füge deinem Case Map deinen ersten Eintrag hinzu.",

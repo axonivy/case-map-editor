@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { CaseMapContext, CaseMapEditorData, EditorFileContent, MetaRequestTypes, SaveArgs } from '@axonivy/case-map-editor-protocol';
+import type {
+  CaseMapActionArgs,
+  CaseMapContext,
+  CaseMapEditorData,
+  EditorFileContent,
+  MetaRequestTypes,
+  SaveArgs
+} from '@axonivy/case-map-editor-protocol';
 import type { CaseMapClient } from '@axonivy/case-map-editor-protocol/src/case-map-client';
-import { Emitter } from '@axonivy/jsonrpc';
 import { data } from './data.mock';
 
 export class CaseMapClientMock implements CaseMapClient {
-  protected onAnimateEmitter = new Emitter<void>();
-  onAnimate = this.onAnimateEmitter.event;
-
   initialize(context: CaseMapContext): Promise<boolean> {
     return Promise.resolve(true);
   }
@@ -29,5 +32,9 @@ export class CaseMapClientMock implements CaseMapClient {
   saveData(saveData: SaveArgs): Promise<EditorFileContent> {
     this.caseMapData.data = saveData.data;
     return Promise.resolve({ content: '' });
+  }
+
+  action(action: CaseMapActionArgs): void {
+    console.log('action', JSON.stringify(action));
   }
 }

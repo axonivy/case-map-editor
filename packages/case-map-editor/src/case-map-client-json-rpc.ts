@@ -1,9 +1,9 @@
 import type {
+  CaseMapActionArgs,
   CaseMapContext,
   CaseMapEditorData,
   CaseMapNotificationTypes,
   EditorFileContent,
-  Event,
   MetaRequestTypes,
   RequestTypes,
   SaveArgs
@@ -12,7 +12,6 @@ import type { CaseMapClient } from '@axonivy/case-map-editor-protocol/src/case-m
 import {
   BaseRpcClient,
   createMessageConnection,
-  Emitter,
   urlBuilder,
   type Connection,
   type Disposable,
@@ -20,14 +19,8 @@ import {
 } from '@axonivy/jsonrpc';
 
 export class CaseMapClientJsonRpc extends BaseRpcClient implements CaseMapClient {
-  protected onAnimateEmitter = new Emitter<void>();
-  onAnimate: Event<void> = this.onAnimateEmitter.event;
-
   protected override setupConnection(): void {
     super.setupConnection();
-    this.onNotification('animate', data => {
-      this.onAnimateEmitter.fire(data);
-    });
   }
 
   initialize(context: CaseMapContext): Promise<boolean> {
@@ -50,9 +43,17 @@ export class CaseMapClientJsonRpc extends BaseRpcClient implements CaseMapClient
     return args === undefined ? this.connection.sendRequest(command) : this.connection.sendRequest(command, args);
   }
 
+  action(action: CaseMapActionArgs): void {
+    void this.sendNotification('action', action);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onNotification<K extends keyof CaseMapNotificationTypes>(kind: K, listener: (args: CaseMapNotificationTypes[K]) => any): Disposable {
     return this.connection.onNotification(kind, listener);
+  }
+
+  sendNotification<K extends keyof CaseMapNotificationTypes>(command: K, args: CaseMapNotificationTypes[K]): Promise<void> {
+    return this.connection.sendNotification(command, args);
   }
 
   public static webSocketUrl(url: string) {

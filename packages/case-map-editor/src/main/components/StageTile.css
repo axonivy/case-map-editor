@@ -4,7 +4,9 @@
   border-radius: var(--border-r3);
   user-select: none;
   min-width: 200px;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 
   .stage-tile-header {
     font-weight: bold;
