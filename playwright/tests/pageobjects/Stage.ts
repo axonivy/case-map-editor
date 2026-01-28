@@ -1,13 +1,15 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { Process } from './process';
+import { Process } from './Process';
 
 export class Stage {
   protected readonly page: Page;
   public readonly stage: Locator;
+  readonly delete: Locator;
 
   constructor(page: Page, parent: Locator, nth: number) {
     this.page = page;
     this.stage = parent.locator('.stage-tile').nth(nth);
+    this.delete = this.stage.getByRole('button', { name: 'Delete Stage (Delete)' });
   }
 
   processByNth(nth: number) {

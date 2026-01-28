@@ -1,5 +1,5 @@
 import type { StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import { cn, Flex, IvyIcon } from '@axonivy/ui-components';
+import { cn, Flex, IvyIcon, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDraggable } from '@dnd-kit/core';
 import { DropZone } from './DropZone';
@@ -17,9 +17,11 @@ export const ProcessTile = ({
   postId?: string;
   dragging?: boolean;
 }) => {
+  const readonly = useReadonly();
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: process.id,
     data: { type: 'process' },
+    disabled: readonly,
     attributes: { tabIndex: 0 }
   });
   const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(process.id, 'process');

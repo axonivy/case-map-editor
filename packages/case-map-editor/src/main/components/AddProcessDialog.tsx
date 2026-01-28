@@ -7,10 +7,16 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  useDialogHotkeys,
+  useHotkeys,
   type MessageData
 } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
 import { modifyData } from '../../data/data';
@@ -21,26 +27,50 @@ type AddProcessDialogProps = {
   children: React.ReactNode;
 };
 
-export const AddProcessDialog = ({ stageId, type, children }: AddProcessDialogProps) => (
-  <Dialog>
-    <DialogTrigger asChild>{children}</DialogTrigger>
-    <DialogContent>
-      <AddProcessDialogContent stageId={stageId} type={type} />
-    </DialogContent>
-  </Dialog>
-);
+const DIALOG_HOTKEY_IDS = ['addProcessDialog'];
 
-const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'sidestep' | 'process' }) => {
+export const AddProcessDialog = ({ stageId, type, children }: AddProcessDialogProps) => {
+  const { t } = useTranslation();
+  const { open, onOpenChange } = useDialogHotkeys(DIALOG_HOTKEY_IDS);
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>{children}</DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent>{t('dialog.addProcess.title', { type: type.charAt(0).toUpperCase() + type.slice(1) })}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <DialogContent>
+        <AddProcessDialogContent stageId={stageId} type={type} closeDialog={() => onOpenChange(false)} />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const AddProcessDialogContent = ({
+  stageId,
+  type,
+  closeDialog
+}: {
+  stageId: string;
+  type: 'sidestep' | 'process';
+  closeDialog: () => void;
+}) => {
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
   const [id, setId] = useState('newId');
   const [name, setName] = useState('newName');
   const [process, setProcess] = useState('someProcess');
-
+  const idInputRef = useRef<HTMLInputElement>(null);
   const idValidationMessage = useMemo(() => validateFieldId(id, caseMap), [id, caseMap]);
   const processValidationMessage = useMemo(() => validateFieldProcess(process), [process]);
 
-  const addProcess = () => {
+  const addProcess = (event: React.MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
+    if (!allInputsValid()) {
+      return;
+    }
     const newProcess: StageProcessModel = {
       id: id,
       name: name,
@@ -56,23 +86,31 @@ const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'si
           data: { parentId: stageId, type: type, newElement: newProcess }
         }).newData
     );
+    if (!event.ctrlKey && !event.metaKey) {
+      closeDialog();
+    } else {
+      setName('');
+      idInputRef.current?.focus();
+    }
   };
-
+  const formattedType = type.charAt(0).toUpperCase() + type.slice(1);
   const allInputsValid = () => !idValidationMessage && !processValidationMessage;
+  const enter = useHotkeys<HTMLDivElement>(['Enter', 'mod+Enter'], addProcess, { scopes: DIALOG_HOTKEY_IDS, enableOnFormTags: true });
+
   return (
     <BasicDialogContent
-      title={t('dialog.addProcess.title')}
-      description={t('dialog.addProcess.desc')}
+      title={t('dialog.addProcess.title', { type: formattedType })}
+      description={t('dialog.addProcess.desc', { type: formattedType })}
       submit={
         <Button
           variant='primary'
           size='large'
-          aria-label={t('dialog.addProcess.create')}
+          aria-label={t('dialog.addProcess.create', { type: formattedType })}
           onClick={addProcess}
           icon={IvyIcons.Plus}
           disabled={!allInputsValid()}
         >
-          {t('dialog.addProcess.create')}
+          {t('dialog.addProcess.create', { type: formattedType })}
         </Button>
       }
       cancel={
@@ -80,10 +118,11 @@ const AddProcessDialogContent = ({ stageId, type }: { stageId: string; type: 'si
           {t('common.label.cancel')}
         </Button>
       }
+      ref={enter}
       tabIndex={-1}
     >
       <BasicField label={t('editor.sidebar.id')} message={idValidationMessage} tabIndex={0}>
-        <BasicInput value={id} onChange={e => setId(e.target.value)} />
+        <BasicInput ref={idInputRef} value={id} onChange={e => setId(e.target.value)} />
       </BasicField>
       <BasicField label={t('editor.sidebar.name')} tabIndex={0}>
         <BasicInput value={name} onChange={e => setName(e.target.value)} />

@@ -7,7 +7,8 @@ import {
   ResizablePanel,
   Spinner,
   type Unary,
-  useDefaultLayout
+  useDefaultLayout,
+  useHistoryData
 } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -25,19 +26,10 @@ function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
   const context = props.context;
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
-
   const client = useClient();
-
+  const [initialData, setInitialData] = useState<CaseMapModel | undefined>(undefined);
+  const history = useHistoryData<CaseMapModel>();
   const { defaultLayout, onLayoutChanged } = useDefaultLayout({ groupId: 'case-map-resize', storage: localStorage });
-  /**
-   * TODO: Implement animation handling
-   * useEffect(() => {
-   *   const animateDispose = client.onAnimate(data => animate(data));
-   *   return () => {
-   *     animateDispose.dispose();
-   *   };
-   * }, [client]);
-   */
 
   const queryClient = useQueryClient();
   const queryKeys = useMemo(() => {
@@ -54,6 +46,11 @@ function CaseMapEditor(props: EditorProps) {
     },
     structuralSharing: false
   });
+
+  if (data?.data !== undefined && initialData === undefined) {
+    setInitialData(data.data);
+    history.push(data.data);
+  }
 
   const mutation = useMutation({
     mutationKey: queryKeys.saveData(context),
@@ -90,9 +87,11 @@ function CaseMapEditor(props: EditorProps) {
         setCaseMap: mutation.mutate,
         detail,
         setDetail,
+        history,
         setSelectedElement,
         selectedElement,
-        context
+        context,
+        helpUrl: data.helpUrl
       }}
     >
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css`} />
@@ -119,8 +118,10 @@ function CaseMapEditor(props: EditorProps) {
         {detail && (
           <>
             <ResizableHandle />
-            <ResizablePanel defaultSize='25%' minSize='10%'>
-              <Detail />
+            <ResizablePanel defaultSize='25%' minSize='10%' className='case-map-editor-detail-panel'>
+              <Flex direction='column' className='panel'>
+                <Detail />
+              </Flex>
             </ResizablePanel>
           </>
         )}

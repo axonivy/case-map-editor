@@ -3,10 +3,12 @@ import { expect, type Locator, type Page } from '@playwright/test';
 export class Inscription {
   protected readonly page: Page;
   public readonly view: Locator;
+  readonly help: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.view = page.locator('.case-map-editor-detail-panel');
+    this.help = this.view.getByRole('button', { name: 'Open Help' });
   }
 
   get header() {

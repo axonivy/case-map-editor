@@ -1,11 +1,13 @@
 import { expect, type Page } from '@playwright/test';
-import { Flow } from './flow';
-import { Inscription } from './inscription';
 
-export const server = process.env.BASE_URL ?? 'http://localhost:8081';
+import { Flow } from './Flow';
+import { Inscription } from './Inscription';
+import { Toolbar } from './Toolbar';
+
+export const server = process.env.BASE_URL ?? 'http://localhost:8080/~Developer-case-map-test-project';
 export const user = 'Developer';
 const ws = process.env.TEST_WS ?? '';
-const app = process.env.TEST_APP ?? 'designer';
+const app = process.env.TEST_APP ?? 'Developer-case-map-test-project';
 const pmv = 'case-map-test-project';
 
 export class CaseMapEditor {
@@ -18,7 +20,7 @@ export class CaseMapEditor {
   static async openCaseMap(page: Page, options?: { readonly?: boolean }) {
     const serverUrl = server.replace(/^https?:\/\//, '');
 
-    let url = `?server=${serverUrl}${ws}&app=${app}&pmv=${pmv}`;
+    let url = `?server=${serverUrl}${ws}&app=${app}&pmv=${pmv}&file=processes/Lending/Lending.icm`;
 
     if (options) {
       url += `${this.params(options)}`;
@@ -68,5 +70,9 @@ export class CaseMapEditor {
 
   get inscription() {
     return new Inscription(this.page);
+  }
+
+  get toolbar() {
+    return new Toolbar(this.page);
   }
 }

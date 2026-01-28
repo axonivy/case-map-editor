@@ -1,3 +1,4 @@
+import { useReadonly } from '@axonivy/ui-components';
 import type { KeyboardEvent } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import { useCaseMapData } from '../useCaseMapData';
@@ -7,7 +8,7 @@ type TileType = 'stage' | 'process';
 export const useSelectableTile = (id: string, type: TileType) => {
   const { detail, selectedElement, setSelectedElement, setDetail } = useAppContext();
   const { deleteElementById, moveElement } = useCaseMapData();
-
+  const readonly = useReadonly();
   const isSelected = selectedElement?.id === id && selectedElement?.type === type;
 
   const onClick = (e: React.MouseEvent) => {
@@ -21,11 +22,15 @@ export const useSelectableTile = (id: string, type: TileType) => {
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
+    if (/^\d$/.test(e.key)) {
+      return;
+    }
     e.stopPropagation();
     if (e.key === 'Enter') {
       setSelectedElement({ id, type });
       setDetail(!detail);
     }
+    if (readonly) return;
     if (e.key === 'Delete') {
       deleteElementById(id, type);
     }

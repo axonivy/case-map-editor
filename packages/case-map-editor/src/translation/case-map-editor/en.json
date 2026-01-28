@@ -1,14 +1,22 @@
 {
   "common": {
+    "hotkey": {
+      "focusInscription": "Focus Inscription ({{hotkey}})",
+      "focusMain": "Focus Main ({{hotkey}})",
+      "focusToolbar": "Focus Toolbar ({{hotkey}})",
+      "help": "Open Help ({{hotkey}})",
+      "redo": "Redo ({{hotkey}})",
+      "undo": "Undo ({{hotkey}})"
+    },
     "label": {
       "cancel": "Cancel"
     }
   },
   "dialog": {
     "addProcess": {
-      "create": "Create Process",
-      "desc": "Create a new process",
-      "title": "Add Process"
+      "create": "Create {{type}}",
+      "desc": "Create a new {{type}}",
+      "title": "Add {{type}}"
     },
     "addStage": {
       "create": "Create Stage",
@@ -37,6 +45,10 @@
     "toolbar": {
       "detailToggle": "Details"
     }
+  },
+  "hotkey": {
+    "addStage": "Add Stage ({{hotkey}})",
+    "deleteStage": "Delete Stage ({{hotkey}})"
   },
   "message": {
     "addFirstItem": "Add your first stage to your case map.",

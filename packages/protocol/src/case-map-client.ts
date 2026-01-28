@@ -1,5 +1,5 @@
 import type { CaseMapContext, CaseMapEditorData, EditorFileContent } from './editor';
-import type { MetaRequestTypes, SaveArgs } from './types';
+import type { CaseMapActionArgs, MetaRequestTypes, SaveArgs } from './types';
 
 export interface Event<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,7 +15,7 @@ export interface CaseMapClient {
   data(context: CaseMapContext): Promise<CaseMapEditorData>;
   saveData(args: SaveArgs): Promise<EditorFileContent>;
 
-  meta<TMeta extends keyof MetaRequestTypes>(path: TMeta, args: MetaRequestTypes[TMeta][0]): Promise<MetaRequestTypes[TMeta][1]>;
+  action(action: CaseMapActionArgs): void;
 
-  onAnimate: Event<void>;
+  meta<TMeta extends keyof MetaRequestTypes>(path: TMeta, args: MetaRequestTypes[TMeta][0]): Promise<MetaRequestTypes[TMeta][1]>;
 }
