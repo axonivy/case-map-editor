@@ -1,5 +1,6 @@
 export * from './case-map-client-json-rpc';
 export { default as CaseMapEditor } from './CaseMapEditor';
+export { default as CaseMapViewer } from './CaseMapViewer';
 export * from './protocol/ClientContextProvider';
 export * from './query/query-client';
 export * from './query/QueryProvider';

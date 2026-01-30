@@ -12,11 +12,18 @@ export default defineConfig({
     trace: 'retain-on-failure',
     headless: process.env.CI ? true : false
   },
-  webServer: {
-    command: `pnpm run --filter @axonivy/case-map-editor-standalone ${process.env.CI ? 'serve' : 'dev'}`,
-    url: process.env.CI ? 'http://localhost:4173' : 'http://localhost:3002',
-    reuseExistingServer: !process.env.CI
-  },
+  webServer: [
+    {
+      command: `pnpm run --filter @axonivy/case-map-editor-standalone ${process.env.CI ? 'serve' : 'dev'}`,
+      url: process.env.CI ? 'http://localhost:4173' : 'http://localhost:3002',
+      reuseExistingServer: !process.env.CI
+    },
+    {
+      command: `pnpm run --filter @axonivy/case-map-viewer ${process.env.CI ? 'serve' : 'dev'}`,
+      url: process.env.CI ? 'http://localhost:4174' : 'http://localhost:3003',
+      reuseExistingServer: !process.env.CI
+    }
+  ],
   globalSetup: './tests/global.setup',
   projects: [
     { name: 'integration-chrome', use: { ...devices['Desktop Chrome'] }, testDir: './tests/integration' },
@@ -26,6 +33,12 @@ export default defineConfig({
       name: 'screenshots',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1000, height: 600 } },
       testDir: './tests/screenshots',
+      retries: 0
+    },
+    {
+      name: 'viewer-chrome',
+      use: { ...devices['Desktop Chrome'], baseURL: process.env.CI ? 'http://localhost:4174' : 'http://localhost:3003' },
+      testDir: './tests/viewer',
       retries: 0
     }
   ]

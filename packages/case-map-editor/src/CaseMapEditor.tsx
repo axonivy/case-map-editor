@@ -1,4 +1,4 @@
-import { type CaseMapContext, type CaseMapEditorData, type CaseMapModel, type EditorProps } from '@axonivy/case-map-editor-protocol';
+import { type CaseMapEditorData, type CaseMapModel, type EditorProps } from '@axonivy/case-map-editor-protocol';
 import {
   Flex,
   PanelMessage,
@@ -12,15 +12,15 @@ import {
 } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
 import { DndContext } from './context/DndContext';
 import { Detail } from './detail/Details';
+import { useCaseMapQueryKeys } from './hooks/useCaseMapQueryKeys';
 import { CaseMapFlow } from './main/CaseMapFlow';
 import { MainToolbar } from './main/MainToolbar';
 import { useClient } from './protocol/ClientContextProvider';
-import { genQueryKey } from './query/query-client';
 
 function CaseMapEditor(props: EditorProps) {
   const [detail, setDetail] = useState(false);
@@ -30,14 +30,8 @@ function CaseMapEditor(props: EditorProps) {
   const [initialData, setInitialData] = useState<CaseMapModel | undefined>(undefined);
   const history = useHistoryData<CaseMapModel>();
   const { defaultLayout, onLayoutChanged } = useDefaultLayout({ groupId: 'case-map-resize', storage: localStorage });
-
+  const queryKeys = useCaseMapQueryKeys();
   const queryClient = useQueryClient();
-  const queryKeys = useMemo(() => {
-    return {
-      data: (context: CaseMapContext) => genQueryKey('data', context),
-      saveData: (context: CaseMapContext) => genQueryKey('saveData', context)
-    };
-  }, []);
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: queryKeys.data(context),

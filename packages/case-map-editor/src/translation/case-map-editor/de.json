@@ -27,6 +27,8 @@
   "editor": {
     "flow": {
       "addFirstItem": "Füge deinen ersten {{item}} hinzu",
+      "noProcesses": "Keine {{item}} konfiguriert",
+      "noStages": "Keine Stufen konfiguriert",
       "processes": "Prozesse",
       "sidesteps": "Sidesteps"
     },
