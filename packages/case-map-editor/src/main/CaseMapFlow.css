@@ -1,14 +1,27 @@
 .case-map-flow {
   padding: var(--size-4);
+  .case-map-row {
+    display: grid;
+    grid-template-columns: repeat(var(--items-per-row), minmax(0, 1fr));
+  }
 
+  .case-map-row.reversed > * {
+    direction: ltr;
+  }
   .stage-header {
     width: 100%;
-    height: 22px;
+    height: 25px;
   }
 
   .stage-line {
     flex-grow: 1;
     height: 1px;
+    background-color: var(--P300);
+  }
+  .stage-vertical-line {
+    width: 1px;
+    min-height: 20px;
+    flex-grow: 1;
     background-color: var(--P300);
   }
 

@@ -2,7 +2,7 @@ import type { StageModel } from '@axonivy/case-map-editor-protocol';
 import { Button, cn, Flex, PanelMessage, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
 import { removeCSSPrefix } from '../detail/IconCombobox';
@@ -17,31 +17,113 @@ export const CaseMapFlow = () => {
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [showPlaceholder, setShowPlaceholder] = useState<number | undefined>();
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+  useEffect(() => {
+    const calculate = () => {
+      if (!containerRef.current) return;
+
+      const width = containerRef.current.offsetWidth;
+      const minStageWidth = 240; // StageTile min-width + gaps
+      const gap = 60;
+      let items = Math.floor((width + gap) / (minStageWidth + gap));
+      items = Math.max(2, Math.min(items, 6));
+
+      setItemsPerRow(items);
+    };
+
+    calculate();
+    const resizeObserver = new ResizeObserver(calculate);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+  }, []);
+
+  const rows = useMemo(() => {
+    if (!caseMap?.stages) return [];
+
+    const result: { stages: StageModel[]; reversed: boolean }[] = [];
+    let index = 0;
+    let rowIndex = 0;
+
+    while (index < caseMap.stages.length) {
+      const slice = caseMap.stages.slice(index, index + itemsPerRow);
+      const reversed = rowIndex % 2 === 1;
+
+      result.push({
+        stages: reversed ? [...slice].reverse() : slice,
+        reversed
+      });
+
+      index += itemsPerRow;
+      rowIndex++;
+    }
+
+    return result;
+  }, [caseMap?.stages, itemsPerRow]);
+
   if (!caseMap || !caseMap.stages || caseMap.stages.length === 0) {
     return <EmptyState />;
   }
-
   return (
-    <Flex direction='row' className='case-map-flow'>
-      {caseMap.stages.map((stage, index) => (
-        <Flex key={stage.id} direction='row'>
-          <Flex gap={4} direction='column' alignItems='center'>
-            <StageConnector stage={stage} hideLeftLine={index === 0} hideRightLine={index === caseMap.stages.length - 1 && readonly} />
-            <StageTile stage={stage} />
+    <Flex ref={containerRef} direction='column' className='case-map-flow'>
+      {rows.map((row, rowIndex) => (
+        <div key={rowIndex} className='case-map-row-wrapper'>
+          <Flex
+            direction='row'
+            className={cn('case-map-row', row.reversed && 'reversed')}
+            style={{ '--items-per-row': itemsPerRow } as React.CSSProperties}
+          >
+            {row.stages.map((stage, index) => {
+              // Find the absolute index of this stage in the full stages array
+              const absoluteIndex = caseMap.stages.findIndex(s => s.id === stage.id);
+              const isFirstInRow = row.reversed ? index === row.stages.length - 1 : index === 0;
+              const isLastInRow = row.reversed ? index === 0 : index === row.stages.length - 1;
+
+              return (
+                <div key={stage.id} className='stage-grid-item'>
+                  <Flex direction='row' className='stage-container' style={{ height: '100%' }}>
+                    <Flex direction='column' alignItems='center'>
+                      <StageConnector
+                        stage={stage}
+                        hideLeftLine={row.reversed ? isLastInRow : isFirstInRow}
+                        hideRightLine={row.reversed ? isFirstInRow : isLastInRow}
+                      />
+                      <div className='stage-vertical-line' />
+                      <Flex
+                        direction='column'
+                        style={{
+                          marginBottom: (row.reversed && !isLastInRow) || (!row.reversed && !isLastInRow) ? 'var(--size-4)' : undefined,
+                          height: '100%'
+                        }}
+                        alignItems='center'
+                      >
+                        <StageTile stage={stage} />
+                        {isLastInRow && absoluteIndex !== caseMap.stages.length - 1 ? <div className='stage-vertical-line' /> : null}
+                      </Flex>
+                    </Flex>
+
+                    {((row.reversed && !isFirstInRow) || (!row.reversed && !isLastInRow)) && (
+                      <AddStageSlot
+                        index={absoluteIndex}
+                        stageId={stage.id}
+                        isLast={false}
+                        hoverIndex={hoverIndex}
+                        setHoverIndex={setHoverIndex}
+                        showPlaceholder={showPlaceholder}
+                        setShowPlaceholder={setShowPlaceholder}
+                        postStageId={caseMap.stages?.[absoluteIndex + 1]?.id ?? undefined}
+                      />
+                    )}
+                  </Flex>
+                </div>
+              );
+            })}
           </Flex>
-          <AddStageSlot
-            index={index}
-            stageId={stage.id}
-            isLast={index === caseMap.stages.length - 1}
-            hoverIndex={hoverIndex}
-            setHoverIndex={setHoverIndex}
-            showPlaceholder={showPlaceholder}
-            setShowPlaceholder={setShowPlaceholder}
-            postStageId={caseMap.stages?.[index + 1]?.id ?? undefined}
-          />
-        </Flex>
+        </div>
       ))}
-      {!readonly && <Flex style={{ width: '50vw', flexShrink: 0 }} />}
+
+      {!readonly && <Flex style={{ height: '50vh' }} />}
     </Flex>
   );
 };
@@ -131,6 +213,7 @@ const AddStageSlot = ({
         onMouseOver={() => setHoverIndex(index)}
         onMouseOut={() => setShowPlaceholder(undefined)}
       >
+        <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
         {!readonly && (hoverIndex === index || isLast) && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>
             <Button
