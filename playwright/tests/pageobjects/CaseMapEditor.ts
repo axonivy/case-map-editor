@@ -29,6 +29,15 @@ export class CaseMapEditor {
     return this.openUrl(page, url);
   }
 
+  static async openCaseMapViewer(page: Page, options?: { readonly?: boolean }) {
+    const serverUrl = server.replace(/^https?:\/\//, '');
+    let url = `?server=${serverUrl}${ws}&app=${app}&pmv=${pmv}&file=processes/Lending/Lending.icm`;
+    if (options) {
+      url += `${this.params(options)}`;
+    }
+    return this.openUrl(page, url);
+  }
+
   static async openMock(page: Page, options?: { readonly?: boolean; app?: string }) {
     let params = '';
     if (options) {

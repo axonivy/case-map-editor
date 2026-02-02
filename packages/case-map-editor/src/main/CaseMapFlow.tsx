@@ -12,6 +12,7 @@ import { StageTile } from './components/StageTile';
 
 export const CaseMapFlow = () => {
   const { caseMap } = useAppContext();
+  const readonly = useReadonly();
   const [hoverIndex, setHoverIndex] = useState<number | undefined>();
   const [showPlaceholder, setShowPlaceholder] = useState<number | undefined>();
 
@@ -24,7 +25,7 @@ export const CaseMapFlow = () => {
       {caseMap.stages.map((stage, index) => (
         <Flex key={stage.id} direction='row'>
           <Flex gap={4} direction='column' alignItems='center'>
-            <StageConnector stage={stage} showLeftLine={index !== 0} />
+            <StageConnector stage={stage} hideLeftLine={index === 0} hideRightLine={index === caseMap.stages.length - 1 && readonly} />
             <StageTile stage={stage} />
           </Flex>
           <AddStageSlot
@@ -39,7 +40,7 @@ export const CaseMapFlow = () => {
           />
         </Flex>
       ))}
-      <Flex style={{ width: '50vw', flexShrink: 0 }} />
+      {!readonly && <Flex style={{ width: '50vw', flexShrink: 0 }} />}
     </Flex>
   );
 };
@@ -47,21 +48,29 @@ export const CaseMapFlow = () => {
 const EmptyState = () => {
   const { t } = useTranslation();
   const hotkeys = useKnownHotkeys();
+  const readonly = useReadonly();
 
   return (
     <Flex direction='column' alignItems='center' justifyContent='center' style={{ height: '100%' }}>
-      <PanelMessage icon={IvyIcons.Database} message={t('message.addFirstItem')} mode='column' style={{ height: 'unset' }} />
+      <PanelMessage
+        icon={readonly ? IvyIcons.Search : IvyIcons.ActivitiesGroup}
+        message={readonly ? t('editor.flow.noStages') : t('message.addFirstItem')}
+        mode='column'
+        style={{ height: 'unset' }}
+      />
 
-      <AddStageDialog index={0}>
-        <Button size='large' variant='primary' icon={IvyIcons.Plus} aria-label={hotkeys.addStage.label}>
-          {t('dialog.addStage.title')}
-        </Button>
-      </AddStageDialog>
+      {!readonly && (
+        <AddStageDialog index={0}>
+          <Button size='large' variant='primary' icon={IvyIcons.Plus} aria-label={hotkeys.addStage.label}>
+            {t('dialog.addStage.title')}
+          </Button>
+        </AddStageDialog>
+      )}
     </Flex>
   );
 };
 
-const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLine: boolean }) => {
+const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageModel; hideLeftLine: boolean; hideRightLine: boolean }) => {
   const { selectedElement, setSelectedElement, setDetail } = useAppContext();
   const isStageSelected =
     (selectedElement?.id === stage.id && selectedElement?.type === 'stage') ||
@@ -69,7 +78,7 @@ const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLi
     stage.sidesteps?.some(proc => proc.id === selectedElement?.id);
   return (
     <Flex className='stage-header' alignItems='center' justifyContent='center'>
-      <div className={showLeftLine ? 'stage-line' : 'stage-line-hidden'} />
+      <div className={hideLeftLine ? 'stage-line-hidden' : 'stage-line'} />
       <div
         className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
         onClick={e => {
@@ -80,7 +89,7 @@ const StageConnector = ({ stage, showLeftLine }: { stage: StageModel; showLeftLi
       >
         <i className={stage.icon} />
       </div>
-      <div className='stage-line' />
+      <div className={hideRightLine ? 'stage-line-hidden' : 'stage-line'} />
     </Flex>
   );
 };

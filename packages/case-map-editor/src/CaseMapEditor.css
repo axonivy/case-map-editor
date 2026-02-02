@@ -10,3 +10,9 @@
 .panel {
   height: 100%;
 }
+
+.case-map-viewer {
+  background-color: var(--N100);
+  height: 100%;
+  overflow-x: auto;
+}

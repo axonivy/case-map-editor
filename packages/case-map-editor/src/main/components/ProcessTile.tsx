@@ -41,7 +41,7 @@ export const ProcessTile = ({
         {...attributes}
       >
         <Flex alignItems='center' gap={1} style={{ overflow: 'hidden' }}>
-          <IvyIcon icon={IvyIcons.EditDots} />
+          {!readonly && <IvyIcon icon={IvyIcons.EditDots} />}
           <div className='process-tile-name'> {process.name}</div>
         </Flex>
         {process.preCondition !== undefined && process.preCondition.label.length > 0 && process.preCondition.script.length > 0 && (

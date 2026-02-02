@@ -34,9 +34,7 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
     attributes: { tabIndex: 0 }
   });
   const isFirst = caseMap.stages[0]?.id === stage.id;
-  const { deleteElementById } = useCaseMapData();
   const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id, 'stage');
-  const hotkeys = useKnownHotkeys();
 
   return (
     <FirstStageDropZone isFirst={isFirst} id={stage.id}>
@@ -56,22 +54,7 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
           <Flex gap={2} alignItems='center' className='stage-tile-name'>
             {stage.name}
           </Flex>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  icon={IvyIcons.Trash}
-                  disabled={readonly}
-                  onClick={e => {
-                    e.stopPropagation();
-                    deleteElementById(stage.id, 'stage');
-                  }}
-                  aria-label={hotkeys.deleteStage.label}
-                />
-              </TooltipTrigger>
-              <TooltipContent>{hotkeys.deleteStage.label}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {!readonly && <DeleteStageButton stageId={stage.id} />}
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
@@ -80,6 +63,28 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
         </Flex>
       </Flex>
     </FirstStageDropZone>
+  );
+};
+
+const DeleteStageButton = ({ stageId }: { stageId: string }) => {
+  const { deleteElementById } = useCaseMapData();
+  const hotkeys = useKnownHotkeys();
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            icon={IvyIcons.Trash}
+            onClick={e => {
+              e.stopPropagation();
+              deleteElementById(stageId, 'stage');
+            }}
+            aria-label={hotkeys.deleteStage.label}
+          />
+        </TooltipTrigger>
+        <TooltipContent>{hotkeys.deleteStage.label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
@@ -109,9 +114,11 @@ const ProcessPart = ({
           <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id ?? undefined}>
             <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
               {title}
-              <AddProcessDialog type={type} stageId={stageId}>
-                <Button size='small' icon={IvyIcons.Plus} disabled={readonly} />
-              </AddProcessDialog>
+              {!readonly && (
+                <AddProcessDialog type={type} stageId={stageId}>
+                  <Button size='small' icon={IvyIcons.Plus} />
+                </AddProcessDialog>
+              )}
             </Flex>
           </DropZone>
           {stageProcesses?.map((proc, index) => (
@@ -121,12 +128,16 @@ const ProcessPart = ({
       ) : (
         <>
           <div style={{ fontWeight: 'bold' }}>{title}</div>
-          <AddProcessDialog type={type} stageId={stageId}>
-            <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef} disabled={readonly}>
-              {t(`editor.flow.addFirstItem`, { item: title })}
-              <IvyIcon icon={IvyIcons.Plus} />
-            </Button>
-          </AddProcessDialog>
+          {!readonly ? (
+            <AddProcessDialog type={type} stageId={stageId}>
+              <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef} disabled={readonly}>
+                {t(`editor.flow.addFirstItem`, { item: title })}
+                <IvyIcon icon={IvyIcons.Plus} />
+              </Button>
+            </AddProcessDialog>
+          ) : (
+            <div className='no-processes-message'>{t('editor.flow.noProcesses', { item: title })}</div>
+          )}
         </>
       )}
     </Flex>

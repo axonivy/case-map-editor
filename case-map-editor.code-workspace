@@ -18,6 +18,10 @@
     {
       "name": "integrations/standalone",
       "path": "./integrations/standalone"
+    },  
+    {
+      "name": "integrations/viewer",
+      "path": "./integrations/viewer"
     },
     {
       "name": "playwright",

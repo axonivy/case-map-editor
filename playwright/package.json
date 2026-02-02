@@ -18,6 +18,7 @@
     "build": "tsc --build",
     "webtest": "playwright test --project=integration-chrome",
     "webtest:screenshots": "playwright test --project=screenshots",
+    "webtest:viewer": "playwright test --project=viewer-chrome",
     "webtest:*": "playwright test --project=integration-*",
     "webtest:chrome": "playwright test --project=integration-chrome",
     "webtest:firefox": "playwright test --project=integration-firefox",

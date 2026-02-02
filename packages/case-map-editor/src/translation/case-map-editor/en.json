@@ -20,13 +20,15 @@
     },
     "addStage": {
       "create": "Create Stage",
-      "desc": "Create a new stage",
+      "desc": "Create a new Stage",
       "title": "Add Stage"
     }
   },
   "editor": {
     "flow": {
       "addFirstItem": "Add first {{item}}",
+      "noProcesses": "No {{item}} configured",
+      "noStages": "No Stages configured",
       "processes": "Processes",
       "sidesteps": "Sidesteps"
     },
@@ -51,7 +53,7 @@
     "deleteStage": "Delete Stage ({{hotkey}})"
   },
   "message": {
-    "addFirstItem": "Add your first stage to your case map.",
+    "addFirstItem": "Add your first Stage to your Case Map.",
     "help": "Help",
     "nothingSelected": "Nothing selected"
   }
