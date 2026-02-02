@@ -27,7 +27,7 @@ export const CaseMapFlow = () => {
       const minStageWidth = 240; // StageTile min-width + gaps
       const gap = 60;
       let items = Math.floor((width + gap) / (minStageWidth + gap));
-      items = Math.max(2, Math.min(items, 6));
+      items = Math.max(1, Math.min(items, 6));
 
       setItemsPerRow(items);
     };
@@ -37,7 +37,7 @@ export const CaseMapFlow = () => {
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
-  }, []);
+  }, [caseMap?.stages]);
 
   const rows = useMemo(() => {
     if (!caseMap?.stages) return [];
@@ -51,7 +51,7 @@ export const CaseMapFlow = () => {
       const reversed = rowIndex % 2 === 1;
 
       result.push({
-        stages: reversed ? [...slice].reverse() : slice,
+        stages: slice,
         reversed
       });
 
@@ -77,44 +77,42 @@ export const CaseMapFlow = () => {
             {row.stages.map((stage, index) => {
               // Find the absolute index of this stage in the full stages array
               const absoluteIndex = caseMap.stages.findIndex(s => s.id === stage.id);
-              const isFirstInRow = row.reversed ? index === row.stages.length - 1 : index === 0;
-              const isLastInRow = row.reversed ? index === 0 : index === row.stages.length - 1;
+              const isLeftest = row.reversed ? index === row.stages.length - 1 : index === 0;
+              const isRightest = row.reversed ? index === 0 : index === row.stages.length - 1;
 
               return (
                 <div key={stage.id} className='stage-grid-item'>
                   <Flex direction='row' className='stage-container' style={{ height: '100%' }}>
                     <Flex direction='column' alignItems='center'>
-                      <StageConnector
-                        stage={stage}
-                        hideLeftLine={row.reversed ? isLastInRow : isFirstInRow}
-                        hideRightLine={row.reversed ? isFirstInRow : isLastInRow}
-                      />
+                      <StageConnector stage={stage} hideLeftLine={isLeftest} hideRightLine={isRightest && hoverIndex !== absoluteIndex} />
                       <div className='stage-vertical-line' />
                       <Flex
                         direction='column'
                         style={{
-                          marginBottom: (row.reversed && !isLastInRow) || (!row.reversed && !isLastInRow) ? 'var(--size-4)' : undefined,
+                          marginBottom: (row.reversed && !isRightest) || (!row.reversed && !isRightest) ? 'var(--size-4)' : undefined,
                           height: '100%'
                         }}
                         alignItems='center'
                       >
                         <StageTile stage={stage} />
-                        {isLastInRow && absoluteIndex !== caseMap.stages.length - 1 ? <div className='stage-vertical-line' /> : null}
+                        {((row.reversed && isLeftest) || (!row.reversed && isRightest)) && absoluteIndex !== caseMap.stages.length - 1 ? (
+                          <div className='stage-vertical-line' />
+                        ) : null}
                       </Flex>
                     </Flex>
 
-                    {((row.reversed && !isFirstInRow) || (!row.reversed && !isLastInRow)) && (
-                      <AddStageSlot
-                        index={absoluteIndex}
-                        stageId={stage.id}
-                        isLast={false}
-                        hoverIndex={hoverIndex}
-                        setHoverIndex={setHoverIndex}
-                        showPlaceholder={showPlaceholder}
-                        setShowPlaceholder={setShowPlaceholder}
-                        postStageId={caseMap.stages?.[absoluteIndex + 1]?.id ?? undefined}
-                      />
-                    )}
+                    <AddStageSlot
+                      index={absoluteIndex}
+                      stageId={stage.id}
+                      isLast={isRightest}
+                      hoverIndex={hoverIndex}
+                      setHoverIndex={setHoverIndex}
+                      showPlaceholder={showPlaceholder}
+                      setShowPlaceholder={setShowPlaceholder}
+                      postStageId={
+                        row.reversed ? caseMap.stages?.[absoluteIndex - 1]?.id : (caseMap.stages?.[absoluteIndex + 1]?.id ?? undefined)
+                      }
+                    />
                   </Flex>
                 </div>
               );
@@ -213,8 +211,8 @@ const AddStageSlot = ({
         onMouseOver={() => setHoverIndex(index)}
         onMouseOut={() => setShowPlaceholder(undefined)}
       >
-        <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
-        {!readonly && (hoverIndex === index || isLast) && (
+        <div className={hoverIndex === index || !isLast ? 'stage-line' : 'stage-line-hidden'} />
+        {!readonly && hoverIndex === index && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>
             <Button
               className='add-stage-button'

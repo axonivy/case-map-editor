@@ -1,6 +1,7 @@
 .stage-tile {
   background: var(--background);
-  border: 1px solid var(--P300);
+  /* border: 1px solid var(--P300); */
+  /* box-shadow: var(--popover-shadow); */
   padding: var(--size-3);
   border-radius: var(--border-r3);
   user-select: none;
