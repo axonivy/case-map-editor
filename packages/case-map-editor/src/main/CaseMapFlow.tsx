@@ -84,35 +84,45 @@ export const CaseMapFlow = () => {
                 <div key={stage.id} className='stage-grid-item'>
                   <Flex direction='row' className='stage-container' style={{ height: '100%' }}>
                     <Flex direction='column' alignItems='center'>
-                      <StageConnector stage={stage} hideLeftLine={isLeftest} hideRightLine={isRightest && hoverIndex !== absoluteIndex} />
+                      <StageConnector stage={stage} hideLeftLine={isLeftest} hideRightLine={isRightest} />
                       <div className='stage-vertical-line' />
                       <Flex
                         direction='column'
                         style={{
-                          marginBottom: (row.reversed && !isRightest) || (!row.reversed && !isRightest) ? 'var(--size-4)' : undefined,
+                          marginBottom: (row.reversed && !isLeftest) || (!row.reversed && !isRightest) ? 'var(--size-4)' : undefined,
                           height: '100%'
                         }}
                         alignItems='center'
                       >
                         <StageTile stage={stage} />
                         {((row.reversed && isLeftest) || (!row.reversed && isRightest)) && absoluteIndex !== caseMap.stages.length - 1 ? (
-                          <div className='stage-vertical-line' />
+                          <AddStageSlotHorizontal
+                            index={absoluteIndex}
+                            stageId={stage.id}
+                            isLast={isRightest}
+                            hoverIndex={hoverIndex}
+                            setHoverIndex={setHoverIndex}
+                            showPlaceholder={showPlaceholder}
+                            setShowPlaceholder={setShowPlaceholder}
+                            postStageId={caseMap.stages?.[absoluteIndex + 1]?.id}
+                          />
                         ) : null}
                       </Flex>
                     </Flex>
 
-                    <AddStageSlot
-                      index={absoluteIndex}
-                      stageId={stage.id}
-                      isLast={isRightest}
-                      hoverIndex={hoverIndex}
-                      setHoverIndex={setHoverIndex}
-                      showPlaceholder={showPlaceholder}
-                      setShowPlaceholder={setShowPlaceholder}
-                      postStageId={
-                        row.reversed ? caseMap.stages?.[absoluteIndex - 1]?.id : (caseMap.stages?.[absoluteIndex + 1]?.id ?? undefined)
-                      }
-                    />
+                    {!isRightest && (
+                      <AddStageSlot
+                        index={absoluteIndex}
+                        stageId={row.reversed ? (caseMap.stages?.[absoluteIndex - 1]?.id ?? stage.id) : stage.id}
+                        isLast={isRightest}
+                        isReversed={row.reversed}
+                        hoverIndex={hoverIndex}
+                        setHoverIndex={setHoverIndex}
+                        showPlaceholder={showPlaceholder}
+                        setShowPlaceholder={setShowPlaceholder}
+                        postStageId={row.reversed ? stage.id : (caseMap.stages?.[absoluteIndex + 1]?.id ?? undefined)}
+                      />
+                    )}
                   </Flex>
                 </div>
               );
@@ -120,8 +130,6 @@ export const CaseMapFlow = () => {
           </Flex>
         </div>
       ))}
-
-      {!readonly && <Flex style={{ height: '50vh' }} />}
     </Flex>
   );
 };
@@ -179,6 +187,75 @@ const AddStageSlot = ({
   index,
   isLast,
   hoverIndex,
+  isReversed,
+  setHoverIndex,
+  showPlaceholder,
+  setShowPlaceholder,
+  stageId,
+  postStageId
+}: {
+  index: number;
+  isLast: boolean;
+  isReversed: boolean;
+  hoverIndex?: number;
+  setHoverIndex: (i?: number) => void;
+  showPlaceholder?: number;
+  setShowPlaceholder: (i?: number) => void;
+  stageId: string;
+  postStageId?: string;
+}) => {
+  const dnd = useDndContext();
+  const readonly = useReadonly();
+  const hotkeys = useKnownHotkeys();
+  const { isOver, setNodeRef } = useDroppable({
+    id: stageId,
+    disabled: dnd.active?.id === stageId || dnd.active?.id === postStageId || dnd.active?.data?.current?.type !== 'stage'
+  });
+
+  return (
+    <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>
+      <Flex
+        className='stage-header'
+        alignItems='center'
+        justifyContent='center'
+        onMouseOver={() => setHoverIndex(isReversed ? index - 1 : index)}
+        onMouseOut={() => setShowPlaceholder(undefined)}
+      >
+        <div className={hoverIndex === index || !isLast ? 'stage-line' : 'stage-line-hidden'} />
+        {!readonly && (isReversed ? hoverIndex === index - 1 : hoverIndex === index) && (
+          <AddStageDialog index={hoverIndex ? (isReversed ? hoverIndex : hoverIndex + 1) : isReversed ? index : index + 1}>
+            <Button
+              className='add-stage-button'
+              icon={IvyIcons.Plus}
+              onMouseOver={() => setShowPlaceholder(isReversed ? index - 1 : index)}
+              aria-label={hotkeys.addStage.label}
+            />
+          </AddStageDialog>
+        )}
+        <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
+      </Flex>
+
+      <Flex style={{ flex: 1 }} ref={setNodeRef}>
+        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(isReversed ? index - 1 : index)} />
+        <Flex
+          direction='column'
+          className={cn(
+            'placeholder-stage',
+            (isReversed ? showPlaceholder === index - 1 : showPlaceholder === index) && 'visible',
+            isOver && 'is-drop-target'
+          )}
+          alignItems='center'
+        />
+        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(isReversed ? index - 1 : index)} />
+      </Flex>
+    </Flex>
+  );
+};
+
+const AddStageSlotHorizontal = ({
+  index,
+  isLast,
+  hoverIndex,
   setHoverIndex,
   showPlaceholder,
   setShowPlaceholder,
@@ -203,37 +280,35 @@ const AddStageSlot = ({
   });
 
   return (
-    <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>
+    <Flex
+      direction='column'
+      alignItems='center'
+      style={{ flex: 1, width: '100%' }}
+      ref={setNodeRef}
+      onMouseOver={() => setHoverIndex(index)}
+    >
+      <div className='stage-vertical-line' />
       <Flex
-        className='stage-header'
+        direction='row'
+        className={cn('stage-header-horizontal', showPlaceholder === index && 'visible')}
         alignItems='center'
         justifyContent='center'
-        onMouseOver={() => setHoverIndex(index)}
-        onMouseOut={() => setShowPlaceholder(undefined)}
       >
-        <div className={hoverIndex === index || !isLast ? 'stage-line' : 'stage-line-hidden'} />
+        <div className={cn('placeholder-stage-horizontal', showPlaceholder === index && 'visible', isOver && 'is-drop-target')} />
         {!readonly && hoverIndex === index && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>
             <Button
               className='add-stage-button'
               icon={IvyIcons.Plus}
               onMouseOver={() => setShowPlaceholder(index)}
+              onMouseOut={() => setShowPlaceholder(undefined)}
               aria-label={hotkeys.addStage.label}
             />
           </AddStageDialog>
         )}
-        <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
+        <div className={cn('placeholder-stage-horizontal', showPlaceholder === index && 'visible', isOver && 'is-drop-target')} />
       </Flex>
-
-      <Flex style={{ flex: 1 }} ref={setNodeRef}>
-        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
-        <Flex
-          direction='column'
-          className={cn('placeholder-stage', showPlaceholder === index && 'visible', isOver && 'is-drop-target')}
-          alignItems='center'
-        />
-        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
-      </Flex>
+      <div className='stage-vertical-line' />
     </Flex>
   );
 };

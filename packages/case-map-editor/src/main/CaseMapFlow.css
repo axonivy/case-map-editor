@@ -73,11 +73,13 @@
     width: 8.5px;
     margin: 2px;
   }
+
   .placeholder-stage {
     width: 0px;
     height: 50px;
     transition: width 0.2s ease;
   }
+
   .placeholder-stage.visible {
     cursor: pointer;
     background: var(--P300);
@@ -94,5 +96,35 @@
     color: var(--P300);
     height: 100%;
     width: 2px;
+  }
+
+  .placeholder-stage-horizontal {
+    height: 0px;
+    flex-grow: 1;
+    background-color: var(--P300);
+  }
+
+  .placeholder-stage-horizontal.visible {
+    background: var(--P300);
+    height: 4px;
+    transition: height 0.2s ease;
+  }
+
+  .placeholder-stage-horizontal.is-drop-target {
+    background: var(--P300);
+    color: var(--P300);
+    height: 4px;
+    transition: height 0.2s ease;
+  }
+
+  .stage-header-horizontal {
+    width: 1px;
+    flex-grow: 1;
+    background-color: var(--P300);
+  }
+  .stage-header-horizontal.visible {
+    width: 100%;
+    height: 25px;
+    background-color: transparent;
   }
 }
