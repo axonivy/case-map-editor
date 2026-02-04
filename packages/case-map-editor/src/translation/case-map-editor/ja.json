@@ -1,0 +1,26 @@
+{
+  "common": {
+    "hotkey": {
+    },
+    "label": {
+    }
+  },
+  "dialog": {
+    "addProcess": {
+    },
+    "addStage": {
+    }
+  },
+  "editor": {
+    "flow": {
+    },
+    "sidebar": {
+    },
+    "toolbar": {
+    }
+  },
+  "hotkey": {
+  },
+  "message": {
+  }
+}

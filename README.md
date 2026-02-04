@@ -1,6 +1,6 @@
 # Case Map Editor
 
-[![translation-status](https://hosted.weblate.org/widget/axonivy/case-map-editor/svg-badge.svg)](https://hosted.weblate.org/engage/axonivy/)
+[![translation-status](https://hosted.weblate.org/widget/axonivy/casemap-editor/svg-badge.svg)](https://hosted.weblate.org/engage/axonivy/)
 
 This repo contains the web-based Case Map Editor client.
 
