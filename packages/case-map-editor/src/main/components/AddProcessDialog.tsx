@@ -1,9 +1,10 @@
-import type { CaseMapModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
+import type { StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import {
   BasicDialogContent,
   BasicField,
   BasicInput,
   Button,
+  Combobox,
   Dialog,
   DialogContent,
   DialogTrigger,
@@ -19,7 +20,10 @@ import { IvyIcons } from '@axonivy/ui-icons';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { useMeta } from '../../context/useMeta';
 import { modifyData } from '../../data/data';
+import { ExtendedComboboxProcess } from '../../detail/ProcessDetail';
+import { generateName, generateUniqueId } from '../../utils/formatting';
 
 type AddProcessDialogProps = {
   stageId: string;
@@ -58,21 +62,28 @@ const AddProcessDialogContent = ({
   type: 'sidestep' | 'process';
   closeDialog: () => void;
 }) => {
-  const { caseMap, setCaseMap } = useAppContext();
+  const { caseMap, setCaseMap, context } = useAppContext();
   const { t } = useTranslation();
-  const [id, setId] = useState('newId');
-  const [name, setName] = useState('newName');
-  const [process, setProcess] = useState('someProcess');
-  const idInputRef = useRef<HTMLInputElement>(null);
-  const idValidationMessage = useMemo(() => validateFieldId(id, caseMap), [id, caseMap]);
-  const processValidationMessage = useMemo(() => validateFieldProcess(process), [process]);
+  const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data.map(p => ({
+    value: p.processReference,
+    name: p.startName.length > 0 ? p.startName : p.processName,
+    detail: p.userFriendlyRequestPath
+  }));
+
+  const [name, setName] = useState('');
+  const [process, setProcess] = useState('');
+  const generatedId = useMemo(() => generateUniqueId(name, caseMap), [name, caseMap]);
+
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const nameValidationMessage = useMemo(() => validateField(name), [name]);
+  const processValidationMessage = useMemo(() => validateField(process), [process]);
 
   const addProcess = (event: React.MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (!allInputsValid()) {
       return;
     }
     const newProcess: StageProcessModel = {
-      id: id,
+      id: generatedId,
       name: name,
       processToExecute: process,
       description: '',
@@ -90,11 +101,11 @@ const AddProcessDialogContent = ({
       closeDialog();
     } else {
       setName('');
-      idInputRef.current?.focus();
+      nameInputRef.current?.focus();
     }
   };
   const formattedType = type.charAt(0).toUpperCase() + type.slice(1);
-  const allInputsValid = () => !idValidationMessage && !processValidationMessage;
+  const allInputsValid = () => !nameValidationMessage && !processValidationMessage;
   const enter = useHotkeys<HTMLDivElement>(['Enter', 'mod+Enter'], addProcess, { scopes: DIALOG_HOTKEY_IDS, enableOnFormTags: true });
 
   return (
@@ -121,41 +132,29 @@ const AddProcessDialogContent = ({
       ref={enter}
       tabIndex={-1}
     >
-      <BasicField label={t('editor.sidebar.id')} message={idValidationMessage} tabIndex={0}>
-        <BasicInput ref={idInputRef} value={id} onChange={e => setId(e.target.value)} />
-      </BasicField>
-      <BasicField label={t('editor.sidebar.name')} tabIndex={0}>
-        <BasicInput value={name} onChange={e => setName(e.target.value)} />
-      </BasicField>
       <BasicField label={t('editor.sidebar.process')} message={processValidationMessage} tabIndex={0}>
-        <BasicInput value={process} onChange={e => setProcess(e.target.value)} />
+        <Combobox
+          options={processes}
+          value={process}
+          onChange={value => {
+            setProcess(value);
+            setName(generateName(value, processes));
+          }}
+          itemRender={option => <ExtendedComboboxProcess {...option} />}
+        />
+      </BasicField>
+
+      <BasicField label={t('editor.sidebar.name')} message={process ? nameValidationMessage : undefined} tabIndex={0}>
+        <BasicInput value={name} onChange={e => setName(e.target.value)} disabled={!process} />
       </BasicField>
     </BasicDialogContent>
   );
 };
 
-export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
-  if (id.trim() === '') {
-    return toErrorMessage('Id cannot be empty.');
+export const validateField = (name: string) => {
+  if (name.trim() === '') {
+    return toErrorMessage('Field cannot be empty.');
   }
-  if (
-    caseMap.stages.some(stage => stage.id === id) ||
-    caseMap.stages.some(stage => stage.processes?.some(process => process.id === id)) ||
-    caseMap.stages.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
-  ) {
-    return toErrorMessage('Id is already taken.');
-  }
-  if (/\s/.test(id)) {
-    return toErrorMessage('Id cannot have any whitespaces.');
-  }
-  return;
-};
-
-export const validateFieldProcess = (id: string) => {
-  if (id.trim() === '') {
-    return toErrorMessage('Process cannot be empty.');
-  }
-
   return;
 };
 

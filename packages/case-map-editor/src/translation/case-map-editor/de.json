@@ -50,6 +50,7 @@
   },
   "hotkey": {
     "addStage": "Stufe hinzufügen ({{hotkey}})",
+    "deleteProcess": "Prozess löschen",
     "deleteStage": "Stufe löschen ({{hotkey}})"
   },
   "message": {

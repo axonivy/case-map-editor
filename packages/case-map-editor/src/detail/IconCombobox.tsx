@@ -1,4 +1,5 @@
 import { Combobox, Flex, type ComboboxOption } from '@axonivy/ui-components';
+import './IconCombobox.css';
 
 export const IconCombobox = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
   const ExtendedComboboxItem = ({ value }: ComboboxOption) => (
@@ -8,14 +9,17 @@ export const IconCombobox = ({ value, onChange }: { value: string; onChange: (va
     </Flex>
   );
   return (
-    <Combobox
-      value={value as string}
-      onChange={onChange}
-      options={streamlineIcons.map(icon => {
-        return { value: icon };
-      })}
-      itemRender={option => <ExtendedComboboxItem {...option} />}
-    />
+    <Flex alignItems='center' gap={2} className='stage-icon-combobox'>
+      <i className={value + ' stage-icon-preview'} />
+      <Combobox
+        value={value as string}
+        onChange={onChange}
+        options={streamlineIcons.map(icon => {
+          return { value: icon };
+        })}
+        itemRender={option => <ExtendedComboboxItem {...option} />}
+      />
+    </Flex>
   );
 };
 const formatIconString = (icon: string) => {

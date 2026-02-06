@@ -63,7 +63,7 @@ export const ProcessDetail = () => {
   );
 };
 
-const ExtendedComboboxProcess = ({ name, detail }: { name: string; detail: string }) => {
+export const ExtendedComboboxProcess = ({ name, detail }: { name: string; detail: string }) => {
   return (
     <Flex direction='row' gap={1} style={{ flexWrap: 'wrap', alignItems: 'flex-start' }}>
       <span>{name}</span>
