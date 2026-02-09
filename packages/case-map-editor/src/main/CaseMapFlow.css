@@ -28,9 +28,9 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    margin: var(--size-1);
-
-    transition: background 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease;
 
     &:hover {
       box-shadow: var(--focus-shadow);
