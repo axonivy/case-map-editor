@@ -13,8 +13,10 @@ import {
 } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import type { ElementType } from '../../data/data';
 import { useKnownHotkeys } from '../../utils/useKnownHotkeys';
 import { useCaseMapData } from '../useCaseMapData';
 import { AddProcessDialog } from './AddProcessDialog';
@@ -54,7 +56,7 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
           <Flex gap={2} alignItems='center' className='stage-tile-name'>
             {stage.name}
           </Flex>
-          {!readonly && <DeleteStageButton stageId={stage.id} />}
+          {!readonly && <DeleteButton id={stage.id} type='stage' />}
         </Flex>
         <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
@@ -66,7 +68,8 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
   );
 };
 
-const DeleteStageButton = ({ stageId }: { stageId: string }) => {
+const DeleteButton = ({ id, type }: { id: string; type: ElementType }) => {
+  const { t } = useTranslation();
   const { deleteElementById } = useCaseMapData();
   const hotkeys = useKnownHotkeys();
   return (
@@ -77,12 +80,12 @@ const DeleteStageButton = ({ stageId }: { stageId: string }) => {
             icon={IvyIcons.Trash}
             onClick={e => {
               e.stopPropagation();
-              deleteElementById(stageId, 'stage');
+              deleteElementById(id, type);
             }}
-            aria-label={hotkeys.deleteStage.label}
+            aria-label={type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}
           />
         </TooltipTrigger>
-        <TooltipContent>{hotkeys.deleteStage.label}</TooltipContent>
+        <TooltipContent>{type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
@@ -99,6 +102,7 @@ const ProcessPart = ({
   stageProcesses?: StageProcessModel[];
   type: 'process' | 'sidestep';
 }) => {
+  const { selectedElement } = useAppContext();
   const { t } = useTranslation();
   const dnd = useDndContext();
   const { isOver, setNodeRef } = useDroppable({
@@ -107,6 +111,9 @@ const ProcessPart = ({
   });
   const readonly = useReadonly();
   const processesAvailable = stageProcesses !== undefined && stageProcesses.length > 0;
+  const processSelected = useMemo(() => {
+    return stageProcesses?.some(proc => proc.id === selectedElement?.id) ?? false;
+  }, [selectedElement, stageProcesses]);
   return (
     <Flex direction='column' gap={2}>
       {processesAvailable ? (
@@ -115,9 +122,16 @@ const ProcessPart = ({
             <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
               {title}
               {!readonly && (
-                <AddProcessDialog type={type} stageId={stageId}>
-                  <Button size='small' icon={IvyIcons.Plus} />
-                </AddProcessDialog>
+                <Flex gap={1}>
+                  {processSelected && selectedElement && <DeleteButton id={selectedElement.id} type='process' />}
+                  <AddProcessDialog type={type} stageId={stageId}>
+                    <Button
+                      size='small'
+                      icon={IvyIcons.Plus}
+                      aria-label={t('dialog.addProcess.title', { type: type.charAt(0).toUpperCase() + type.slice(1) })}
+                    />
+                  </AddProcessDialog>
+                </Flex>
               )}
             </Flex>
           </DropZone>

@@ -1,4 +1,4 @@
-import type { CaseMapModel, StageModel } from '@axonivy/case-map-editor-protocol';
+import type { StageModel } from '@axonivy/case-map-editor-protocol';
 import {
   BasicDialogContent,
   BasicField,
@@ -20,6 +20,8 @@ import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
 import { modifyData } from '../../data/data';
+import { IconCombobox } from '../../detail/IconCombobox';
+import { generateUniqueId } from '../../utils/formatting';
 import { useKnownHotkeys } from '../../utils/useKnownHotkeys';
 
 type AddStageDialogProps = { children: React.ReactNode; index?: number };
@@ -50,18 +52,19 @@ export const AddStageDialog = ({ children, index }: AddStageDialogProps) => {
 const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void; index?: number }) => {
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
-  const [id, setId] = useState('newId');
   const [name, setName] = useState('newName');
-  const [icon, setIcon] = useState('newIcon');
-  const idInputRef = useRef<HTMLInputElement>(null);
-  const idValidationMessage = useMemo(() => validateFieldId(id, caseMap), [id, caseMap]);
-  const allInputsValid = () => !idValidationMessage;
+  const [icon, setIcon] = useState('si si-check-1');
+  const generatedId = useMemo(() => generateUniqueId(name, caseMap), [name, caseMap]);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  const nameValidationMessage = useMemo(() => validateFieldName(name), [name]);
+  const allInputsValid = () => !nameValidationMessage;
   const addStage = (event: React.MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (!allInputsValid()) {
       return;
     }
     const newStage: StageModel = {
-      id: id,
+      id: generatedId,
       name: name,
       icon: icon,
       isTerminating: false,
@@ -79,7 +82,7 @@ const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void
       closeDialog();
     } else {
       setName('');
-      idInputRef.current?.focus();
+      nameInputRef.current?.focus();
     }
   };
   const enter = useHotkeys<HTMLDivElement>(['Enter', 'mod+Enter'], addStage, { scopes: DIALOG_HOTKEY_IDS, enableOnFormTags: true });
@@ -108,32 +111,19 @@ const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void
       ref={enter}
       tabIndex={-1}
     >
-      <BasicField label={t('editor.sidebar.id')} message={idValidationMessage} tabIndex={0}>
-        <BasicInput ref={idInputRef} value={id} onChange={e => setId(e.target.value)} />
+      <BasicField label={t('editor.sidebar.name')} message={nameValidationMessage} tabIndex={0}>
+        <BasicInput ref={nameInputRef} value={name} onChange={e => setName(e.target.value)} />
       </BasicField>
-      <BasicField label={t('editor.sidebar.name')} tabIndex={0}>
-        <BasicInput value={name} onChange={e => setName(e.target.value)} />
-      </BasicField>
-      <BasicField label={t('editor.sidebar.icon')} tabIndex={0}>
-        <BasicInput value={icon} onChange={e => setIcon(e.target.value)} />
+      <BasicField label={t('editor.sidebar.icon')}>
+        <IconCombobox value={icon} onChange={value => setIcon(value)} />
       </BasicField>
     </BasicDialogContent>
   );
 };
 
-export const validateFieldId = (id: string, caseMap: CaseMapModel) => {
-  if (id.trim() === '') {
-    return toErrorMessage('Id cannot be empty.');
-  }
-  if (
-    caseMap.stages?.some(stage => stage.id === id) ||
-    caseMap.stages?.some(stage => stage.processes?.some(process => process.id === id)) ||
-    caseMap.stages?.some(stage => stage.sidesteps?.some(sideSteps => sideSteps.id === id))
-  ) {
-    return toErrorMessage('Id is already taken.');
-  }
-  if (/\s/.test(id)) {
-    return toErrorMessage('Id cannot have any whitespaces.');
+export const validateFieldName = (name: string) => {
+  if (name.trim() === '') {
+    return toErrorMessage('Name cannot be empty.');
   }
   return;
 };

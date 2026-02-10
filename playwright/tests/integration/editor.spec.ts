@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { AddProcessDialog } from '../pageobjects/AddProcessDialog';
 import { AddStageDialog } from '../pageobjects/AddStageDialog';
 import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
 
@@ -17,22 +18,18 @@ test('save data', async ({ page }) => {
   const editor = await CaseMapEditor.openCaseMap(page);
   await editor.flow.expectStages(3);
   const dialog = await editor.flow.openAddStageDialog();
-  const newStageId = `coolStage`;
-  const newStageName = `Cool Stage`;
-  const newStageIcon = `si si-single-neutral-actions`;
-  await dialog.name.locator.fill(newStageName);
-  await dialog.icon.locator.fill(newStageIcon);
-  await dialog.id.locator.fill(newStageId);
+  await dialog.name.locator.fill(`Cool Stage`);
+  await dialog.icon.fill(`si si-single-neutral-actions`);
   await dialog.create.click();
   await editor.flow.expectStages(4);
 
   await editor.flow.stageByNth(3).inscribe();
-  await editor.inscription.expectHeader('coolStage');
+  await editor.inscription.expectHeader('coolstage');
   const general = editor.inscription.collapsible('General');
   const id = general.input('Id');
   const name = general.input('Name');
   const icon = general.combobox('Icon');
-  await id.expectValue('coolStage');
+  await id.expectValue('coolstage');
   await name.expectValue('Cool Stage');
   await icon.expectValue('si si-single-neutral-actions');
 
@@ -41,6 +38,36 @@ test('save data', async ({ page }) => {
 
   await editor.flow.stageByNth(3).delete.click();
   await editor.flow.expectStages(3);
+});
+
+test('add process', async ({ page }) => {
+  const editor = await CaseMapEditor.openCaseMap(page);
+  await editor.flow.stageByNth(0).expectProcesses(2);
+  await editor.flow.stageByNth(0).addProcess.click();
+  const dialog = new AddProcessDialog(page);
+  await dialog.process.choose('ExternalSolvencyService');
+  await dialog.name.expectValue('External Solvency Service');
+  await dialog.create.click();
+  await editor.flow.stageByNth(0).expectProcesses(3);
+
+  await editor.flow.stageByNth(0).processByNth(0).inscribe();
+  await editor.inscription.expectHeader('externalsolvencyservice');
+  const generalProcess = editor.inscription.collapsible('General');
+  const id = generalProcess.input('Id');
+  const name = generalProcess.input('Name');
+  const process = generalProcess.combobox('Process');
+  await id.expectValue('externalsolvencyservice');
+  await name.expectValue('External Solvency Service');
+  await process.expectValue('casemap.test.project:casemap-test-project:15A8995AA29B442B/start.ivp');
+
+  await page.reload();
+  await editor.flow.stageByNth(0).expectProcesses(3);
+
+  await expect(editor.flow.stageByNth(0).deleteProcess).toBeHidden();
+  await editor.flow.stageByNth(0).processByNth(0).process.click();
+  await expect(editor.flow.stageByNth(0).deleteProcess).toBeVisible();
+  await editor.flow.stageByNth(0).deleteProcess.click();
+  await editor.flow.stageByNth(0).expectProcesses(2);
 });
 
 test('empty', async ({ page }) => {

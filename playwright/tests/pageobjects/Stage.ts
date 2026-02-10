@@ -4,12 +4,16 @@ import { Process } from './Process';
 export class Stage {
   protected readonly page: Page;
   public readonly stage: Locator;
+  public readonly addProcess: Locator;
   readonly delete: Locator;
+  readonly deleteProcess: Locator;
 
   constructor(page: Page, parent: Locator, nth: number) {
     this.page = page;
     this.stage = parent.locator('.stage-tile').nth(nth);
+    this.addProcess = this.stage.getByRole('button', { name: 'Add Process' });
     this.delete = this.stage.getByRole('button', { name: 'Delete Stage (Delete)' });
+    this.deleteProcess = this.stage.getByRole('button', { name: 'Delete Process' });
   }
 
   processByNth(nth: number) {

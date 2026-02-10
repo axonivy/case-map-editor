@@ -1,0 +1,16 @@
+.stage-icon-combobox {
+  .stage-icon-preview {
+    line-height: 12px;
+    padding: var(--input-padding);
+    font-size: 12px;
+    border: var(--basic-border);
+    border-radius: var(--border-r1);
+  }
+  .ui-combobox {
+    display: flex;
+    width: 100%;
+    .ui-inputgroup {
+      width: 100%;
+    }
+  }
+}
