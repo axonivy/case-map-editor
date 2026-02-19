@@ -7,8 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'build',
-    chunkSizeWarningLimit: 5000,
-    rollupOptions: { input: { index: './index.html', mock: './mock.html' } }
+    chunkSizeWarningLimit: 5000
   },
   server: {
     port: 3003,

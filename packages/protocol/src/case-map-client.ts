@@ -19,3 +19,7 @@ export interface CaseMapClient {
 
   meta<TMeta extends keyof MetaRequestTypes>(path: TMeta, args: MetaRequestTypes[TMeta][0]): Promise<MetaRequestTypes[TMeta][1]>;
 }
+
+export interface CaseMapViewerClient {
+  data(context: CaseMapContext): Promise<CaseMapEditorData>;
+}

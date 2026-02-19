@@ -1,4 +1,10 @@
-import { CaseMapClientJsonRpc, CaseMapViewer, ClientContextProvider, initQueryClient, QueryProvider } from '@axonivy/case-map-editor';
+import {
+  CaseMapViewer,
+  CaseMapViewerClientJsonRpc,
+  initQueryClient,
+  QueryProvider,
+  ViewerClientContextProvider
+} from '@axonivy/case-map-editor';
 import { webSocketConnection, type Connection } from '@axonivy/jsonrpc';
 import { Flex, HotkeysProvider, ReadonlyProvider, Spinner, ThemeProvider, toast, Toaster } from '@axonivy/ui-components';
 import * as React from 'react';
@@ -32,12 +38,11 @@ export async function start(): Promise<void> {
     </React.StrictMode>
   );
   const initialize = async (connection: Connection) => {
-    const client = await CaseMapClientJsonRpc.startClient(connection);
-    await client.initialize({ app, pmv, file });
+    const client = await CaseMapViewerClientJsonRpc.startClient(connection);
     root.render(
       <React.StrictMode>
         <ThemeProvider defaultTheme={theme}>
-          <ClientContextProvider client={client}>
+          <ViewerClientContextProvider client={client}>
             <QueryProvider client={queryClient}>
               <ReadonlyProvider readonly={true}>
                 <HotkeysProvider initiallyActiveScopes={['global']}>
@@ -45,19 +50,19 @@ export async function start(): Promise<void> {
                 </HotkeysProvider>
               </ReadonlyProvider>
             </QueryProvider>
-          </ClientContextProvider>
+          </ViewerClientContextProvider>
           <Toaster closeButton={true} position='bottom-left' />
         </ThemeProvider>
       </React.StrictMode>
     );
     return client;
   };
-  const reconnect = async (connection: Connection, oldClient: CaseMapClientJsonRpc) => {
+  const reconnect = async (connection: Connection, oldClient: CaseMapViewerClientJsonRpc) => {
     await oldClient.stop();
     return initialize(connection);
   };
 
-  webSocketConnection<CaseMapClientJsonRpc>(CaseMapClientJsonRpc.webSocketUrl(server)).listen({
+  webSocketConnection<CaseMapViewerClientJsonRpc>(CaseMapViewerClientJsonRpc.webSocketUrl(server)).listen({
     onConnection: initialize,
     onReconnect: reconnect,
     logger: { log: console.log, info: toast.info, warn: toast.warning, error: toast.error }

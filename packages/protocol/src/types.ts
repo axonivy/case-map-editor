@@ -1,4 +1,4 @@
-import type { CaseMapClient } from './case-map-client';
+import type { CaseMapClient, CaseMapViewerClient } from './case-map-client';
 import type {
   CaseMapContext,
   CaseMapEditorData,
@@ -23,6 +23,10 @@ export interface CaseMapActionArgs {
 
 export interface ClientContext {
   client: CaseMapClient;
+}
+
+export interface ViewerClientContext {
+  client: CaseMapViewerClient;
 }
 
 export interface RequestTypes extends MetaRequestTypes {
