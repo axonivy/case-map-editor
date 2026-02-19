@@ -1,16 +1,5 @@
 import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import {
-  Button,
-  cn,
-  Flex,
-  IvyIcon,
-  Separator,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-  useReadonly
-} from '@axonivy/ui-components';
+import { Button, cn, Flex, IvyIcon, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useMemo } from 'react';
@@ -25,7 +14,7 @@ import { ProcessTile } from './ProcessTile';
 import './StageTile.css';
 import { useSelectableTile } from './useSelectableTile';
 
-export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: boolean }) => {
+export const StageTile = ({ stage, dragging, margin }: { stage: StageModel; dragging?: boolean; margin?: string }) => {
   const { t } = useTranslation();
   const { caseMap } = useAppContext();
   const readonly = useReadonly();
@@ -46,19 +35,12 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onKeyDown={onKeyDown}
-        style={{ flexWrap: 'wrap' }}
+        style={{ flexWrap: 'wrap', marginBottom: margin }}
         gap={3}
         ref={setNodeRef}
         {...listeners}
         {...attributes}
       >
-        <Flex className='stage-tile-header' alignItems='center' justifyContent='space-between' gap={2}>
-          <Flex gap={2} alignItems='center' className='stage-tile-name'>
-            {stage.name}
-          </Flex>
-          {!readonly && <DeleteButton id={stage.id} type='stage' />}
-        </Flex>
-        <Separator style={{ marginBlock: 'unset' }} />
         <Flex direction='column' gap={3}>
           <ProcessPart stageId={stage.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
           <ProcessPart stageId={stage.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sidesteps} type='sidestep' />
@@ -68,7 +50,7 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
   );
 };
 
-const DeleteButton = ({ id, type }: { id: string; type: ElementType }) => {
+export const DeleteButton = ({ id, type }: { id: string; type: ElementType }) => {
   const { t } = useTranslation();
   const { deleteElementById } = useCaseMapData();
   const hotkeys = useKnownHotkeys();

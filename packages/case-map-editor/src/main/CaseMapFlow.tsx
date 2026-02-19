@@ -1,11 +1,10 @@
 import type { StageModel } from '@axonivy/case-map-editor-protocol';
-import { Button, cn, Flex, PanelMessage, useReadonly } from '@axonivy/ui-components';
+import { Button, cn, Flex, IvyIcon, PanelMessage, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
-import { removeCSSPrefix } from '../detail/IconCombobox';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
 import './CaseMapFlow.css';
 import { AddStageDialog } from './components/AddStageDialog';
@@ -85,16 +84,18 @@ export const CaseMapFlow = () => {
                   <Flex direction='row' className='stage-container' style={{ height: '100%' }}>
                     <Flex direction='column' alignItems='center'>
                       <StageConnector stage={stage} hideLeftLine={isLeftest} hideRightLine={isRightest} />
-                      <div className='stage-vertical-line' />
+                      <div style={{ minHeight: '20px' }} />
                       <Flex
                         direction='column'
                         style={{
-                          marginBottom: (row.reversed && !isLeftest) || (!row.reversed && !isRightest) ? 'var(--size-4)' : undefined,
                           height: '100%'
                         }}
                         alignItems='center'
                       >
-                        <StageTile stage={stage} />
+                        <StageTile
+                          stage={stage}
+                          margin={(row.reversed && !isLeftest) || (!row.reversed && !isRightest) ? '40px' : undefined}
+                        />
                         {((row.reversed && isLeftest) || (!row.reversed && isRightest)) && absoluteIndex !== caseMap.stages.length - 1 ? (
                           <AddStageSlotHorizontal
                             index={absoluteIndex}
@@ -161,6 +162,7 @@ const EmptyState = () => {
 
 const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageModel; hideLeftLine: boolean; hideRightLine: boolean }) => {
   const { selectedElement, setSelectedElement, setDetail } = useAppContext();
+  const readonly = useReadonly();
   const isStageSelected =
     (selectedElement?.id === stage.id && selectedElement?.type === 'stage') ||
     stage.processes?.some(proc => proc.id === selectedElement?.id) ||
@@ -168,16 +170,23 @@ const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageMo
   return (
     <Flex className='stage-header' alignItems='center' justifyContent='center'>
       <div className={hideLeftLine ? 'stage-line-hidden' : 'stage-line'} />
-      <div
-        className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
+      <Flex
+        className={`stage-rectangle ${isStageSelected ? 'selected' : ''}`}
+        justifyContent='space-between'
         onClick={e => {
           e.stopPropagation();
           setSelectedElement({ id: stage.id, type: 'stage' });
           setDetail(true);
         }}
       >
-        <i className={removeCSSPrefix(stage.icon)} />
-      </div>
+        <Flex gap={2} alignItems='center' className='stage-tile-name'>
+          {/* <i className={stage.icon} /> */}
+          <IvyIcon icon={IvyIcons.ClockOutline} />
+          {stage.name}
+        </Flex>
+        <Button icon={IvyIcons.Dots} size='small' />
+        {/* {!readonly && <DeleteButton id={stage.id} type='stage' />} */}
+      </Flex>
       <div className={hideRightLine ? 'stage-line-hidden' : 'stage-line'} />
     </Flex>
   );
