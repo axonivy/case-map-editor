@@ -50,6 +50,7 @@ function CaseMapViewer(props: EditorProps) {
       }}
     >
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css`} />
+      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/v4-shims.min.css`} />
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css`} />
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces`} />
       <div className='case-map-viewer'>
