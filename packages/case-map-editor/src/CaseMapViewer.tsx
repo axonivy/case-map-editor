@@ -7,12 +7,12 @@ import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
 import { useCaseMapQueryKeys } from './hooks/useCaseMapQueryKeys';
 import { CaseMapFlow } from './main/CaseMapFlow';
-import { useClient } from './protocol/ClientContextProvider';
+import { useViewerClient } from './protocol/ClientContextProvider';
 
 function CaseMapViewer(props: EditorProps) {
   const context = props.context;
   const [selectedElement, setSelectedElement] = useState<SelectedElement>();
-  const client = useClient();
+  const client = useViewerClient();
   const queryKeys = useCaseMapQueryKeys();
 
   const { data, isPending, isError, error } = useQuery({

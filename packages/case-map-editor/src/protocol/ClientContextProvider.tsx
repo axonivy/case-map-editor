@@ -1,5 +1,5 @@
-import type { ClientContext } from '@axonivy/case-map-editor-protocol';
-import type { CaseMapClient } from '@axonivy/case-map-editor-protocol/src/case-map-client';
+import type { ClientContext, ViewerClientContext } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapClient, CaseMapViewerClient } from '@axonivy/case-map-editor-protocol/src/case-map-client';
 import type { ReactNode } from 'react';
 import { createContext, useContext } from 'react';
 
@@ -15,4 +15,18 @@ export const useClient = (): CaseMapClient => {
 
 export const ClientContextProvider = ({ client, children }: { client: CaseMapClient; children: ReactNode }) => {
   return <ClientContextInstance.Provider value={{ client }}>{children}</ClientContextInstance.Provider>;
+};
+
+const ViewerClientContextInstance = createContext<ViewerClientContext | undefined>(undefined);
+
+export const useViewerClient = (): CaseMapViewerClient => {
+  const context = useContext(ViewerClientContextInstance);
+  if (context === undefined) {
+    throw new Error('useViewerClient must be used within a ClientContext');
+  }
+  return context.client;
+};
+
+export const ViewerClientContextProvider = ({ client, children }: { client: CaseMapViewerClient; children: ReactNode }) => {
+  return <ViewerClientContextInstance.Provider value={{ client }}>{children}</ViewerClientContextInstance.Provider>;
 };
