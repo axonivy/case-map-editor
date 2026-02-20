@@ -5,6 +5,7 @@ import { useDndContext, useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
+import { removeCSSPrefix } from '../detail/IconCombobox';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
 import './CaseMapFlow.css';
 import { AddStageDialog } from './components/AddStageDialog';
@@ -87,7 +88,7 @@ const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageMo
           setDetail(true);
         }}
       >
-        <i className={stage.icon} />
+        <i className={removeCSSPrefix(stage.icon)} />
       </div>
       <div className={hideRightLine ? 'stage-line-hidden' : 'stage-line'} />
     </Flex>

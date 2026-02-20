@@ -4,13 +4,13 @@ import './IconCombobox.css';
 export const IconCombobox = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
   const ExtendedComboboxItem = ({ value }: ComboboxOption) => (
     <Flex direction='row' alignItems='center' gap={2}>
-      <i className={value} />
+      <i className={removeCSSPrefix(value)} />
       <div style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{formatIconString(value)}</div>
     </Flex>
   );
   return (
     <Flex alignItems='center' gap={2} className='stage-icon-combobox'>
-      <i className={value + ' stage-icon-preview'} />
+      <i className={removeCSSPrefix(value) + ' stage-icon-preview'} />
       <Combobox
         value={value as string}
         onChange={onChange}
@@ -21,6 +21,9 @@ export const IconCombobox = ({ value, onChange }: { value: string; onChange: (va
       />
     </Flex>
   );
+};
+export const removeCSSPrefix = (icon: string) => {
+  return icon.replace(/^css:/, '');
 };
 const formatIconString = (icon: string) => {
   let formatted = icon.replace(/^(si[- ]?)+/, '');
