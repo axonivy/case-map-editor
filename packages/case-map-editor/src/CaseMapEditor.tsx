@@ -88,10 +88,28 @@ function CaseMapEditor(props: EditorProps) {
         helpUrl: data.helpUrl
       }}
     >
-      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css`} />
-      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/v4-shims.min.css`} />
-      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css`} />
-      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces`} />
+      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/all.min.css`} crossOrigin='anonymous' />
+      <link
+        rel='stylesheet'
+        href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/v4-shims.min.css`}
+        crossOrigin='anonymous'
+      />
+      <link
+        rel='stylesheet'
+        href={`${data.baseUrl}/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css`}
+        crossOrigin='anonymous'
+      />
+      <link
+        rel='stylesheet'
+        href={`${data.baseUrl}/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces`}
+        crossOrigin='anonymous'
+      />
+      <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/tabler-icons/tabler-icons.min.css`} crossOrigin='anonymous' />
+      <link
+        rel='stylesheet'
+        href={`${data.baseUrl}/dev-workflow-ui/webjars/tabler-icons/tabler-icons-filled.min.css`}
+        crossOrigin='anonymous'
+      />
       <ResizableGroup orientation='horizontal' defaultLayout={defaultLayout} onLayoutChanged={onLayoutChanged}>
         <DndContext>
           <ResizablePanel defaultSize='75%' minSize='50%' className='case-map-editor-main-panel'>
