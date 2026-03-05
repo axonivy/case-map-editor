@@ -13,6 +13,11 @@ export const IconCombobox = ({ value, onChange }: { value: string; onChange: (va
         onChange={onChange}
         options={iconOptions}
         optionsLimit={50}
+        optionFilter={(option, input) =>
+          formatIconString(option.value)
+            .toLowerCase()
+            .startsWith(input?.toLowerCase() || '')
+        }
         itemRender={option => <ExtendedComboboxItem {...option} />}
       />
     </Flex>

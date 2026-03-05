@@ -6,7 +6,7 @@
   "stages" : [ {
     "id" : "identification",
     "name" : "Identification",
-    "icon" : "si si-single-neutral-actions",
+    "icon" : "ti ti-user",
     "processes" : [ {
       "id" : "collect_personal_data",
       "name" : "Collect personal data",
@@ -19,7 +19,7 @@
   }, {
     "id" : "credit_rating",
     "name" : "Credit rating",
-    "icon" : "si si-monetization-approve",
+    "icon" : "ti ti-pig-money",
     "processes" : [ {
       "id" : "check_company_register",
       "name" : "Check company register",
@@ -33,7 +33,7 @@
   }, {
     "id" : "approval",
     "name" : "Approval",
-    "icon" : "si si-check-circle-1",
+    "icon" : "ti ti-square-rounded-check",
     "isTerminating" : true,
     "processes" : [ {
       "id" : "approve_level_1",
