@@ -53,7 +53,7 @@ const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
   const [name, setName] = useState('newName');
-  const [icon, setIcon] = useState('si si-check-1');
+  const [icon, setIcon] = useState('ti ti-check');
   const generatedId = useMemo(() => generateUniqueId(name, caseMap), [name, caseMap]);
   const nameInputRef = useRef<HTMLInputElement>(null);
 

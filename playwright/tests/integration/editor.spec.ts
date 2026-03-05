@@ -19,7 +19,7 @@ test('save data', async ({ page }) => {
   await editor.flow.expectStages(3);
   const dialog = await editor.flow.openAddStageDialog();
   await dialog.name.locator.fill(`Cool Stage`);
-  await dialog.icon.fill(`si si-single-neutral-actions`);
+  await dialog.icon.fill(`ti ti-user`);
   await dialog.create.click();
   await editor.flow.expectStages(4);
 
@@ -31,7 +31,7 @@ test('save data', async ({ page }) => {
   const icon = general.combobox('Icon');
   await id.expectValue('coolstage');
   await name.expectValue('Cool Stage');
-  await icon.expectValue('si si-single-neutral-actions');
+  await icon.expectValue('ti ti-user');
 
   await page.reload();
   await editor.flow.expectStages(4);
