@@ -16,7 +16,6 @@ export default defineConfig({
       '/dev-workflow-ui': {
         target: ENGINE_URL,
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/dev-workflow-ui/, '/dev-workflow-ui'),
         secure: false
       }
     }
