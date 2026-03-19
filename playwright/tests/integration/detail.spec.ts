@@ -1,5 +1,25 @@
-import test from '@playwright/test';
+import test, { expect } from '@playwright/test';
 import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
+
+test('case map', async ({ page }) => {
+  const editor = await CaseMapEditor.openMock(page);
+  await editor.toolbar.detailToggle.click();
+  await editor.inscription.expectHeader('Mock Case Map');
+  const general = editor.inscription.collapsible('General');
+  const id = general.input('Id');
+  const name = general.input('Name');
+  const description = general.input('Description');
+  await id.expectValue('mock-id');
+  await name.expectValue('Mock Case Map');
+  await description.expectValue('A mock case map for testing purposes');
+
+  await name.fill('New Case Map Name');
+  await description.fill('New Description');
+
+  await name.expectValue('New Case Map Name');
+  await description.expectValue('New Description');
+  await expect(editor.toolbar.locator).toHaveText('New Case Map Name');
+});
 
 test('stage', async ({ page }) => {
   const editor = await CaseMapEditor.openMock(page);
