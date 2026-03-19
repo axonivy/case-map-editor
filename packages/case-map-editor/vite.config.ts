@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: 'editor',
       formats: ['es']
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: [
         '@axonivy/ui-components',
         '@axonivy/ui-icons',
