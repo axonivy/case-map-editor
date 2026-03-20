@@ -1,6 +1,19 @@
 import type { CaseMapModel, ProcessPreCondition, StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import { useAppContext } from '../context/AppContext';
 
+export const useCaseMapProperty = () => {
+  const { caseMap, setCaseMap } = useAppContext();
+
+  const setProperty = <K extends keyof CaseMapModel>(key: K, value: CaseMapModel[K]) => {
+    setCaseMap(old => ({
+      ...old,
+      [key]: value
+    }));
+  };
+
+  return { caseMap, setProperty };
+};
+
 export const useStageProperty = () => {
   const { caseMap, setCaseMap, selectedElement } = useAppContext();
 

@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
 import { useAction } from '../hooks/useAction';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
+import { CaseMapDetail } from './CaseMapDetail';
 import './Details.css';
-import { EmptyDetail } from './EmptyDetail';
 import { ProcessDetail } from './ProcessDetail';
 import { StageDetail } from './StageDetail';
 
 export const Detail = () => {
-  const { selectedElement, helpUrl } = useAppContext();
+  const { selectedElement, helpUrl, caseMap } = useAppContext();
   const openUrl = useAction('openUrl');
   const { t } = useTranslation();
   const { openHelp: helpText } = useKnownHotkeys();
@@ -18,7 +18,12 @@ export const Detail = () => {
 
   return (
     <>
-      <SidebarHeader icon={IvyIcons.PenEdit} title={selectedElement?.id ?? ''} className='case-map-editor-detail-header' tabIndex={0}>
+      <SidebarHeader
+        icon={IvyIcons.PenEdit}
+        title={selectedElement?.id ?? caseMap.name}
+        className='case-map-editor-detail-header'
+        tabIndex={0}
+      >
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -29,7 +34,7 @@ export const Detail = () => {
         </TooltipProvider>
       </SidebarHeader>
       <Flex direction='column' className='case-map-editor-detail-content'>
-        {selectedElement?.type === 'stage' ? <StageDetail /> : selectedElement?.type === 'process' ? <ProcessDetail /> : <EmptyDetail />}
+        {selectedElement?.type === 'stage' ? <StageDetail /> : selectedElement?.type === 'process' ? <ProcessDetail /> : <CaseMapDetail />}
       </Flex>
     </>
   );
