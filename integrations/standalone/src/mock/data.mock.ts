@@ -9,7 +9,7 @@ export const data: CaseMapModel = {
     {
       id: 'stage-1',
       name: 'Start Stage',
-      icon: 'start-icon',
+      icon: 'ti ti-player-play',
       isTerminating: false,
       description: 'This is the starting stage.',
       processes: [
@@ -29,7 +29,7 @@ export const data: CaseMapModel = {
     {
       id: 'stage-2',
       name: 'Review Stage',
-      icon: 'review-icon',
+      icon: 'ti ti-eye',
       isTerminating: false,
       description: 'Stage for reviewing the case details.',
       processes: [
@@ -60,7 +60,7 @@ export const data: CaseMapModel = {
     {
       id: 'stage-3',
       name: 'Approval Stage',
-      icon: 'approval-icon',
+      icon: 'ti ti-check',
       isTerminating: true,
       description: 'Final stage for approving the case.',
       processes: [

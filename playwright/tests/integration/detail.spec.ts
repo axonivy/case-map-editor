@@ -34,7 +34,7 @@ test('stage', async ({ page }) => {
   await id.expectValue('stage-1');
   await name.expectValue('Start Stage');
   await description.expectValue('This is the starting stage.');
-  await icon.expectValue('start-icon');
+  await icon.expectValue('ti ti-player-play');
   await isTerminating.expectValue(false);
 
   await name.fill('New Stage Name');

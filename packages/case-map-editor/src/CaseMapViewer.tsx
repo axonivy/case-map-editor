@@ -3,7 +3,6 @@ import { Flex, PanelMessage, Spinner } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
 import { useCaseMapQueryKeys } from './hooks/useCaseMapQueryKeys';
 import { CaseMapFlow } from './main/CaseMapFlow';
@@ -25,7 +24,7 @@ function CaseMapViewer(props: EditorProps) {
 
   if (isPending) {
     return (
-      <Flex alignItems='center' justifyContent='center' style={{ width: '100%', height: '100%' }}>
+      <Flex alignItems='center' justifyContent='center' className='size-full'>
         <Spinner />
       </Flex>
     );
@@ -53,7 +52,7 @@ function CaseMapViewer(props: EditorProps) {
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/font-awesome/6.1.0/css/v4-shims.min.css`} />
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/streamline-icons/StreamlineIcons.css`} />
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces`} />
-      <div className='case-map-viewer'>
+      <div className='h-full overflow-x-auto bg-n100'>
         <CaseMapFlow />
       </div>
     </AppProvider>

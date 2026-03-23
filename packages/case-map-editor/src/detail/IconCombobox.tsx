@@ -1,14 +1,16 @@
 import { Combobox, Flex, type ComboboxOption } from '@axonivy/ui-components';
 import { useMemo } from 'react';
-import './IconCombobox.css';
 
 export const IconCombobox = ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
   const icons = useMemo(() => extractIcons(), []);
   const iconOptions = icons.map(icon => ({ value: icon }));
   return (
-    <Flex alignItems='center' gap={2} className='stage-icon-combobox'>
-      <i className={removeCSSPrefix(value) + ' stage-icon-preview'} />
+    <Flex alignItems='center' gap={2} className='w-full *:last:grow'>
+      <div className='flex size-9.25 items-center justify-center rounded-sm border border-n200'>
+        <i className={removeCSSPrefix(value)} />
+      </div>
       <Combobox
+        className='w-full'
         value={value as string}
         onChange={onChange}
         options={iconOptions}
@@ -27,7 +29,7 @@ export const IconCombobox = ({ value, onChange }: { value: string; onChange: (va
 const ExtendedComboboxItem = ({ value }: ComboboxOption) => (
   <Flex direction='row' alignItems='center' gap={2}>
     <i className={removeCSSPrefix(value)} />
-    <div style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{formatIconString(value)}</div>
+    <div className='truncate'>{formatIconString(value)}</div>
   </Flex>
 );
 

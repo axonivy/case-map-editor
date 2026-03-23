@@ -18,10 +18,10 @@ export const StageDetail = () => {
   const { setSelectedElement } = useAppContext();
   const { stage, setProperty } = useStageProperty();
   if (!stage) {
-    return <PanelMessage message={t('message.nothingSelected')} style={{ height: '100%', flex: 1 }} />;
+    return <PanelMessage message={t('message.nothingSelected')} className='h-full flex-1' />;
   }
   return (
-    <Flex direction='column' gap={2} style={{ overflow: 'auto' }}>
+    <Flex direction='column' gap={2} className='overflow-auto'>
       <Collapsible defaultOpen={true}>
         <CollapsibleTrigger> {t('editor.sidebar.general')}</CollapsibleTrigger>
         <CollapsibleContent>

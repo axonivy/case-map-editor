@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
 import { removeCSSPrefix } from '../detail/IconCombobox';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
-import './CaseMapFlow.css';
 import { AddStageDialog } from './components/AddStageDialog';
 import { StageTile } from './components/StageTile';
 
@@ -22,7 +21,7 @@ export const CaseMapFlow = () => {
   }
 
   return (
-    <Flex direction='row' className='case-map-flow'>
+    <Flex direction='row' className='p-4' role='region' data-element-type='flow'>
       {caseMap.stages.map((stage, index) => (
         <Flex key={stage.id} direction='row'>
           <Flex gap={4} direction='column' alignItems='center'>
@@ -41,7 +40,7 @@ export const CaseMapFlow = () => {
           />
         </Flex>
       ))}
-      {!readonly && <Flex style={{ width: '50vw', flexShrink: 0 }} />}
+      {!readonly && <Flex className='w-[50vw] shrink-0' />}
     </Flex>
   );
 };
@@ -52,21 +51,18 @@ const EmptyState = () => {
   const readonly = useReadonly();
 
   return (
-    <Flex direction='column' alignItems='center' justifyContent='center' style={{ height: '100%' }}>
+    <Flex direction='column' alignItems='center' justifyContent='center' className='h-full'>
       <PanelMessage
         icon={readonly ? IvyIcons.Search : IvyIcons.ActivitiesGroup}
         message={readonly ? t('editor.flow.noStages') : t('message.addFirstItem')}
         mode='column'
-        style={{ height: 'unset' }}
-      />
-
-      {!readonly && (
+      >
         <AddStageDialog index={0}>
-          <Button size='large' variant='primary' icon={IvyIcons.Plus} aria-label={hotkeys.addStage.label}>
+          <Button size='large' variant='primary' icon={IvyIcons.Plus} aria-label={hotkeys.addStage.label} disabled={readonly}>
             {t('dialog.addStage.title')}
           </Button>
         </AddStageDialog>
-      )}
+      </PanelMessage>
     </Flex>
   );
 };
@@ -78,10 +74,14 @@ const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageMo
     stage.processes?.some(proc => proc.id === selectedElement?.id) ||
     stage.sidesteps?.some(proc => proc.id === selectedElement?.id);
   return (
-    <Flex className='stage-header' alignItems='center' justifyContent='center'>
-      <div className={hideLeftLine ? 'stage-line-hidden' : 'stage-line'} />
+    <Flex className='h-5.5 w-full' alignItems='center' justifyContent='center'>
+      <div className={cn('h-px grow bg-p300', hideLeftLine && 'h-0.5 bg-transparent')} data-hide-left-line={hideLeftLine} />
       <div
-        className={`stage-circle ${isStageSelected ? 'selected' : ''}`}
+        className={cn(
+          'flex size-6.25 items-center justify-center rounded-full border border-p300 font-bold text-p300 transition-all hover:cursor-pointer hover:border-p300',
+          isStageSelected && 'bg-p300 text-background'
+        )}
+        data-selected={isStageSelected}
         onClick={e => {
           e.stopPropagation();
           setSelectedElement({ id: stage.id, type: 'stage' });
@@ -90,7 +90,7 @@ const StageConnector = ({ stage, hideLeftLine, hideRightLine }: { stage: StageMo
       >
         <i className={removeCSSPrefix(stage.icon)} />
       </div>
-      <div className={hideRightLine ? 'stage-line-hidden' : 'stage-line'} />
+      <div className={cn('h-px grow bg-p300', hideRightLine && 'h-0.5 bg-transparent')} data-hide-right-line={hideRightLine} />
     </Flex>
   );
 };
@@ -123,9 +123,9 @@ const AddStageSlot = ({
   });
 
   return (
-    <Flex gap={4} direction='column' alignItems='center' style={{ flex: 1 }}>
+    <Flex gap={4} direction='column' alignItems='center' className='flex-1'>
       <Flex
-        className='stage-header'
+        className='h-5.5 w-full'
         alignItems='center'
         justifyContent='center'
         onMouseOver={() => setHoverIndex(index)}
@@ -134,24 +134,28 @@ const AddStageSlot = ({
         {!readonly && (hoverIndex === index || isLast) && (
           <AddStageDialog index={hoverIndex ? hoverIndex + 1 : index + 1}>
             <Button
-              className='add-stage-button'
+              className='size-6.25! rounded-full! border! border-p300! bg-p50!'
               icon={IvyIcons.Plus}
               onMouseOver={() => setShowPlaceholder(index)}
               aria-label={hotkeys.addStage.label}
             />
           </AddStageDialog>
         )}
-        <div className={!isLast ? 'stage-line' : 'stage-line-hidden'} />
+        <div className={cn('h-px grow bg-p300', isLast && 'h-0.5 bg-transparent')} data-last={isLast} />
       </Flex>
 
-      <Flex style={{ flex: 1 }} ref={setNodeRef}>
-        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
+      <Flex className='flex-1' ref={setNodeRef}>
+        <div className='m-0.5 h-full w-[8.5px] bg-transparent' onMouseEnter={() => setHoverIndex(index)} />
         <Flex
           direction='column'
-          className={cn('placeholder-stage', showPlaceholder === index && 'visible', isOver && 'is-drop-target')}
+          className={cn(
+            'h-12.5 w-0 transition-[width,height]',
+            (showPlaceholder === index || isOver) && 'h-full w-0.5 cursor-pointer border border-dashed border-p300 bg-p300 text-p300'
+          )}
+          data-show-placeholder={showPlaceholder === index || isOver}
           alignItems='center'
         />
-        <div className='add-stage-slot' onMouseEnter={() => setHoverIndex(index)} />
+        <div className='m-0.5 h-full w-[8.5px] bg-transparent' onMouseEnter={() => setHoverIndex(index)} />
       </Flex>
     </Flex>
   );

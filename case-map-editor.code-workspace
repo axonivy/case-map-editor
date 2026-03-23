@@ -1,6 +1,12 @@
 {
   "extensions": {
-    "recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "vitest.explorer", "ms-playwright.playwright"]
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "bradlc.vscode-tailwindcss",
+      "vitest.explorer",
+      "ms-playwright.playwright"
+    ]
   },
   "folders": [
     {
@@ -18,7 +24,7 @@
     {
       "name": "integrations/standalone",
       "path": "./integrations/standalone"
-    },  
+    },
     {
       "name": "integrations/viewer",
       "path": "./integrations/viewer"
@@ -37,11 +43,14 @@
       "source.organizeImports": "always"
     },
     "editor.insertSpaces": true,
-    "eslint.validate": ["javascript", "typescript"],
     "search.exclude": {
       "**/node_modules": true,
       "**/lib": true
     },
+    "files.associations": {
+      "*.css": "tailwindcss"
+    },
+    "tailwindCSS.classFunctions": ["clsx", "cn", "cva"],
     "[css]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
     },

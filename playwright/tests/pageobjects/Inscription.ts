@@ -7,12 +7,12 @@ export class Inscription {
 
   constructor(page: Page) {
     this.page = page;
-    this.view = page.locator('.case-map-editor-detail-panel');
+    this.view = page.locator('#case-map-detail');
     this.help = this.view.getByRole('button', { name: 'Open Help' });
   }
 
   get header() {
-    return this.view.locator('.case-map-editor-detail-header');
+    return this.view.locator('.ui-sidebar-header');
   }
 
   collapsible(title: string) {
@@ -20,7 +20,7 @@ export class Inscription {
   }
 
   async expectHeader(title: string) {
-    await expect(this.view.locator('.case-map-editor-detail-header')).toContainText(title);
+    await expect(this.header).toContainText(title);
   }
 }
 
