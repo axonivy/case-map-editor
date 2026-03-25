@@ -33,11 +33,13 @@ const ExtendedComboboxItem = ({ value }: ComboboxOption) => (
   </Flex>
 );
 
-export const removeCSSPrefix = (icon: string) => {
+export const removeCSSPrefix = (icon?: string) => {
+  if (!icon) return '';
   return icon.replace(/^css:/, '');
 };
 
-const formatIconString = (icon: string) => {
+export const formatIconString = (icon?: string) => {
+  if (!icon) return '';
   let formatted = icon.replace(/^(ti[- ]?)+/, '');
   formatted = formatted.replace(/-/g, ' ');
   return formatted;
