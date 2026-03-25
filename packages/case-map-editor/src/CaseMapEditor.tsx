@@ -13,7 +13,6 @@ import {
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import './CaseMapEditor.css';
 import { AppProvider, type SelectedElement } from './context/AppContext';
 import { DndContext } from './context/DndContext';
 import { Detail } from './detail/Details';
@@ -65,7 +64,7 @@ function CaseMapEditor(props: EditorProps) {
 
   if (isPending) {
     return (
-      <Flex alignItems='center' justifyContent='center' style={{ width: '100%', height: '100%' }}>
+      <Flex alignItems='center' justifyContent='center' className='size-full'>
         <Spinner />
       </Flex>
     );
@@ -112,12 +111,12 @@ function CaseMapEditor(props: EditorProps) {
       />
       <ResizableGroup orientation='horizontal' defaultLayout={defaultLayout} onLayoutChanged={onLayoutChanged}>
         <DndContext>
-          <ResizablePanel defaultSize='75%' minSize='50%' className='case-map-editor-main-panel'>
-            <Flex direction='column' style={{ height: '100%' }}>
+          <ResizablePanel defaultSize='75%' minSize='50%' className='h-full bg-n100'>
+            <Flex direction='column' className='h-full'>
               <MainToolbar title={data ? data.data.name : ''} />
 
               <div
-                className='case-map-editor-panel-content'
+                className='h-full overflow-x-auto'
                 onClick={() => {
                   setSelectedElement(undefined);
                   setDetail(false);
@@ -131,8 +130,8 @@ function CaseMapEditor(props: EditorProps) {
         {detail && (
           <>
             <ResizableHandle />
-            <ResizablePanel defaultSize='25%' minSize='10%' className='case-map-editor-detail-panel'>
-              <Flex direction='column' className='panel'>
+            <ResizablePanel id='case-map-editor-detail' defaultSize='25%' minSize='10%' className='h-full'>
+              <Flex direction='column' className='h-full'>
                 <Detail />
               </Flex>
             </ResizablePanel>

@@ -9,7 +9,7 @@ export class Flow {
 
   constructor(page: Page) {
     this.page = page;
-    this.locator = page.locator('.case-map-flow');
+    this.locator = page.locator('[data-element-type="flow"]');
     this.add = this.locator.getByRole('button', { name: 'Add Stage (A)' });
   }
 
@@ -18,7 +18,7 @@ export class Flow {
   }
 
   async expectStages(count: number) {
-    await expect(this.locator.locator('.stage-tile')).toHaveCount(count);
+    await expect(this.locator.locator('[data-element-type="stage"]')).toHaveCount(count);
   }
 
   public async openAddStageDialog() {

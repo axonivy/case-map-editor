@@ -78,11 +78,12 @@ test('empty', async ({ page }) => {
   await editor.flow.stageByNth(0).delete.click();
   await editor.flow.expectStages(0);
 
-  const mainPanel = page.locator('.case-map-editor-main-panel');
-  const emptyMessage = mainPanel.locator('.ui-panel-message');
+  const main = page.locator('#case-map-editor-main');
+  const emptyMessage = main.locator('.ui-panel-message');
   await expect(emptyMessage).toBeVisible();
+  await expect(emptyMessage).toContainText('There are no stages in this case map. Add the first stage to start building the case map.');
 
-  await mainPanel.locator('button', { hasText: 'Add Stage' }).click();
+  await main.getByRole('button', { name: 'Add Stage' }).click();
   const dialog = new AddStageDialog(page);
   await expect(dialog.locator).toBeVisible();
   await dialog.cancel.click();

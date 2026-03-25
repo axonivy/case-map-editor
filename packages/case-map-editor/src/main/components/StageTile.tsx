@@ -22,7 +22,6 @@ import { useCaseMapData } from '../useCaseMapData';
 import { AddProcessDialog } from './AddProcessDialog';
 import { DropZone, FirstStageDropZone } from './DropZone';
 import { ProcessTile } from './ProcessTile';
-import './StageTile.css';
 import { useSelectableTile } from './useSelectableTile';
 
 export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: boolean }) => {
@@ -41,24 +40,31 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
   return (
     <FirstStageDropZone isFirst={isFirst} id={stage.id}>
       <Flex
-        className={cn('stage-tile', { selected: isSelected, dragging })}
+        className={cn(
+          'min-w-50 flex-wrap rounded-lg border border-transparent bg-background p-3 select-none hover:cursor-pointer hover:border-p300',
+          dragging && 'cursor-grabbing bg-p50 opacity-50',
+          isSelected && 'border-body'
+        )}
         direction='column'
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         onKeyDown={onKeyDown}
-        style={{ flexWrap: 'wrap' }}
+        aria-label={stage.name}
+        data-element-type='stage'
+        data-selected={isSelected}
+        data-dragging={dragging}
         gap={3}
         ref={setNodeRef}
         {...listeners}
         {...attributes}
       >
-        <Flex className='stage-tile-header' alignItems='center' justifyContent='space-between' gap={2}>
-          <Flex gap={2} alignItems='center' className='stage-tile-name'>
+        <Flex className='h-5 max-w-87.5 overflow-hidden font-bold text-body' alignItems='center' justifyContent='space-between' gap={2}>
+          <Flex gap={2} alignItems='center' className='truncate'>
             {stage.name}
           </Flex>
           {!readonly && <DeleteButton id={stage.id} type='stage' />}
         </Flex>
-        <Separator style={{ marginBlock: 'unset' }} />
+        <Separator className='mbs-0! mbe-0!' />
         <Flex direction='column' gap={3}>
           <ProcessPart stageId={stage.id} title={t('editor.flow.processes')} stageProcesses={stage.processes} type='process' />
           <ProcessPart stageId={stage.id} title={t('editor.flow.sidesteps')} stageProcesses={stage.sidesteps} type='sidestep' />
@@ -119,7 +125,7 @@ const ProcessPart = ({
       {processesAvailable ? (
         <>
           <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id ?? undefined}>
-            <Flex justifyContent='space-between' alignItems='center' style={{ fontWeight: 'bold' }}>
+            <Flex justifyContent='space-between' alignItems='center' className='font-bold'>
               {title}
               {!readonly && (
                 <Flex gap={1}>
@@ -141,16 +147,26 @@ const ProcessPart = ({
         </>
       ) : (
         <>
-          <div style={{ fontWeight: 'bold' }}>{title}</div>
+          <div className='font-bold'>{title}</div>
           {!readonly ? (
             <AddProcessDialog type={type} stageId={stageId}>
-              <Button className={cn('add-process-button', { 'is-drop-target': isOver })} ref={setNodeRef} disabled={readonly}>
+              <Button
+                className={cn(
+                  'justify-between border! border-dashed! border-p75! bg-p50! p-2! text-xs! text-p300!',
+                  isOver && 'border-p300! text-transparent!'
+                )}
+                data-dragging-over={isOver}
+                ref={setNodeRef}
+                disabled={readonly}
+              >
                 {t(`editor.flow.addFirstItem`, { item: title })}
                 <IvyIcon icon={IvyIcons.Plus} />
               </Button>
             </AddProcessDialog>
           ) : (
-            <div className='no-processes-message'>{t('editor.flow.noProcesses', { item: title })}</div>
+            <div className='justify-between rounded-md border border-n200 bg-n50 p-2 text-xs text-n500'>
+              {t('editor.flow.noProcesses', { item: title })}
+            </div>
           )}
         </>
       )}

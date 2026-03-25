@@ -6,7 +6,7 @@ export const CaseMapDetail = () => {
   const { t } = useTranslation();
   const { caseMap, setProperty } = useCaseMapProperty();
   return (
-    <Flex direction='column' gap={2} style={{ overflow: 'auto' }}>
+    <Flex direction='column' gap={2} className='overflow-auto'>
       <Collapsible defaultOpen={true}>
         <CollapsibleTrigger> {t('editor.sidebar.general')}</CollapsibleTrigger>
         <CollapsibleContent>

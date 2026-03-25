@@ -5,7 +5,6 @@ import { useAppContext } from '../context/AppContext';
 import { useAction } from '../hooks/useAction';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
 import { CaseMapDetail } from './CaseMapDetail';
-import './Details.css';
 import { ProcessDetail } from './ProcessDetail';
 import { StageDetail } from './StageDetail';
 
@@ -18,12 +17,7 @@ export const Detail = () => {
 
   return (
     <>
-      <SidebarHeader
-        icon={IvyIcons.PenEdit}
-        title={selectedElement?.id ?? caseMap.name}
-        className='case-map-editor-detail-header'
-        tabIndex={0}
-      >
+      <SidebarHeader icon={IvyIcons.PenEdit} title={selectedElement?.id ?? caseMap.name} tabIndex={0}>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -33,7 +27,7 @@ export const Detail = () => {
           </Tooltip>
         </TooltipProvider>
       </SidebarHeader>
-      <Flex direction='column' className='case-map-editor-detail-content'>
+      <Flex direction='column' className='flex-1 p-2'>
         {selectedElement?.type === 'stage' ? <StageDetail /> : selectedElement?.type === 'process' ? <ProcessDetail /> : <CaseMapDetail />}
       </Flex>
     </>

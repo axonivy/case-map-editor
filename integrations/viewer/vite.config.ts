@@ -1,10 +1,11 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 const ENGINE_URL = process.env.BASE_URL ?? 'http://localhost:8080/~Developer-case-map-test-project';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [tailwindcss(), react()],
   build: {
     outDir: 'build',
     chunkSizeWarningLimit: 5000

@@ -6,10 +6,10 @@ export class Process {
 
   constructor(page: Page, parent: Locator, type: 'process' | 'sidestep', nth: number) {
     this.page = page;
-    this.process = parent.locator(`.${type}-tile`).nth(nth);
+    this.process = parent.locator(`[data-element-type="${type}"]`).nth(nth);
   }
   async expectName(name: string) {
-    await expect(this.process.locator('.process-tile-name')).toHaveText(name);
+    await expect(this.process).toContainText(name);
   }
 
   async inscribe() {
@@ -18,6 +18,6 @@ export class Process {
   }
 
   async expectSelected() {
-    await expect(this.process).toHaveClass(/selected/);
+    await expect(this.process).toHaveAttribute('data-selected', 'true');
   }
 }

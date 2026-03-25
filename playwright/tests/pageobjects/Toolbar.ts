@@ -7,7 +7,7 @@ export class Toolbar {
   readonly redo: Locator;
 
   constructor(page: Page) {
-    this.locator = page.locator('.case-map-editor-main-toolbar');
+    this.locator = page.locator('.ui-toolbar');
     this.detailToggle = this.locator.getByRole('button', { name: 'Details' });
     this.undo = this.locator.getByRole('button', { name: 'Undo' });
     this.redo = this.locator.getByRole('button', { name: 'Redo' });

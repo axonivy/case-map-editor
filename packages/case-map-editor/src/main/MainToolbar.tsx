@@ -36,7 +36,7 @@ export const MainToolbar = ({ title }: MainToolbarProps) => {
     () => {
       setDetail(true);
       setTimeout(() => {
-        document.querySelector<HTMLElement>('.case-map-editor-detail-header')?.focus();
+        document.querySelector<HTMLElement>('.ui-sidebar-header')?.focus();
       }, 0);
     },
     {
@@ -46,13 +46,13 @@ export const MainToolbar = ({ title }: MainToolbarProps) => {
   useHotkeys(
     hotkeys.focusMain.hotkey,
     () => {
-      document.querySelector<HTMLElement>('.stage-tile[role="button"]')?.focus();
+      document.querySelector<HTMLElement>('[aria-label^="Stage: "]')?.focus();
     },
     { scopes: ['global'] }
   );
 
   return (
-    <Toolbar className='case-map-editor-main-toolbar' ref={firstElement} tabIndex={0}>
+    <Toolbar ref={firstElement} tabIndex={0}>
       <ToolbarTitle>{title}</ToolbarTitle>
       <Flex gap={1}>
         {!readonly && <EditButtons />}
@@ -103,7 +103,7 @@ const EditButtons = () => {
             </Tooltip>
           </TooltipProvider>
         </Flex>
-        <Separator orientation='vertical' style={{ height: '26px', marginInline: 'var(--size-2)' }} />
+        <Separator orientation='vertical' className='mx-2! h-6.5!' />
       </Flex>
     </ToolbarContainer>
   );

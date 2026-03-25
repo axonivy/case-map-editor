@@ -10,7 +10,7 @@ export class Stage {
 
   constructor(page: Page, parent: Locator, nth: number) {
     this.page = page;
-    this.stage = parent.locator('.stage-tile').nth(nth);
+    this.stage = parent.locator('[data-element-type="stage"]').nth(nth);
     this.addProcess = this.stage.getByRole('button', { name: 'Add Process' });
     this.delete = this.stage.getByRole('button', { name: 'Delete Stage (Delete)' });
     this.deleteProcess = this.stage.getByRole('button', { name: 'Delete Process' });
@@ -30,14 +30,14 @@ export class Stage {
   }
 
   async expectSelected() {
-    await expect(this.stage).toHaveClass(/selected/);
+    await expect(this.stage).toHaveAttribute('data-selected', 'true');
   }
 
   async expectProcesses(count: number) {
-    await expect(this.stage.locator('.process-tile')).toHaveCount(count);
+    await expect(this.stage.locator('[data-element-type="process"]')).toHaveCount(count);
   }
 
   async expectSidesteps(count: number) {
-    await expect(this.stage.locator('.sidestep-tile')).toHaveCount(count);
+    await expect(this.stage.locator('[data-element-type="sidestep"]')).toHaveCount(count);
   }
 }
