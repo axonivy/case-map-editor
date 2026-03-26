@@ -111,7 +111,7 @@ function CaseMapEditor(props: EditorProps) {
       />
       <ResizableGroup orientation='horizontal' defaultLayout={defaultLayout} onLayoutChanged={onLayoutChanged}>
         <DndContext>
-          <ResizablePanel defaultSize='75%' minSize='50%' className='h-full bg-n100'>
+          <ResizablePanel id='case-map-editor-main' defaultSize='75%' minSize='50%' className='h-full bg-n100'>
             <Flex direction='column' className='h-full'>
               <MainToolbar title={data ? data.data.name : ''} />
 
