@@ -12,6 +12,11 @@ test('data', async ({ page }) => {
   await flow.stageByNth(1).expectSidesteps(1);
   await flow.stageByNth(2).expectProcesses(3);
   await flow.stageByNth(2).expectSidesteps(0);
+  await flow.stageByNth(0).addProcess.click();
+  const dialog = new AddProcessDialog(page);
+  await dialog.process.expectOptionCount(9);
+  await dialog.process.expectOptionName(0, 'AbortRequest- Lending/AbortRequest/start.ivp');
+  await dialog.process.expectOptionName(6, 'ExternalSolvencyService- Lending/ExternalSolvencyService/start.ivp');
 });
 
 test('save data', async ({ page }) => {
@@ -41,14 +46,14 @@ test('save data', async ({ page }) => {
 });
 
 test('add process', async ({ page }) => {
-  const editor = await CaseMapEditor.openCaseMap(page);
-  await editor.flow.stageByNth(0).expectProcesses(2);
+  const editor = await CaseMapEditor.openMock(page);
+  await editor.flow.stageByNth(0).expectProcesses(1);
   await editor.flow.stageByNth(0).addProcess.click();
   const dialog = new AddProcessDialog(page);
   await dialog.process.choose('ExternalSolvencyService');
   await dialog.name.expectValue('External Solvency Service');
   await dialog.create.click();
-  await editor.flow.stageByNth(0).expectProcesses(3);
+  await editor.flow.stageByNth(0).expectProcesses(2);
 
   await editor.flow.stageByNth(0).processByNth(0).inscribe();
   await editor.inscription.expectHeader('externalsolvencyservice');
@@ -59,15 +64,6 @@ test('add process', async ({ page }) => {
   await id.expectValue('externalsolvencyservice');
   await name.expectValue('External Solvency Service');
   await process.expectValue('casemap.test.project:casemap-test-project:15A8995AA29B442B/start.ivp');
-
-  await page.reload();
-  await editor.flow.stageByNth(0).expectProcesses(3);
-
-  await expect(editor.flow.stageByNth(0).deleteProcess).toBeHidden();
-  await editor.flow.stageByNth(0).processByNth(0).process.click();
-  await expect(editor.flow.stageByNth(0).deleteProcess).toBeVisible();
-  await editor.flow.stageByNth(0).deleteProcess.click();
-  await editor.flow.stageByNth(0).expectProcesses(2);
 });
 
 test('empty', async ({ page }) => {

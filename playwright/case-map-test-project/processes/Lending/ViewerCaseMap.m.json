@@ -1,0 +1,34 @@
+{
+  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/casemap.json",
+  "uuid" : "da66e4c7-8397-4c1a-9560-93a1e4e2e248",
+  "id" : "viewer_case_map",
+  "name" : "Viewer Case Map",
+  "stages" : [ {
+    "id" : "stage1",
+    "name" : "Stage 1",
+    "icon" : "ti ti-check",
+    "processes" : [ {
+      "id" : "collectpersonaldata",
+      "name" : "Collect Personal Data",
+      "processToExecute" : "casemap.test.project:casemap-test-project:15A5AC9A4F755A3B/start.ivp"
+    }, {
+      "id" : "abortrequest2",
+      "name" : "Abort Request",
+      "processToExecute" : "casemap.test.project:casemap-test-project:15A8996D261A1DFE/start.ivp"
+    } ]
+  }, {
+    "id" : "stage2",
+    "name" : "Stage 2",
+    "icon" : "ti ti-check",
+    "processes" : [ {
+      "id" : "abortrequest",
+      "name" : "Abort Request",
+      "processToExecute" : "casemap.test.project:casemap-test-project:15A8996D261A1DFE/start.ivp"
+    } ],
+    "sidesteps" : [ {
+      "id" : "approvelevel2",
+      "name" : "Approve Level 2",
+      "processToExecute" : "casemap.test.project:casemap-test-project:15A89963C015F70D/start.ivp"
+    } ]
+  } ]
+}

@@ -1,4 +1,4 @@
-import type { CaseMapModel } from '@axonivy/case-map-editor-protocol';
+import type { CaseMapModel, ProcessStart } from '@axonivy/case-map-editor-protocol';
 
 export const data: CaseMapModel = {
   $schema: 'https://case-map-editor.axonivy.com/schema/case-map-model.json',
@@ -91,3 +91,39 @@ export const data: CaseMapModel = {
     }
   ]
 };
+
+export const PROCESSES: Array<ProcessStart> = [
+  {
+    description: '',
+    name: 'start.ivp',
+    processName: 'ExternalSolvencyService',
+    processReference: 'casemap.test.project:casemap-test-project:15A8995AA29B442B/start.ivp',
+    projectName: 'casemap-test-project',
+    signature: 'start()',
+    startDescription: '',
+    startName: '',
+    userFriendlyRequestPath: 'Lending/ExternalSolvencyService/start.ivp'
+  },
+  {
+    description: '',
+    name: 'start.ivp',
+    processName: 'CustomerOnboardingProcess',
+    processReference: 'casemap.test.project:casemap-test-project:9B2211AA11CC4422/start.ivp',
+    projectName: 'casemap-test-project',
+    signature: 'start()',
+    startDescription: '',
+    startName: '',
+    userFriendlyRequestPath: 'Lending/CustomerOnboardingProcess/start.ivp'
+  },
+  {
+    description: '',
+    name: 'start.ivp',
+    processName: 'FraudDetectionProcess',
+    processReference: 'casemap.test.project:casemap-test-project:7F3311DD55EE8899/start.ivp',
+    projectName: 'casemap-test-project',
+    signature: 'start()',
+    startDescription: '',
+    startName: '',
+    userFriendlyRequestPath: 'Lending/FraudDetectionProcess/start.ivp'
+  }
+];
