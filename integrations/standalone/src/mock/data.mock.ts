@@ -1,6 +1,7 @@
 import type { CaseMapModel } from '@axonivy/case-map-editor-protocol';
 
 export const data: CaseMapModel = {
+  $schema: 'https://case-map-editor.axonivy.com/schema/case-map-model.json',
   uuid: 'mock-uuid',
   id: 'mock-id',
   name: 'Mock Case Map',

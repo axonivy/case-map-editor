@@ -21,6 +21,7 @@ const createStage = (id: string, processes: string[], sidesteps: string[]): Stag
 });
 
 const baseModel = (): CaseMapModel => ({
+  $schema: 'https://case-map-editor.axonivy.com/schema/case-map-model.json',
   id: 'root',
   uuid: 'uuid',
   name: 'test model',

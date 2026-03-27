@@ -11,6 +11,7 @@ caseMapContext: CaseMapContext
 caseMapEditorData: CaseMapEditorData
 caseMapEditorProcessContext: CaseMapEditorProcessContext
 caseMapEditorSaveArgs: CaseMapEditorSaveArgs
+caseMapModel: CaseMapModel
 editorFileContent: EditorFileContent
 processStart: ProcessStart[]
 [k: string]: unknown
@@ -28,11 +29,12 @@ export interface CaseMapEditorData {
   readonly: boolean;
 }
 export interface CaseMapModel {
-  description: string;
+  $schema: string;
+  uuid: string;
   id: string;
   name: string;
+  description: string;
   stages: StageModel[];
-  uuid: string;
 }
 export interface StageModel {
   description: string;

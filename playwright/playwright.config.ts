@@ -39,6 +39,18 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], baseURL: process.env.CI ? 'http://localhost:4174' : 'http://localhost:3003' },
       testDir: './tests/viewer',
       retries: 0
+    },
+    {
+      name: 'viewer-firefox',
+      use: { ...devices['Desktop Firefox'], baseURL: process.env.CI ? 'http://localhost:4174' : 'http://localhost:3003' },
+      testDir: './tests/viewer',
+      retries: 0
+    },
+    {
+      name: 'viewer-webkit',
+      use: { ...devices['Desktop Safari'], baseURL: process.env.CI ? 'http://localhost:4174' : 'http://localhost:3003' },
+      testDir: './tests/viewer',
+      retries: 0
     }
   ]
 });

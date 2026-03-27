@@ -16,12 +16,12 @@
   "scripts": {
     "type": "tsc --noEmit",
     "build": "tsc --build",
-    "webtest": "playwright test --project=integration-chrome",
+    "webtest": "playwright test --project=integration-chrome --project=viewer-chrome",
     "webtest:screenshots": "playwright test --project=screenshots",
     "webtest:viewer": "playwright test --project=viewer-chrome",
-    "webtest:*": "playwright test --project=integration-*",
-    "webtest:chrome": "playwright test --project=integration-chrome",
-    "webtest:firefox": "playwright test --project=integration-firefox",
-    "webtest:webkit": "playwright test --project=integration-webkit"
+    "webtest:*": "playwright test --project=integration-* --project=viewer-*",
+    "webtest:chrome": "playwright test --project=integration-chrome --project=viewer-chrome",
+    "webtest:firefox": "playwright test --project=integration-firefox --project=viewer-firefox",
+    "webtest:webkit": "playwright test --project=integration-webkit --project=viewer-webkit"
   }
 }
