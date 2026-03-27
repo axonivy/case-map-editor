@@ -46,7 +46,7 @@ export const MainToolbar = ({ title }: MainToolbarProps) => {
   useHotkeys(
     hotkeys.focusMain.hotkey,
     () => {
-      document.querySelector<HTMLElement>('[aria-label^="Stage: "]')?.focus();
+      document.querySelector<HTMLElement>('[data-element-type="stage"]')?.focus();
     },
     { scopes: ['global'] }
   );
