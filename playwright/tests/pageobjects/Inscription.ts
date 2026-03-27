@@ -165,6 +165,18 @@ export class Combobox {
     await this.page.getByRole('option', { name: value }).first().click();
   }
 
+  async expectOptionCount(count: number) {
+    await this.locator.click();
+    await expect(this.page.getByRole('option')).toHaveCount(count);
+    await this.locator.click();
+  }
+
+  async expectOptionName(nth: number, name: string | RegExp) {
+    await this.locator.click();
+    await expect(this.page.getByRole('option').nth(nth)).toHaveText(name);
+    await this.locator.click();
+  }
+
   async expectValue(value: string | RegExp) {
     await expect(this.locator).toHaveValue(value);
   }

@@ -31,7 +31,7 @@ export class CaseMapEditor {
 
   static async openCaseMapViewer(page: Page, options?: { readonly?: boolean }) {
     const serverUrl = server.replace(/^https?:\/\//, '');
-    let url = `?server=${serverUrl}${ws}/${app}/1&app=${app}&pmv=${pmv}&file=processes/Lending/Lending.m.json`;
+    let url = `?server=${serverUrl}${ws}/${app}/1&app=${app}&pmv=${pmv}&file=processes/Lending/ViewerCaseMap.m.json`;
     if (options) {
       url += `${this.params(options)}`;
     }

@@ -8,14 +8,20 @@ import type {
   SaveArgs
 } from '@axonivy/case-map-editor-protocol';
 import type { CaseMapClient } from '@axonivy/case-map-editor-protocol/src/case-map-client';
-import { data } from './data.mock';
+import { data, PROCESSES } from './data.mock';
 
 export class CaseMapClientMock implements CaseMapClient {
   initialize(context: CaseMapContext): Promise<boolean> {
     return Promise.resolve(true);
   }
-  meta<TMeta extends keyof MetaRequestTypes>(path: TMeta, args: MetaRequestTypes[TMeta][0]): Promise<MetaRequestTypes[TMeta][1]> {
-    throw new Error('Method not implemented.');
+  async meta<TMeta extends keyof MetaRequestTypes>(path: TMeta, args: MetaRequestTypes[TMeta][0]): Promise<MetaRequestTypes[TMeta][1]> {
+    console.log('Meta:', args);
+    switch (path) {
+      case 'meta/processes':
+        return Promise.resolve(PROCESSES);
+      default:
+        throw Error('mock meta path not programmed');
+    }
   }
 
   private caseMapData: CaseMapEditorData = {

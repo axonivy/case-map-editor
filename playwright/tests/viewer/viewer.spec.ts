@@ -9,17 +9,15 @@ test('correct viewer mode', async ({ page }) => {
   await flow.stageByNth(0).expectProcesses(2);
   await flow.stageByNth(0).expectSidesteps(0);
   await flow.stageByNth(1).expectProcesses(1);
-  await flow.stageByNth(2).expectProcesses(3);
-  await flow.stageByNth(2).expectSidesteps(0);
   await expect(flow.stageByNth(0).stage).toContainText('No Sidesteps configured');
 
   // eslint-disable-next-line playwright/no-force-option
   await flow.stageByNth(0).stage.dblclick({ force: true });
   await flow.stageByNth(0).expectSelected();
   await expect(inscription.view).toBeHidden();
-  await flow.expectStages(3);
+  await flow.expectStages(2);
   await page.keyboard.press('Delete');
-  await flow.expectStages(3);
+  await flow.expectStages(2);
   // eslint-disable-next-line playwright/no-force-option
   await flow.stageByNth(1).processByNth(0).process.dblclick({ force: true });
   await flow.stageByNth(1).processByNth(0).expectSelected();
