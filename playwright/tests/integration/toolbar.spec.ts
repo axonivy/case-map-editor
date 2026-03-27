@@ -49,6 +49,7 @@ test('help', async ({ page }) => {
 
 test('focus jumps', async ({ page }) => {
   const editor = await CaseMapEditor.openMock(page);
+  await expect(editor.toolbar.locator).toBeVisible();
   await page.keyboard.press('1');
   await expect(editor.toolbar.locator).toBeFocused();
   await page.keyboard.press('2');

@@ -81,7 +81,7 @@ test('empty', async ({ page }) => {
   const main = page.locator('#case-map-editor-main');
   const emptyMessage = main.locator('.ui-panel-message');
   await expect(emptyMessage).toBeVisible();
-  await expect(emptyMessage).toContainText('There are no stages in this case map. Add the first stage to start building the case map.');
+  await expect(emptyMessage).toContainText('Add your first Stage to your Case Map.Add Stage');
 
   await main.getByRole('button', { name: 'Add Stage' }).click();
   const dialog = new AddStageDialog(page);

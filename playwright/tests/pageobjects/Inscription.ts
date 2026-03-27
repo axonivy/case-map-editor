@@ -7,7 +7,7 @@ export class Inscription {
 
   constructor(page: Page) {
     this.page = page;
-    this.view = page.locator('#case-map-detail');
+    this.view = page.locator('#case-map-editor-detail');
     this.help = this.view.getByRole('button', { name: 'Open Help' });
   }
 
