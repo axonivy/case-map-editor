@@ -3,6 +3,8 @@ import { AddProcessDialog } from '../pageobjects/AddProcessDialog';
 import { AddStageDialog } from '../pageobjects/AddStageDialog';
 import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
 
+test.describe.configure({ mode: 'serial' });
+
 test('data', async ({ page }) => {
   const { flow } = await CaseMapEditor.openCaseMap(page);
   await flow.expectStages(3);
