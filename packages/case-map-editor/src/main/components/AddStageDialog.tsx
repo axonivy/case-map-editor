@@ -3,14 +3,11 @@ import {
   BasicDialogContent,
   BasicField,
   BasicInput,
+  BasicTooltip,
   Button,
   Dialog,
   DialogContent,
   DialogTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
   useDialogHotkeys,
   useHotkeys,
   type MessageData
@@ -34,14 +31,9 @@ export const AddStageDialog = ({ children, index }: AddStageDialogProps) => {
   useHotkeys(shortcut.hotkey, () => onOpenChange(true), { scopes: ['global'], keyup: true, enabled: !open });
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DialogTrigger asChild>{children}</DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent>{shortcut.label}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <BasicTooltip content={shortcut.label}>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      </BasicTooltip>
       <DialogContent>
         <AddStageDialogContent closeDialog={() => onOpenChange(false)} index={index} />
       </DialogContent>
@@ -52,10 +44,10 @@ export const AddStageDialog = ({ children, index }: AddStageDialogProps) => {
 const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void; index?: number }) => {
   const { caseMap, setCaseMap } = useAppContext();
   const { t } = useTranslation();
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState('newName');
   const [icon, setIcon] = useState('ti ti-check');
   const generatedId = useMemo(() => generateUniqueId(name, caseMap), [name, caseMap]);
-  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const nameValidationMessage = useMemo(() => validateFieldName(name), [name]);
   const allInputsValid = () => !nameValidationMessage;
@@ -111,7 +103,7 @@ const AddStageDialogContent = ({ closeDialog, index }: { closeDialog: () => void
       ref={enter}
       tabIndex={-1}
     >
-      <BasicField label={t('editor.sidebar.name')} message={nameValidationMessage} tabIndex={0}>
+      <BasicField label={t('editor.sidebar.name')} message={nameValidationMessage}>
         <BasicInput ref={nameInputRef} value={name} onChange={e => setName(e.target.value)} />
       </BasicField>
       <BasicField label={t('editor.sidebar.icon')}>

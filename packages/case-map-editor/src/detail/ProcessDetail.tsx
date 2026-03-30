@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
 import { useMeta } from '../context/useMeta';
+import { extendedOptionFilter } from '../main/components/AddProcessDialog';
 import { useStageProcessProperty } from './useCaseMapProperty';
 
 export const ProcessDetail = () => {
@@ -53,6 +54,7 @@ export const ProcessDetail = () => {
                 value={process.processToExecute ?? ''}
                 onChange={value => setProperty('processToExecute', value)}
                 itemRender={option => <ExtendedComboboxProcess {...option} />}
+                optionFilter={extendedOptionFilter}
               />
             </BasicField>
           </Flex>
@@ -63,7 +65,9 @@ export const ProcessDetail = () => {
   );
 };
 
-export const ExtendedComboboxProcess = ({ name, detail }: { name: string; detail: string }) => {
+export type ExtendedComboboxOption = { name: string; detail: string };
+
+export const ExtendedComboboxProcess = ({ name, detail }: ExtendedComboboxOption) => {
   return (
     <Flex direction='row' gap={1} className='flex-wrap items-start'>
       <span>{name}</span>

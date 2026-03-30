@@ -3,26 +3,23 @@ import {
   BasicDialogContent,
   BasicField,
   BasicInput,
+  BasicTooltip,
   Button,
   Combobox,
   Dialog,
   DialogContent,
   DialogTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
   useDialogHotkeys,
   useHotkeys,
   type MessageData
 } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
 import { useMeta } from '../../context/useMeta';
 import { modifyData } from '../../data/data';
-import { ExtendedComboboxProcess } from '../../detail/ProcessDetail';
+import { ExtendedComboboxProcess, type ExtendedComboboxOption } from '../../detail/ProcessDetail';
 import { generateName, generateUniqueId } from '../../utils/formatting';
 
 type AddProcessDialogProps = {
@@ -38,14 +35,9 @@ export const AddProcessDialog = ({ stageId, type, children }: AddProcessDialogPr
   const { open, onOpenChange } = useDialogHotkeys(DIALOG_HOTKEY_IDS);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DialogTrigger asChild>{children}</DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent>{t('dialog.addProcess.title', { type: type.charAt(0).toUpperCase() + type.slice(1) })}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <BasicTooltip content={t('dialog.addProcess.title', { type: type.charAt(0).toUpperCase() + type.slice(1) })}>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      </BasicTooltip>
       <DialogContent>
         <AddProcessDialogContent stageId={stageId} type={type} closeDialog={() => onOpenChange(false)} />
       </DialogContent>
@@ -74,7 +66,6 @@ const AddProcessDialogContent = ({
   const [process, setProcess] = useState('');
   const generatedId = useMemo(() => generateUniqueId(name, caseMap), [name, caseMap]);
 
-  const nameInputRef = useRef<HTMLInputElement>(null);
   const nameValidationMessage = useMemo(() => validateField(name), [name]);
   const processValidationMessage = useMemo(() => validateField(process), [process]);
 
@@ -101,7 +92,6 @@ const AddProcessDialogContent = ({
       closeDialog();
     } else {
       setName('');
-      nameInputRef.current?.focus();
     }
   };
   const formattedType = type.charAt(0).toUpperCase() + type.slice(1);
@@ -132,7 +122,7 @@ const AddProcessDialogContent = ({
       ref={enter}
       tabIndex={-1}
     >
-      <BasicField label={t('editor.sidebar.process')} message={processValidationMessage} tabIndex={0}>
+      <BasicField label={t('editor.sidebar.process')} message={processValidationMessage}>
         <Combobox
           options={processes}
           value={process}
@@ -140,6 +130,7 @@ const AddProcessDialogContent = ({
             setProcess(value);
             setName(generateName(value, processes));
           }}
+          optionFilter={extendedOptionFilter}
           itemRender={option => <ExtendedComboboxProcess {...option} />}
         />
       </BasicField>
@@ -149,6 +140,14 @@ const AddProcessDialogContent = ({
       </BasicField>
     </BasicDialogContent>
   );
+};
+
+export const extendedOptionFilter = ({ name, detail }: ExtendedComboboxOption, input?: string) => {
+  if (!input) {
+    return true;
+  }
+  const filterIncludes = (value?: string) => (value ? value.toLocaleLowerCase().includes(input.toLowerCase()) : false);
+  return filterIncludes(name) || filterIncludes(detail);
 };
 
 export const validateField = (name: string) => {
