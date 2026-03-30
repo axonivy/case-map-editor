@@ -1,4 +1,4 @@
-import { Button, Flex, SidebarHeader, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, useHotkeys } from '@axonivy/ui-components';
+import { BasicTooltip, Button, Flex, SidebarHeader, useHotkeys } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
@@ -18,14 +18,9 @@ export const Detail = () => {
   return (
     <>
       <SidebarHeader icon={IvyIcons.PenEdit} title={selectedElement?.id ?? caseMap.name} tabIndex={0}>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button icon={IvyIcons.Help} onClick={() => openUrl(helpUrl)} aria-label={helpText.label} />
-            </TooltipTrigger>
-            <TooltipContent>{t('message.help')}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <BasicTooltip content={t('message.help')}>
+          <Button icon={IvyIcons.Help} onClick={() => openUrl(helpUrl)} aria-label={helpText.label} />
+        </BasicTooltip>
       </SidebarHeader>
       <Flex direction='column' className='flex-1 p-2'>
         {selectedElement?.type === 'stage' ? <StageDetail /> : selectedElement?.type === 'process' ? <ProcessDetail /> : <CaseMapDetail />}

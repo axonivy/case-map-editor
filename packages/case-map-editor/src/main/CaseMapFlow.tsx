@@ -25,12 +25,17 @@ export const CaseMapFlow = () => {
       {caseMap.stages.map((stage, index) => (
         <Flex key={stage.id} direction='row'>
           <Flex gap={4} direction='column' alignItems='center'>
-            <StageConnector stage={stage} hideLeftLine={index === 0} hideRightLine={index === caseMap.stages.length - 1 && readonly} />
+            <StageConnector
+              stage={stage}
+              hideLeftLine={(index === 0 || caseMap.stages[index - 1]?.isTerminating) ?? false}
+              hideRightLine={(index === caseMap.stages.length - 1 && readonly) || stage.isTerminating}
+            />
             <StageTile stage={stage} />
           </Flex>
           <AddStageSlot
             index={index}
             stageId={stage.id}
+            stageIsTerminating={stage.isTerminating}
             isLast={index === caseMap.stages.length - 1}
             hoverIndex={hoverIndex}
             setHoverIndex={setHoverIndex}
@@ -102,6 +107,7 @@ const AddStageSlot = ({
   setHoverIndex,
   showPlaceholder,
   setShowPlaceholder,
+  stageIsTerminating,
   stageId,
   postStageId
 }: {
@@ -112,6 +118,7 @@ const AddStageSlot = ({
   showPlaceholder?: number;
   setShowPlaceholder: (i?: number) => void;
   stageId: string;
+  stageIsTerminating: boolean;
   postStageId?: string;
 }) => {
   const dnd = useDndContext();
@@ -141,7 +148,10 @@ const AddStageSlot = ({
             />
           </AddStageDialog>
         )}
-        <div className={cn('h-px grow bg-p300', isLast && 'h-0.5 bg-transparent')} data-last={isLast} />
+        <div
+          className={cn('h-px grow bg-p300', isLast && 'h-0.5 bg-transparent', stageIsTerminating && 'h-0 bg-transparent')}
+          data-last={isLast}
+        />
       </Flex>
 
       <Flex className='flex-1' ref={setNodeRef}>

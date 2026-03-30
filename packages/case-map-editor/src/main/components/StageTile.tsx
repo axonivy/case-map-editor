@@ -1,16 +1,5 @@
 import type { StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
-import {
-  Button,
-  cn,
-  Flex,
-  IvyIcon,
-  Separator,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-  useReadonly
-} from '@axonivy/ui-components';
+import { BasicTooltip, Button, cn, Flex, IvyIcon, Separator, useReadonly } from '@axonivy/ui-components';
 import { IvyIcons } from '@axonivy/ui-icons';
 import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useMemo } from 'react';
@@ -79,21 +68,16 @@ const DeleteButton = ({ id, type }: { id: string; type: ElementType }) => {
   const { deleteElementById } = useCaseMapData();
   const hotkeys = useKnownHotkeys();
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            icon={IvyIcons.Trash}
-            onClick={e => {
-              e.stopPropagation();
-              deleteElementById(id, type);
-            }}
-            aria-label={type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}
-          />
-        </TooltipTrigger>
-        <TooltipContent>{type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <BasicTooltip content={type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}>
+      <Button
+        icon={IvyIcons.Trash}
+        onClick={e => {
+          e.stopPropagation();
+          deleteElementById(id, type);
+        }}
+        aria-label={type === 'stage' ? hotkeys.deleteStage.label : t('hotkey.deleteProcess')}
+      />
+    </BasicTooltip>
   );
 };
 
