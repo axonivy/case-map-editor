@@ -21,7 +21,7 @@ export const useStageProperty = () => {
     return { stage: undefined, setProperty: () => {} };
   }
 
-  const stage = caseMap.stages.find(s => s.id === selectedElement.id);
+  const stage = caseMap.stages?.find(s => s.id === selectedElement.id);
 
   const setProperty = <K extends keyof StageModel>(key: K, value: StageModel[K]) => {
     setCaseMap(old =>
@@ -43,7 +43,7 @@ export const useStageProcessProperty = () => {
 
   let process: StageProcessModel | undefined;
 
-  for (const stage of caseMap.stages) {
+  for (const stage of caseMap.stages ?? []) {
     process = stage.processes?.find(p => p.id === selectedElement.id) ?? stage.sidesteps?.find(s => s.id === selectedElement.id);
     if (process) break;
   }

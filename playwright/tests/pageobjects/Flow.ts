@@ -27,4 +27,10 @@ export class Flow {
     await expect(dialog.locator).toBeVisible();
     return dialog;
   }
+
+  async expectStageOrder(expected: Array<string>) {
+    for (let i = 0; i < expected.length; i++) {
+      await expect(this.stageByNth(i).stage).toHaveAttribute('aria-label', expected[i]!);
+    }
+  }
 }

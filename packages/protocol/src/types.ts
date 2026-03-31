@@ -42,3 +42,8 @@ export interface MetaRequestTypes {
 export interface CaseMapNotificationTypes {
   action: CaseMapActionArgs;
 }
+
+export type CreateProcessData = {
+  name: string;
+  processToExecute: string;
+};

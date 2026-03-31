@@ -1,6 +1,11 @@
 import type { CaseMapModel, StageModel, StageProcessModel } from '@axonivy/case-map-editor-protocol';
 import { add, remove } from '../utils/array';
 export type ElementType = 'stage' | 'process' | 'sidestep';
+export const EMPTY_DROP_ID_PREFIX = 'empty-';
+export const FIRST_DROP_ID_PREFIX = 'first-';
+
+const isStageModel = (element: StageModel | StageProcessModel): element is StageModel => 'processes' in element;
+const isStageProcessModel = (element: StageModel | StageProcessModel): element is StageProcessModel => !isStageModel(element);
 type ModifyAction =
   | {
       type: 'dnd';
@@ -130,15 +135,19 @@ const addElement = (
   insertAfterId?: string,
   parentId?: string
 ) => {
-  if (type === 'stage') {
-    if (!insertAfterId || insertAfterId.startsWith('first-stage')) {
-      data.stages.unshift(element as StageModel);
-      return (element as StageModel).id;
+  if (type === 'stage' && isStageModel(element)) {
+    if (insertAfterId === 'flow-empty') {
+      data.stages.push(element);
+      return element.id;
+    }
+    if (!insertAfterId || insertAfterId.startsWith(FIRST_DROP_ID_PREFIX + 'stage')) {
+      data.stages.unshift(element);
+      return element.id;
     }
     const index = data.stages.findIndex(p => p.id === insertAfterId);
     if (index !== -1) {
-      add(data.stages, element as StageModel, index + 1);
-      return (element as StageModel).id;
+      add(data.stages, element, index + 1);
+      return element.id;
     }
   }
   if (!insertAfterId) {
@@ -147,12 +156,15 @@ const addElement = (
       return pushElementToStage(parentStage, type, element as StageProcessModel);
     }
   }
-  if (type === 'process') {
-    if (insertAfterId?.startsWith('empty-') || insertAfterId?.startsWith('first-')) {
-      const [, emptyType, stageId] = insertAfterId.split('-');
+  if (type === 'process' && isStageProcessModel(element)) {
+    if (insertAfterId?.startsWith(EMPTY_DROP_ID_PREFIX) || insertAfterId?.startsWith(FIRST_DROP_ID_PREFIX)) {
+      const parts = insertAfterId.split('-');
+      const emptyType = parts[1];
+      const stageId = parts.slice(2).join('-');
+
       const stage = data.stages.find(s => s.id === stageId);
       if (stage) {
-        return pushElementToStage(stage, emptyType as 'process' | 'sidestep', element as StageProcessModel);
+        return pushElementToStage(stage, emptyType as 'process' | 'sidestep', element);
       }
     }
     const foundElement = findElementById(data, insertAfterId ?? '');
@@ -164,12 +176,12 @@ const addElement = (
       if (index === -1) {
         index = parentStage.sidesteps.findIndex(p => p.id === insertAfterId);
         if (index !== -1) {
-          add(parentStage.sidesteps, element as StageProcessModel, index + 1);
-          return (element as StageProcessModel).id;
+          add(parentStage.sidesteps, element, index + 1);
+          return element.id;
         }
       }
-      add(parentStage.processes, element as StageProcessModel, index + 1);
-      return (element as StageProcessModel).id;
+      add(parentStage.processes, element, index + 1);
+      return element.id;
     }
   }
 };

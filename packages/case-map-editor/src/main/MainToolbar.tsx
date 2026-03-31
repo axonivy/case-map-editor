@@ -16,6 +16,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/AppContext';
 import { useKnownHotkeys } from '../utils/useKnownHotkeys';
+import { PalettePopover, ProcessPalette } from './palette/Palette';
 
 type MainToolbarProps = {
   title: string;
@@ -51,6 +52,9 @@ export const MainToolbar = ({ title }: MainToolbarProps) => {
   return (
     <Toolbar ref={firstElement} tabIndex={0}>
       <ToolbarTitle>{title}</ToolbarTitle>
+      <PalettePopover label={t('editor.flow.processes')} icon={IvyIcons.Process}>
+        <ProcessPalette />
+      </PalettePopover>
       <Flex gap={1}>
         {!readonly && <EditButtons />}
 

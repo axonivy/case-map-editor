@@ -1,17 +1,20 @@
 import { cn } from '@axonivy/ui-components';
 import { useDndContext, useDroppable } from '@dnd-kit/core';
 import type { ComponentProps } from 'react';
+import { FIRST_DROP_ID_PREFIX } from '../../data/data';
 
 export type DropZoneProps = ComponentProps<'div'> & {
   id: string;
   postId?: string;
+  type: 'process' | 'stage';
 };
 
-export const DropZone = ({ id, className, postId, children }: DropZoneProps) => {
+export const DropZone = ({ id, className, postId, type, children }: DropZoneProps) => {
   const dnd = useDndContext();
   const { isOver, setNodeRef } = useDroppable({
     id,
-    disabled: dnd.active?.id === id || dnd.active?.id === postId || dnd.active?.data?.current?.type !== 'process'
+    data: { type },
+    disabled: dnd.active?.id === id || dnd.active?.id === postId || dnd.active?.data?.current?.type === 'stage'
   });
 
   return (
@@ -25,7 +28,7 @@ export const DropZone = ({ id, className, postId, children }: DropZoneProps) => 
 export const FirstStageDropZone = ({ id, className, postId, children, isFirst }: DropZoneProps & { isFirst: boolean }) => {
   const dnd = useDndContext();
   const { isOver, setNodeRef } = useDroppable({
-    id: 'first-stage' + id,
+    id: FIRST_DROP_ID_PREFIX + 'stage' + id,
     disabled: !isFirst || dnd.active?.id === id || dnd.active?.id === postId || dnd.active?.data?.current?.type !== 'stage'
   });
 

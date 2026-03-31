@@ -27,7 +27,7 @@ export const ProcessTile = ({
   const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(process.id, 'process');
 
   return (
-    <DropZone id={process.id} postId={postId}>
+    <DropZone id={process.id} postId={postId} type={'process'}>
       <Flex
         key={process.id}
         className={cn(

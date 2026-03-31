@@ -9,7 +9,8 @@
       "undo": "Undo ({{hotkey}})"
     },
     "label": {
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "search": "Search"
     }
   },
   "dialog": {
@@ -55,6 +56,7 @@
   },
   "message": {
     "addFirstItem": "Add your first Stage to your Case Map.",
+    "emptyPalette": "No items available in the palette.",
     "help": "Help",
     "nothingSelected": "Nothing selected"
   }
