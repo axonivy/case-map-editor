@@ -52,7 +52,7 @@ export const ProcessTile = ({
           {!readonly && <IvyIcon icon={IvyIcons.EditDots} />}
           <div className='truncate'>{process.name}</div>
         </Flex>
-        {process.preCondition !== undefined && process.preCondition.label.length > 0 && process.preCondition.script.length > 0 && (
+        {process.preCondition !== undefined && (process.preCondition.label?.length > 0 || process.preCondition.script?.length > 0) && (
           <Badge round size='s' variant='primary'>
             <IvyIcon icon={IvyIcons.Condition} />
           </Badge>
