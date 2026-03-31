@@ -130,6 +130,7 @@ const AddProcessDialogContent = ({
             setProcess(value);
             setName(generateName(value, processes));
           }}
+          renderInContainer={true}
           optionFilter={extendedOptionFilter}
           itemRender={option => <ExtendedComboboxProcess {...option} />}
         />

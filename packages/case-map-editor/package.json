@@ -31,9 +31,9 @@
     "react-i18next": "^15.4.1 || ^16.0.0"
   },
   "devDependencies": {
-    "@axonivy/jsonrpc": "~14.0.0-next.1087.32a7b60",
-    "@axonivy/ui-components": "~14.0.0-next.1087.32a7b60",
-    "@axonivy/ui-icons": "~14.0.0-next.1087.32a7b60",
+    "@axonivy/jsonrpc": "~14.0.0-next.1089.42621cd",
+    "@axonivy/ui-components": "~14.0.0-next.1089.42621cd",
+    "@axonivy/ui-icons": "~14.0.0-next.1089.42621cd",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.81.0",
     "@tanstack/react-query-devtools": "^5.81.0",
