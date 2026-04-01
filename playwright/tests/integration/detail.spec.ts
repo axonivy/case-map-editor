@@ -18,7 +18,7 @@ test('case map', async ({ page }) => {
 
   await name.expectValue('New Case Map Name');
   await description.expectValue('New Description');
-  await expect(editor.toolbar.locator).toHaveText('New Case Map Name');
+  await expect(editor.toolbar.locator).toHaveText('New Case Map NameProcesses');
 });
 
 test('stage', async ({ page }) => {

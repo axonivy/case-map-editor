@@ -5,6 +5,7 @@ import { useDndContext, useDraggable, useDroppable } from '@dnd-kit/core';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { EMPTY_DROP_ID_PREFIX, FIRST_DROP_ID_PREFIX } from '../../data/data';
 import type { ElementType } from '../../data/data';
 import { useKnownHotkeys } from '../../utils/useKnownHotkeys';
 import { useCaseMapData } from '../useCaseMapData';
@@ -27,7 +28,7 @@ export const StageTile = ({ stage, dragging }: { stage: StageModel; dragging?: b
   const { onKeyDown, onDoubleClick, onClick, isSelected } = useSelectableTile(stage.id, 'stage');
 
   return (
-    <FirstStageDropZone isFirst={isFirst} id={stage.id}>
+    <FirstStageDropZone isFirst={isFirst} id={stage.id} type={'stage'}>
       <Flex
         className={cn(
           'min-w-50 flex-wrap rounded-lg border border-transparent bg-background p-3 select-none hover:cursor-pointer hover:border-p300',
@@ -96,8 +97,9 @@ const ProcessPart = ({
   const { t } = useTranslation();
   const dnd = useDndContext();
   const { isOver, setNodeRef } = useDroppable({
-    id: `empty-${type}-${stageId}`,
-    disabled: dnd.active?.data?.current?.type !== 'process'
+    id: `${EMPTY_DROP_ID_PREFIX}${type}-${stageId}`,
+    data: { type: 'process' },
+    disabled: dnd.active?.data?.current?.type === 'stage'
   });
   const readonly = useReadonly();
   const processesAvailable = stageProcesses !== undefined && stageProcesses.length > 0;
@@ -108,7 +110,7 @@ const ProcessPart = ({
     <Flex direction='column' gap={2}>
       {processesAvailable ? (
         <>
-          <DropZone id={`first-${type}-${stageId}`} postId={stageProcesses?.[0]?.id ?? undefined}>
+          <DropZone id={`${FIRST_DROP_ID_PREFIX}${type}-${stageId}`} postId={stageProcesses?.[0]?.id ?? undefined} type={'process'}>
             <Flex justifyContent='space-between' alignItems='center' className='font-bold'>
               {title}
               {!readonly && (

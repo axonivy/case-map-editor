@@ -9,7 +9,8 @@
       "undo": "Rückgängig ({{hotkey}})"
     },
     "label": {
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+      "search": "Suche"
     }
   },
   "dialog": {
@@ -55,6 +56,7 @@
   },
   "message": {
     "addFirstItem": "Füge deinem Case Map deinen ersten Eintrag hinzu.",
+    "emptyPalette": "Keine Elemente in der Palette verfügbar.",
     "help": "Hilfe",
     "nothingSelected": "Nichts ausgewählt"
   }

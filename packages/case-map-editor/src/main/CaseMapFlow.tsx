@@ -54,9 +54,13 @@ const EmptyState = () => {
   const { t } = useTranslation();
   const hotkeys = useKnownHotkeys();
   const readonly = useReadonly();
+  const { isOver, setNodeRef } = useDroppable({
+    id: 'flow-empty',
+    data: { type: 'stage' }
+  });
 
   return (
-    <Flex direction='column' alignItems='center' justifyContent='center' className='h-full'>
+    <Flex direction='column' alignItems='center' justifyContent='center' className={cn('h-full', isOver && 'bg-p50')} ref={setNodeRef}>
       <PanelMessage
         icon={readonly ? IvyIcons.Search : IvyIcons.ActivitiesGroup}
         message={readonly ? t('editor.flow.noStages') : t('message.addFirstItem')}
@@ -126,9 +130,9 @@ const AddStageSlot = ({
   const hotkeys = useKnownHotkeys();
   const { isOver, setNodeRef } = useDroppable({
     id: stageId,
-    disabled: dnd.active?.id === stageId || dnd.active?.id === postStageId || dnd.active?.data?.current?.type !== 'stage'
+    data: { type: 'stage' },
+    disabled: dnd.active?.id === stageId || dnd.active?.id === postStageId
   });
-
   return (
     <Flex gap={4} direction='column' alignItems='center' className='flex-1'>
       <Flex

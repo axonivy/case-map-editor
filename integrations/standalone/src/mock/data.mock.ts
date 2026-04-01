@@ -113,7 +113,7 @@ export const PROCESSES: Array<ProcessStart> = [
     signature: 'start()',
     startDescription: '',
     startName: '',
-    userFriendlyRequestPath: 'Lending/CustomerOnboardingProcess/start.ivp'
+    userFriendlyRequestPath: 'Lending/Deep/CustomerOnboardingProcess/start.ivp'
   },
   {
     description: '',
