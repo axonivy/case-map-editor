@@ -10,7 +10,6 @@ export const initTranslation = () => {
     .use(LanguageDetector)
     .init({
       debug: false,
-      showSupportNotice: false,
       supportedLngs: ['en', 'de'],
       fallbackLng: 'en',
       ns: ['case-map-viewer'],
