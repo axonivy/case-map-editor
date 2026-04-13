@@ -24,11 +24,11 @@ type MainToolbarProps = {
 
 export const MainToolbar = ({ title }: MainToolbarProps) => {
   const { detail, setDetail } = useAppContext();
-  const firstElement = useRef<HTMLDivElement>(null);
+  const firstElementRef = useRef<HTMLDivElement>(null);
   const readonly = useReadonly();
   const { t } = useTranslation();
   const hotkeys = useKnownHotkeys();
-  useHotkeys(hotkeys.focusToolbar.hotkey, () => firstElement.current?.focus(), { scopes: ['global'] });
+  useHotkeys(hotkeys.focusToolbar.hotkey, () => firstElementRef.current?.focus(), { scopes: ['global'] });
   useHotkeys(
     hotkeys.focusInscription.hotkey,
     () => {
@@ -50,7 +50,7 @@ export const MainToolbar = ({ title }: MainToolbarProps) => {
   );
 
   return (
-    <Toolbar ref={firstElement} tabIndex={0}>
+    <Toolbar ref={firstElementRef} tabIndex={0}>
       <ToolbarTitle>{title}</ToolbarTitle>
       <PalettePopover label={t('editor.flow.processes')} icon={IvyIcons.Process}>
         <ProcessPalette />
