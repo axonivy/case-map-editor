@@ -1,6 +1,6 @@
 import type { CaseMapContext, CaseMapModel } from '@axonivy/case-map-editor-protocol';
 import type { UpdateConsumer, useHistoryData } from '@axonivy/ui-components';
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 export type SelectedElement = { id: string; type: 'stage' | 'process' };
 
@@ -16,7 +16,7 @@ type AppContext = {
   helpUrl: string;
 };
 
-const appContext = createContext<AppContext>({
+const AppContext = createContext<AppContext>({
   caseMap: {} as CaseMapModel,
   setCaseMap: () => {},
   detail: true,
@@ -27,10 +27,10 @@ const appContext = createContext<AppContext>({
   helpUrl: ''
 });
 
-export const AppProvider = appContext.Provider;
+export const AppProvider = AppContext.Provider;
 
 export const useAppContext = (): AppContext & { setUnhistoriedVariables: UpdateConsumer<CaseMapModel> } => {
-  const context = useContext(appContext);
+  const context = use(AppContext);
   return {
     ...context,
     setCaseMap: updateData => {
