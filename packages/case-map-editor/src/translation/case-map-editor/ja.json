@@ -1,26 +1,63 @@
 {
   "common": {
-    "hotkey": {
-    },
     "label": {
+      "search": "インフォメーション",
+      "cancel": "キャンセル"
+    },
+    "hotkey": {
+      "focusInscription": "焦点の徴候({{hotkey}})",
+      "focusMain": "焦点の本管({{hotkey}})",
+      "focusToolbar": "焦点のツールバー({{hotkey}})",
+      "help": "オープンヘルプ({{hotkey}})",
+      "redo": "Redo ({{hotkey}})",
+      "undo": "Undo({{hotkey}})"
     }
   },
   "dialog": {
-    "addProcess": {
-    },
     "addStage": {
+      "title": "ステージの追加",
+      "create": "ステージの作成",
+      "desc": "新しいステージを作成する"
+    },
+    "addProcess": {
+      "create": "{{type}} の作成",
+      "desc": "新規作成 {{type}}",
+      "title": "{{type}} を追加"
     }
   },
   "editor": {
     "flow": {
+      "processes": "プロセス",
+      "sidesteps": "サイドステップ",
+      "addFirstItem": "最初に追加 {{item}}",
+      "noProcesses": "いいえ {{item}} 設定",
+      "noStages": "ステージ構成なし"
     },
     "sidebar": {
+      "condition": "インフォメーション",
+      "description": "コンテンツ",
+      "general": "インフォメーション",
+      "icon": "アイコン",
+      "id": "ログイン",
+      "isTerminating": "用語集",
+      "label": "ラベル",
+      "name": "お名前 (必須)",
+      "preCondition": "前提条件",
+      "process": "プロセス"
     },
     "toolbar": {
+      "detailToggle": "インフォメーション"
     }
   },
-  "hotkey": {
-  },
   "message": {
+    "emptyPalette": "パレットに商品はありません.",
+    "addFirstItem": "ケースマップに最初のステージを追加します.",
+    "help": "お問い合わせ",
+    "nothingSelected": "選択なし"
+  },
+  "hotkey": {
+    "deleteProcess": "プロセスの削除",
+    "addStage": "ステージの追加({{hotkey}})",
+    "deleteStage": "ステージ削除({{hotkey}})"
   }
 }
