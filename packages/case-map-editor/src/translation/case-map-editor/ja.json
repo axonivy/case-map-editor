@@ -1,16 +1,16 @@
 {
   "common": {
     "label": {
-      "search": "インフォメーション",
+      "search": "検索",
       "cancel": "キャンセル"
     },
     "hotkey": {
       "focusInscription": "焦点の徴候({{hotkey}})",
-      "focusMain": "焦点の本管({{hotkey}})",
-      "focusToolbar": "焦点のツールバー({{hotkey}})",
+      "focusMain": "メインをフォーカス ({{hotkey}})",
+      "focusToolbar": "ツールバーをフォーカス ({{hotkey}})",
       "help": "オープンヘルプ({{hotkey}})",
-      "redo": "Redo ({{hotkey}})",
-      "undo": "Undo({{hotkey}})"
+      "redo": "やり直す ({{hotkey}})",
+      "undo": "元に戻す ({{hotkey}})"
     }
   },
   "dialog": {
