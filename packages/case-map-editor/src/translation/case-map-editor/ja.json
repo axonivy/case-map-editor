@@ -5,7 +5,7 @@
       "cancel": "キャンセル"
     },
     "hotkey": {
-      "focusInscription": "焦点の徴候({{hotkey}})",
+      "focusInscription": "インスクリプションをフォーカス ({{hotkey}})",
       "focusMain": "メインをフォーカス ({{hotkey}})",
       "focusToolbar": "ツールバーをフォーカス ({{hotkey}})",
       "help": "ヘルプを開く ({{hotkey}})",
@@ -35,8 +35,8 @@
     },
     "sidebar": {
       "condition": "インフォメーション",
-      "description": "コンテンツ",
-      "general": "インフォメーション",
+      "description": "説明",
+      "general": "一般",
       "icon": "アイコン",
       "id": "ログイン",
       "isTerminating": "用語集",
@@ -46,7 +46,7 @@
       "process": "プロセス"
     },
     "toolbar": {
-      "detailToggle": "インフォメーション"
+      "detailToggle": "詳細"
     }
   },
   "message": {
