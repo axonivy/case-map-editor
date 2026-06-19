@@ -100,7 +100,7 @@ function CaseMapEditor(props: EditorProps) {
       />
       <link
         rel='stylesheet'
-        href={`${data.baseUrl}/dev-workflow-ui/faces/javax.faces.resource/primeicons/primeicons.css?ln=primefaces`}
+        href={`${data.baseUrl}/dev-workflow-ui/faces/jakarta.faces.resource/primeicons/primeicons.css?ln=primefaces`}
         crossOrigin='anonymous'
       />
       <link rel='stylesheet' href={`${data.baseUrl}/dev-workflow-ui/webjars/tabler-icons/tabler-icons.min.css`} crossOrigin='anonymous' />
