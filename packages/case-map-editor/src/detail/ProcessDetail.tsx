@@ -18,7 +18,7 @@ export const ProcessDetail = () => {
   const { t } = useTranslation();
   const { context, setSelectedElement } = useAppContext();
   const { process, setProperty } = useStageProcessProperty();
-  const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data.map(p => ({
+  const processes = useMeta('meta/processes', { projectFilter: context.project }, []).data.map(p => ({
     value: p.processReference,
     name: p.startName.length > 0 ? p.startName : p.processName,
     detail: p.userFriendlyRequestPath

@@ -8,7 +8,7 @@ export const server = process.env.BASE_URL ?? 'http://localhost:8080/~Developer-
 export const user = 'Developer';
 const ws = process.env.TEST_WS ?? '';
 const app = process.env.TEST_APP ?? 'Developer-case-map-test-project';
-const pmv = 'case-map-test-project';
+const project = 'case-map-test-project';
 
 export class CaseMapEditor {
   readonly page: Page;
@@ -20,7 +20,7 @@ export class CaseMapEditor {
   static async openCaseMap(page: Page, options?: { readonly?: boolean }) {
     const serverUrl = server.replace(/^https?:\/\//, '');
 
-    let url = `?server=${serverUrl}${ws}&app=${app}&pmv=${pmv}&file=processes/Lending/Lending.m.json`;
+    let url = `?server=${serverUrl}${ws}&app=${app}&project=${project}&file=processes/Lending/Lending.m.json`;
 
     if (options) {
       url += `${this.params(options)}`;
@@ -31,7 +31,7 @@ export class CaseMapEditor {
 
   static async openCaseMapViewer(page: Page, options?: { readonly?: boolean }) {
     const serverUrl = server.replace(/^https?:\/\//, '');
-    let url = `?server=${serverUrl}${ws}/${app}/1&app=${app}&pmv=${pmv}&file=processes/Lending/ViewerCaseMap.m.json`;
+    let url = `?server=${serverUrl}${ws}/${app}/1&app=${app}&project=${project}&file=processes/Lending/ViewerCaseMap.m.json`;
     if (options) {
       url += `${this.params(options)}`;
     }

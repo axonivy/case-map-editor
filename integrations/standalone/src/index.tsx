@@ -5,11 +5,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { initTranslation } from './i18n';
 import './index.css';
-import { appParam, directSaveParam, fileParam, pmvParam, readonlyParam, themeParam, webSocketBaseParam } from './url-helper';
+import { appParam, directSaveParam, fileParam, projectParam, readonlyParam, themeParam, webSocketBaseParam } from './url-helper';
 
 export async function start(): Promise<void> {
   const server = webSocketBaseParam();
-  const pmv = pmvParam();
+  const project = projectParam();
   const file = fileParam();
   const app = appParam();
   const theme = themeParam();
@@ -35,7 +35,7 @@ export async function start(): Promise<void> {
   );
   const initialize = async (connection: Connection) => {
     const client = await CaseMapClientJsonRpc.startClient(connection);
-    await client.initialize({ app, pmv, file });
+    await client.initialize({ app, project, file });
     root.render(
       <React.StrictMode>
         <ThemeProvider defaultTheme={theme}>
@@ -43,7 +43,7 @@ export async function start(): Promise<void> {
             <QueryProvider client={queryClient}>
               <ReadonlyProvider readonly={readonly}>
                 <HotkeysProvider initiallyActiveScopes={['global']}>
-                  <CaseMapEditor context={{ app, pmv, file }} directSave={directSave} />
+                  <CaseMapEditor context={{ app, project, file }} directSave={directSave} />
                 </HotkeysProvider>
               </ReadonlyProvider>
             </QueryProvider>
