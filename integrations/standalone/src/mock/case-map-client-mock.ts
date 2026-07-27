@@ -25,7 +25,7 @@ export class CaseMapClientMock implements CaseMapClient {
   }
 
   private caseMapData: CaseMapEditorData = {
-    context: { app: 'mock', pmv: 'mock', file: 'mock.f.json' },
+    context: { app: 'mock', project: 'mock', file: 'mock.f.json' },
     readonly: false,
     data: data,
     baseUrl: '',

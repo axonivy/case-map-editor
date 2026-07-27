@@ -60,7 +60,7 @@ export const PalettePopover = ({ label, icon, children }: PalettePopoverProps) =
 export const ProcessPalette = () => {
   const { t } = useTranslation();
   const { context } = useAppContext();
-  const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data;
+  const processes = useMeta('meta/processes', { projectFilter: context.project }, []).data;
   const sections = useMemo(() => processPaletteSections(processes), [processes]);
 
   const searchFilter = (item: ProcessPaletteItemConfig, term: string) =>

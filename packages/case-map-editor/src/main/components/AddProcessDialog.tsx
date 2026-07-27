@@ -56,7 +56,7 @@ const AddProcessDialogContent = ({
 }) => {
   const { caseMap, setCaseMap, context } = useAppContext();
   const { t } = useTranslation();
-  const processes = useMeta('meta/processes', { projectFilter: context.pmv }, []).data.map(p => ({
+  const processes = useMeta('meta/processes', { projectFilter: context.project }, []).data.map(p => ({
     value: p.processReference,
     name: p.startName.length > 0 ? p.startName : p.processName,
     detail: p.userFriendlyRequestPath

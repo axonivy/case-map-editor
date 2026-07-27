@@ -23,7 +23,7 @@ const AppContext = createContext<AppContext>({
   history: { push: () => {}, undo: () => {}, redo: () => {}, canUndo: false, canRedo: false },
   setSelectedElement: () => {},
   setDetail: () => {},
-  context: { app: '', file: '', pmv: '' },
+  context: { app: '', file: '', project: '' },
   helpUrl: ''
 });
 

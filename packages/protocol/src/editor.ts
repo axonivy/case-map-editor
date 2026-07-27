@@ -19,7 +19,7 @@ processStart: ProcessStart[]
 export interface CaseMapContext {
   app: string;
   file: string;
-  pmv: string;
+  project: string;
 }
 export interface CaseMapEditorData {
   baseUrl: string;

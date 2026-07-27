@@ -11,11 +11,11 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { initTranslation } from './i18n';
 import './index.css';
-import { appParam, fileParam, pmvParam, themeParam, webSocketBaseParam } from './url-helper';
+import { appParam, fileParam, projectParam, themeParam, webSocketBaseParam } from './url-helper';
 
 export async function start(): Promise<void> {
   const server = webSocketBaseParam();
-  const pmv = pmvParam();
+  const project = projectParam();
   const file = fileParam();
   const app = appParam();
   const theme = themeParam();
@@ -46,7 +46,7 @@ export async function start(): Promise<void> {
             <QueryProvider client={queryClient}>
               <ReadonlyProvider readonly={true}>
                 <HotkeysProvider initiallyActiveScopes={['global']}>
-                  <CaseMapViewer context={{ app, pmv, file }} />
+                  <CaseMapViewer context={{ app, project, file }} />
                 </HotkeysProvider>
               </ReadonlyProvider>
             </QueryProvider>

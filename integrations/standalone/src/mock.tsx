@@ -27,7 +27,7 @@ root.render(
         <QueryProvider client={queryClient}>
           <ReadonlyProvider readonly={readonly}>
             <HotkeysProvider initiallyActiveScopes={['global']}>
-              <CaseMapEditor context={{ app: '', file: '', pmv: '' }} />
+              <CaseMapEditor context={{ app: '', file: '', project: '' }} />
             </HotkeysProvider>
           </ReadonlyProvider>
         </QueryProvider>
