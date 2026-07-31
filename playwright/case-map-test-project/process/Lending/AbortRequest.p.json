@@ -1,6 +1,6 @@
 {
-  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process.json",
-  "id" : "15A8995AA29B442B",
+  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process-1.json",
+  "id" : "15A8996D261A1DFE",
   "config" : {
     "data" : "credit.Data"
   },
@@ -14,7 +14,7 @@
           "isVisibleOnStartList" : false
         },
         "task" : {
-          "name" : "External Solvency Check"
+          "name" : "Abort Request"
         }
       },
       "visual" : {

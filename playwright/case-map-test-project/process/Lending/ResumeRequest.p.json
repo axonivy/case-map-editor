@@ -1,6 +1,6 @@
 {
-  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process.json",
-  "id" : "15A89966729CE3FC",
+  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process-1.json",
+  "id" : "015A8996ACC13882",
   "config" : {
     "data" : "credit.Data"
   },
@@ -11,14 +11,10 @@
       "config" : {
         "signature" : "start",
         "request" : {
-          "name" : "Create Contract",
           "isVisibleOnStartList" : false
         },
         "task" : {
-          "name" : "Create Contract",
-          "expiry" : {
-            "timeout" : "new Duration(\"4h\")"
-          }
+          "name" : "Resume Request"
         }
       },
       "visual" : {
