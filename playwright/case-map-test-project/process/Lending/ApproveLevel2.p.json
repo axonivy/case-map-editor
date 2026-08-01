@@ -1,6 +1,6 @@
 {
-  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process.json",
-  "id" : "15A8996D261A1DFE",
+  "$schema" : "https://json-schema.axonivy.com/14.0-dev/project/process-1.json",
+  "id" : "15A89963C015F70D",
   "config" : {
     "data" : "credit.Data"
   },
@@ -11,10 +11,14 @@
       "config" : {
         "signature" : "start",
         "request" : {
+          "name" : "Approve Level 2",
           "isVisibleOnStartList" : false
         },
         "task" : {
-          "name" : "Abort Request"
+          "name" : "Approve Level 2",
+          "expiry" : {
+            "timeout" : "new Duration(\"8h\")"
+          }
         }
       },
       "visual" : {
@@ -22,7 +26,7 @@
         "labelOffset" : { "x" : 12, "y" : 37 }
       },
       "connect" : [
-        { "id" : "f2", "to" : "f1" }
+        { "id" : "f4", "to" : "f3" }
       ]
     }, {
       "id" : "f1",
@@ -30,5 +34,17 @@
       "visual" : {
         "at" : { "x" : 352, "y" : 64 }
       }
+    }, {
+      "id" : "f3",
+      "type" : "DialogCall",
+      "config" : {
+        "dialog" : "credit.ApproveLevel2:start()"
+      },
+      "visual" : {
+        "at" : { "x" : 224, "y" : 64 }
+      },
+      "connect" : [
+        { "id" : "f2", "to" : "f1" }
+      ]
     } ]
 }
