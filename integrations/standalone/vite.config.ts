@@ -24,8 +24,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@axonivy/case-map-editor': resolve(__dirname, '../../packages/case-map-editor/src'),
-      '@axonivy/case-map-editor-protocol': resolve(__dirname, '../../packages/protocol/src')
+      '@axonivy/case-map-editor': resolve(import.meta.dirname, '../../packages/case-map-editor/src'),
+      '@axonivy/case-map-editor-protocol': resolve(import.meta.dirname, '../../packages/protocol/src')
     }
   },
   base: './'
