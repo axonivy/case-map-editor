@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.ivyteam.casemap</groupId>
-  <artifactId>case-map-viewer</artifactId>
+  <artifactId>case-map-viewer-bom</artifactId>
   <version>14.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -19,24 +19,23 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.8.0</version>
-
-        <configuration>
-          <appendAssemblyId>false</appendAssemblyId>
-        </configuration>
-
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
         <executions>
           <execution>
-            <id>zip.casemap</id>
+            <id>attach-json</id>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>attach-artifact</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly.xml</descriptor>
-              </descriptors>
+              <artifacts>
+                <artifact>
+                  <file>${project.basedir}/../../bom.json</file>
+                  <type>json</type>
+                </artifact>
+              </artifacts>
             </configuration>
           </execution>
         </executions>

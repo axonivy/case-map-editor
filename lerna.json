@@ -12,9 +12,5 @@
       "registry": "https://npmjs-registry.ivyteam.ch/"
     }
   },
-  "packages": [
-    "packages/*",
-    "integrations/*",
-    "playwright"
-  ]
+  "packages": [".", "packages/*", "integrations/*", "playwright"]
 }
