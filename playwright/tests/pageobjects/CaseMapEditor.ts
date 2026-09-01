@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test';
+import { type Page } from '@playwright/test';
 
 import { Flow } from './Flow';
 import { Inscription } from './Inscription';
@@ -59,18 +59,8 @@ export class CaseMapEditor {
     const editor = new CaseMapEditor(page);
     await page.goto(url);
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.addStyleTag({ content: `.tsqd-parent-container { display: none; }` });
     return editor;
-  }
-
-  async takeScreenshot(fileName: string) {
-    await this.hideQuery();
-    const dir = process.env.SCREENSHOT_DIR ?? 'tests/screenshots/target';
-    const buffer = await this.page.screenshot({ path: `${dir}/screenshots/${fileName}`, animations: 'disabled' });
-    expect(buffer.byteLength).toBeGreaterThan(3000);
-  }
-
-  async hideQuery() {
-    await this.page.addStyleTag({ content: `.tsqd-parent-container { display: none; }` });
   }
 
   get flow() {
