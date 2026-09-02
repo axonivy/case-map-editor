@@ -6,6 +6,6 @@
   "fields" : [ {
     "name" : "dossier",
     "type" : "credit.CreditDossier",
-    "modifiers" : [ "PERSISTENT" ]
+    "modifiers" : [ ]
   } ]
 }
