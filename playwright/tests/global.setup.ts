@@ -57,6 +57,12 @@ const deployProjects = async (engineUrl: string, workspaceId: string, projectPat
 };
 
 const setup = async () => {
+  const isScreenshotRun = process.argv.some((argument, index) => argument === '--project=screenshots' || (argument === '--project' && process.argv[index + 1] === 'screenshots'));
+  if (isScreenshotRun) {
+    console.info('Skipping Web IDE workspace setup for screenshot tests');
+    return;
+  }
+
   const engineUrl = process.env.BASE_URL ?? 'http://localhost:8080';
   const workspacePath = path.resolve(import.meta.dirname, '..');
   console.info(`Setting up workspace '${workspaceName}' in '${workspacePath}'`);
