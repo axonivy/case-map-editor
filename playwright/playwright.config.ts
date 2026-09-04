@@ -24,6 +24,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI
     }
   ],
+  globalSetup: './tests/global.setup',
   projects: [
     { name: 'integration-chrome', use: { ...devices['Desktop Chrome'] }, testDir: './tests/integration' },
     { name: 'integration-firefox', use: { ...devices['Desktop Firefox'] }, testDir: './tests/integration' },
