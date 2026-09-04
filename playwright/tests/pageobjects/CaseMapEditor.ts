@@ -4,9 +4,9 @@ import { Flow } from './Flow';
 import { Inscription } from './Inscription';
 import { Toolbar } from './Toolbar';
 
-export const server = process.env.BASE_URL ?? 'http://localhost:8080/~Developer-case-map-test-project';
+export const server = process.env.BASE_URL ?? 'http://localhost:8080/';
 export const user = 'Developer';
-const ws = process.env.TEST_WS ?? '';
+const ws = '~Developer-case-map-test-project';
 const app = process.env.TEST_APP ?? 'Developer-case-map-test-project';
 const project = 'case-map-test-project';
 
