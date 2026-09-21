@@ -1,7 +1,7 @@
 {
   "name": "@axonivy/case-map-editor-standalone",
   "private": true,
-  "version": "14.0.0-next",
+  "version": "15.1.0-next",
   "dependencies": {
     "@axonivy/case-map-editor": "workspace:~",
     "@axonivy/case-map-editor-protocol": "workspace:~",
