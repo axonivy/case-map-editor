@@ -2,9 +2,10 @@ import {
   CaseMapViewer,
   CaseMapViewerClientJsonRpc,
   initQueryClient,
-  QueryProvider,
   ViewerClientContextProvider
 } from '@axonivy/case-map-editor';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { webSocketConnection, type Connection } from '@axonivy/jsonrpc';
 import { Flex, HotkeysProvider, ReadonlyProvider, Spinner, ThemeProvider, toast, Toaster } from '@axonivy/ui-components';
 import * as React from 'react';
@@ -43,13 +44,14 @@ export async function start(): Promise<void> {
       <React.StrictMode>
         <ThemeProvider defaultTheme={theme}>
           <ViewerClientContextProvider client={client}>
-            <QueryProvider client={queryClient}>
+            <QueryClientProvider client={queryClient}>
               <ReadonlyProvider readonly={true}>
                 <HotkeysProvider initiallyActiveScopes={['global']}>
                   <CaseMapViewer context={{ app, project, file }} />
                 </HotkeysProvider>
               </ReadonlyProvider>
-            </QueryProvider>
+              <ReactQueryDevtools initialIsOpen={false} buttonPosition={'bottom-left'} />
+            </QueryClientProvider>
           </ViewerClientContextProvider>
           <Toaster closeButton={true} position='bottom-left' />
         </ThemeProvider>
