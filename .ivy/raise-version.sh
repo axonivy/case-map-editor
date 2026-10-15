@@ -13,6 +13,7 @@ source "$SCRIPT_DIR/version-helper.sh"
 NEXT_VERSION="$(to_next_version "$VERSION")"
 NEXT_TAG="$(to_next_tag "$VERSION")"
 
+mvn --batch-mode -f build/sbom/pom.xml versions:set versions:commit -DnewVersion="$VERSION"
 mvn --batch-mode -f playwright/case-map-test-project/pom.xml versions:set versions:commit -DnewVersion="$VERSION"
 mvn --batch-mode -f playwright/tests/screenshots/pom.xml versions:set versions:commit -DnewVersion="$VERSION"
 mvn --batch-mode -f integrations/viewer/pom.xml versions:set versions:commit -DnewVersion="$VERSION"
