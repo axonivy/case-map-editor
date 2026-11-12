@@ -56,6 +56,15 @@ const deployProjects = async (engineUrl: string, workspaceId: string, projectPat
   console.info(`Deployed project '${projectPath}' [${deployResponse.status}]`);
 };
 
+const activateWorkspaceApp = async (engineUrl: string, workspaceId: string) => {
+  const url = `${engineUrl.replace(/\/?$/, '/')}~${user}-${workspaceId}/dev-workflow-ui/faces/home.xhtml`;
+  const response = await fetch(url, { headers: requestHeaders });
+  if (!response.ok) {
+    throw new Error(`Failed to activate workspace app '${workspaceId}': ${response.status} ${await response.text()}`);
+  }
+  console.info(`Activated workspace app '${workspaceId}' via dev-workflow-ui [${response.status}]`);
+};
+
 const setup = async () => {
   const isScreenshotRun = process.argv.some((argument, index) => argument === '--project=screenshots' || (argument === '--project' && process.argv[index + 1] === 'screenshots'));
   if (isScreenshotRun) {
@@ -70,6 +79,7 @@ const setup = async () => {
   const projectPath = path.join(workspacePath, workspaceName);
   await createProject(engineUrl, workspaceId, projectPath);
   await deployProjects(engineUrl, workspaceId, projectPath);
+  await activateWorkspaceApp(engineUrl, workspaceId);
 };
 
 export default setup;
