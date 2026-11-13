@@ -3,46 +3,50 @@ import { AddProcessDialog } from '../pageobjects/AddProcessDialog';
 import { AddStageDialog } from '../pageobjects/AddStageDialog';
 import { CaseMapEditor } from '../pageobjects/CaseMapEditor';
 
-test('data', async ({ page }) => {
-  const { flow } = await CaseMapEditor.openCaseMap(page);
-  await flow.expectStages(3);
-  await flow.stageByNth(0).expectProcesses(2);
-  await flow.stageByNth(0).expectSidesteps(0);
-  await flow.stageByNth(1).expectProcesses(1);
-  await flow.stageByNth(1).expectSidesteps(1);
-  await flow.stageByNth(2).expectProcesses(3);
-  await flow.stageByNth(2).expectSidesteps(0);
-  await flow.stageByNth(0).addProcess.click();
-  const dialog = new AddProcessDialog(page);
-  await dialog.process.expectOptionCount(9);
-  await dialog.process.expectOptionName(0, 'AbortRequest- Lending/AbortRequest/start.ivp');
-  await dialog.process.expectOptionName(6, 'ExternalSolvencyService- Lending/ExternalSolvencyService/start.ivp');
-});
+test.describe('workspace-backed tests', () => {
+  test.describe.configure({ mode: 'serial' });
 
-test('save data', async ({ page }) => {
-  const editor = await CaseMapEditor.openCaseMap(page);
-  await editor.flow.expectStages(3);
-  const dialog = await editor.flow.openAddStageDialog();
-  await dialog.name.locator.fill(`Cool Stage`);
-  await dialog.icon.fill(`ti ti-user`);
-  await dialog.create.click();
-  await editor.flow.expectStages(4);
+  test('data', async ({ page }) => {
+    const { flow } = await CaseMapEditor.openCaseMap(page);
+    await flow.expectStages(3);
+    await flow.stageByNth(0).expectProcesses(2);
+    await flow.stageByNth(0).expectSidesteps(0);
+    await flow.stageByNth(1).expectProcesses(1);
+    await flow.stageByNth(1).expectSidesteps(1);
+    await flow.stageByNth(2).expectProcesses(3);
+    await flow.stageByNth(2).expectSidesteps(0);
+    await flow.stageByNth(0).addProcess.click();
+    const dialog = new AddProcessDialog(page);
+    await dialog.process.expectOptionCount(9);
+    await dialog.process.expectOptionName(0, 'AbortRequest- Lending/AbortRequest/start.ivp');
+    await dialog.process.expectOptionName(6, 'ExternalSolvencyService- Lending/ExternalSolvencyService/start.ivp');
+  });
 
-  await editor.flow.stageByNth(3).inscribe();
-  await editor.inscription.expectHeader('coolstage');
-  const general = editor.inscription.collapsible('General');
-  const id = general.input('Id');
-  const name = general.input('Name');
-  const icon = general.combobox('Icon');
-  await id.expectValue('coolstage');
-  await name.expectValue('Cool Stage');
-  await icon.expectValue('ti ti-user');
+  test('save data', async ({ page }) => {
+    const editor = await CaseMapEditor.openCaseMap(page);
+    await editor.flow.expectStages(3);
+    const dialog = await editor.flow.openAddStageDialog();
+    await dialog.name.locator.fill(`Cool Stage`);
+    await dialog.icon.fill(`ti ti-user`);
+    await dialog.create.click();
+    await editor.flow.expectStages(4);
 
-  await page.reload();
-  await editor.flow.expectStages(4);
+    await editor.flow.stageByNth(3).inscribe();
+    await editor.inscription.expectHeader('coolstage');
+    const general = editor.inscription.collapsible('General');
+    const id = general.input('Id');
+    const name = general.input('Name');
+    const icon = general.combobox('Icon');
+    await id.expectValue('coolstage');
+    await name.expectValue('Cool Stage');
+    await icon.expectValue('ti ti-user');
 
-  await editor.flow.stageByNth(3).delete.click();
-  await editor.flow.expectStages(3);
+    await page.reload();
+    await editor.flow.expectStages(4);
+
+    await editor.flow.stageByNth(3).delete.click();
+    await editor.flow.expectStages(3);
+  });
 });
 
 test('add process', async ({ page }) => {
